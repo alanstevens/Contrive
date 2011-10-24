@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Sample", "Contrive
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.StructureMap", "Contrive.StructureMap\Contrive.StructureMap.csproj", "{FC138A58-C976-4704-BC55-89970007E66A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Tests", "Contrive.Tests\Contrive.Tests.csproj", "{F22ADB36-EBA5-4100-A960-070C5C5B8EEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{FC138A58-C976-4704-BC55-89970007E66A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC138A58-C976-4704-BC55-89970007E66A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC138A58-C976-4704-BC55-89970007E66A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F22ADB36-EBA5-4100-A960-070C5C5B8EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F22ADB36-EBA5-4100-A960-070C5C5B8EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F22ADB36-EBA5-4100-A960-070C5C5B8EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F22ADB36-EBA5-4100-A960-070C5C5B8EEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

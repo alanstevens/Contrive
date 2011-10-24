@@ -8,7 +8,6 @@ namespace Contrive.Core.Extensions
     {
       T value = default(T);
 
-      // given an empty string, return the default value
       if (o is String && o.ToString().IsEmpty()) return value;
 
       try
@@ -24,9 +23,8 @@ namespace Contrive.Core.Extensions
         }
         value = (T)o;
       }
-      catch (Exception e)
+      catch (Exception)
       {
-        //ErrorHandler.LogException(typeof(ObjectExtensions), e);
       }
       return value;
     }
