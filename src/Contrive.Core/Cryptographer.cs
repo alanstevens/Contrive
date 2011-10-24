@@ -37,10 +37,10 @@ namespace Contrive.Core
 
     public string GetPasswordHash(string password, string salt)
     {
-      return ComputeHash(password + salt);
+      return ComputeSha512HashAsBase64(password + salt);
     }
 
-    public string ComputeHash(string valueToHash)
+    public string ComputeSha512HashAsBase64(string valueToHash)
     {
       HashAlgorithm algorithm = SHA512.Create();
       byte[] hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(valueToHash));
@@ -48,31 +48,17 @@ namespace Contrive.Core
       return Convert.ToBase64String(hash);
     }
 
-    public string ComputeMd5Hash(string input)
+    public string ComputeMd5HashAsHex(string valueToHash)
     {
       Encoding enc = new ASCIIEncoding();
       MD5 md5 = new MD5CryptoServiceProvider();
-      byte[] bToConvert = md5.ComputeHash(enc.GetBytes(input));
+      byte[] bToConvert = md5.ComputeHash(enc.GetBytes(valueToHash));
       string md5Hash = "";
 
       for (int i = 0; i < 16; i++)
         md5Hash += String.Format("{0:x02}", bToConvert[i]);
 
       return md5Hash;
-    }
-
-    static string GetBuffer(int bufferSize)
-    {
-      byte[] buffer = new byte[bufferSize];
-
-      //using (var rng = new RNGCryptoServiceProvider())
-      //{
-      //  rng.GetBytes(buffer);
-      //  return Convert.ToBase64String(buffer);
-      //}
-      var rng = new RNGCryptoServiceProvider();
-      rng.GetBytes(buffer);
-      return Convert.ToBase64String(buffer);
     }
 
     public string Encrypt(string plainText)
@@ -141,6 +127,17 @@ namespace Contrive.Core
       }
 
       return Convert.ToBase64String(outputBuffer);
+    }
+
+    static string GetBuffer(int bufferSize)
+    {
+      byte[] buffer = new byte[bufferSize];
+
+      using (var rng = new RNGCryptoServiceProvider())
+      {
+        rng.GetBytes(buffer);
+        return Convert.ToBase64String(buffer);
+      }
     }
 
     SymmetricAlgorithm GetCryptAlgorithm()

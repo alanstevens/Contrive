@@ -22,7 +22,7 @@ namespace Contrive.Web.Configuration
       [DebuggerStepThrough]
       get
       {
-        var membershipSection = System.Web.Configuration.WebConfigurationManager.GetSection("system.web/membership").As<MembershipSection>();
+        var membershipSection = WebConfigurationManager.GetSection("system.web/membership").As<MembershipSection>();
         string defaultProvider = membershipSection.DefaultProvider;
         return membershipSection.Providers[defaultProvider].Parameters;
       }
@@ -33,7 +33,7 @@ namespace Contrive.Web.Configuration
       [DebuggerStepThrough]
       get
       {
-        var roleManagerSection = System.Web.Configuration.WebConfigurationManager.GetSection("system.web/roleManager").As<RoleManagerSection>();
+        var roleManagerSection = WebConfigurationManager.GetSection("system.web/roleManager").As<RoleManagerSection>();
         string defaultProvider = roleManagerSection.DefaultProvider;
         return roleManagerSection.Providers[defaultProvider].Parameters;
       }
@@ -42,7 +42,7 @@ namespace Contrive.Web.Configuration
     [DebuggerStepThrough]
     public T GetSection<T>(string sectionName)
     {
-      return (T)ConfigurationManager.GetSection(sectionName);
+      return (T) ConfigurationManager.GetSection(sectionName);
     }
 
     [DebuggerStepThrough]
@@ -72,18 +72,17 @@ namespace Contrive.Web.Configuration
     {
       Verify.NotEmpty(hexString, "hexString");
 
-      if (hexString.Length % 2 == 1)
+      if (hexString.Length%2 == 1)
         hexString = '0' + hexString;
 
-      byte[] buffer = new byte[hexString.Length / 2];
+      byte[] buffer = new byte[hexString.Length/2];
 
       for (int i = 0; i < buffer.Length; ++i)
       {
-        buffer[i] = byte.Parse(hexString.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        buffer[i] = byte.Parse(hexString.Substring(i*2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
       }
 
       return buffer;
     }
-
   }
 }

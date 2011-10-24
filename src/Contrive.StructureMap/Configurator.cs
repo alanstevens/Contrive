@@ -16,8 +16,8 @@ namespace Contrive.StructureMap
       {
         x.For<IServiceLocator>().Singleton().Use(serviceLocator);
         x.For<IConfigurationProvider>().Singleton().Use<ConfigurationProvider>();
-        x.For<IUserProvider>().Singleton().Use<UserProvider>();
-        x.For<IRoleProvider>().Singleton().Use<RoleProvider>();
+        x.For<IUserService>().Singleton().Use<UserService>();
+        x.For<IRoleService>().Singleton().Use<RoleService>();
         x.For<ICryptographer>().Singleton().Use<Cryptographer>();
       });
     }

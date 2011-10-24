@@ -9,7 +9,7 @@ namespace Contrive.Web.Modules
   {
     protected AuthenticationModuleBase()
     {
-      _users = ServiceLocator.Current.GetInstance<IUserProvider>();
+      _users = ServiceLocator.Current.GetInstance<IUserService>();
       _config = ServiceLocator.Current.GetInstance<IConfigurationProvider>();
     }
 
@@ -19,7 +19,7 @@ namespace Contrive.Web.Modules
     public const string RESPONSE_HEADER_NAME = "Authorization";
     protected readonly IConfigurationProvider _config;
 
-    protected readonly IUserProvider _users;
+    protected readonly IUserService _users;
     protected string _realm;
 
     /// <summary>

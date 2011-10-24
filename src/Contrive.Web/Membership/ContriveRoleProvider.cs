@@ -11,9 +11,9 @@ namespace Contrive.Web.Membership
   {
     public override string ApplicationName { get; set; }
 
-    IRoleProvider GetRoleManagementService()
+    IRoleService GetRoleManagementService()
     {
-      return ServiceLocator.Current.GetInstance<IRoleProvider>();
+      return ServiceLocator.Current.GetInstance<IRoleService>();
     }
 
     public override void Initialize(string name, NameValueCollection config)

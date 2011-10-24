@@ -48,9 +48,9 @@ namespace Contrive.Web.Membership
       get { return Context.Response; }
     }
 
-    static IUserProvider GetUserManagementService()
+    static IUserService GetUserManagementService()
     {
-      return ServiceLocator.Current.GetInstance<IUserProvider>();
+      return ServiceLocator.Current.GetInstance<IUserService>();
     }
 
     public static bool Login(string userNameOrEmail, string password, bool persistCookie = false)

@@ -12,13 +12,13 @@ namespace Contrive.Web.Modules
   public class DigestHelper
   {
     static readonly IConfigurationProvider _config;
-    static readonly IUserProvider _userAuth;
+    static readonly IUserService _userAuth;
     static readonly ICryptographer _cryptographer;
 
     static DigestHelper()
     {
       _config = ServiceLocator.Current.GetInstance<IConfigurationProvider>();
-      _userAuth = ServiceLocator.Current.GetInstance<IUserProvider>();
+      _userAuth = ServiceLocator.Current.GetInstance<IUserService>();
       _cryptographer = ServiceLocator.Current.GetInstance<ICryptographer>();
     }
 
@@ -125,7 +125,7 @@ namespace Contrive.Web.Modules
 
       // d)
       // HA2 = MD5(A2)
-      string ha2 = _cryptographer.ComputeMd5Hash(a2);
+      string ha2 = _cryptographer.ComputeMd5HashAsHex(a2);
 
       // e)
       // GENRESPONSE = 
@@ -147,7 +147,7 @@ namespace Contrive.Web.Modules
       else
         genresponse = String.Format("{0}:{1}:{2}", ha1, nonce, ha2);
 
-      return _cryptographer.ComputeMd5Hash(genresponse);
+      return _cryptographer.ComputeMd5HashAsHex(genresponse);
     }
 
     static string GetDigestFor(string userName)

@@ -79,9 +79,9 @@ namespace Contrive.Web.Membership
       get { return _passwordStrengthRegularExpression; }
     }
 
-    IUserProvider GetUserManagementService()
+    IUserService GetUserManagementService()
     {
-      return ServiceLocator.Current.GetInstance<IUserProvider>();
+      return ServiceLocator.Current.GetInstance<IUserService>();
     }
 
     public override void Initialize(string name, NameValueCollection config)
