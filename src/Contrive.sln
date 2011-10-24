@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Core", "Contrive.Core\Contrive.Core.csproj", "{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Web", "Contrive.Web\Contrive.Web.csproj", "{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Sample", "Contrive.Sample\Contrive.Sample.csproj", "{83E4F300-AD67-4773-8E01-0323A3A7B9AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.StructureMap", "Contrive.StructureMap\Contrive.StructureMap.csproj", "{FC138A58-C976-4704-BC55-89970007E66A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC138A58-C976-4704-BC55-89970007E66A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC138A58-C976-4704-BC55-89970007E66A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC138A58-C976-4704-BC55-89970007E66A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC138A58-C976-4704-BC55-89970007E66A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
