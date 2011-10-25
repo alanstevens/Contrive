@@ -49,6 +49,7 @@
     <Compile Include="Configuration\ConfigurationProvider.cs" />
     <Compile Include="Membership\ContriveMembershipProvider.cs" />
     <Compile Include="Membership\ContriveRoleProvider.cs" />
+    <Compile Include="Membership\IWebSecurity.cs" />
     <Compile Include="Membership\WebSecurity.cs" />
     <Compile Include="Modules\AuthenticationModuleBase.cs" />
     <Compile Include="Modules\BasicAuthenticationModule.cs" />

@@ -81,7 +81,7 @@ namespace Contrive.Web.Membership
       get { return _passwordStrengthRegularExpression; }
     }
 
-    IUserService GetUserManagementService()
+    IUserService GetUserService()
     {
       return ServiceLocator.Current.GetInstance<IUserService>();
     }
@@ -102,7 +102,7 @@ namespace Contrive.Web.Membership
       // Initialize the abstract base class.
       base.Initialize(name, config);
 
-      var membership = GetUserManagementService();
+      var membership = GetUserService();
 
       _applicationName = membership.ApplicationName;
       _enablePasswordReset = membership.EnablePasswordReset;
@@ -121,14 +121,14 @@ namespace Contrive.Web.Membership
     {
       bool success = false;
 
-      ThrowMembership(() => success = GetUserManagementService().ChangePassword(userName, oldPassword, newPassword));
+      ThrowMembership(() => success = GetUserService().ChangePassword(userName, oldPassword, newPassword));
 
       return success;
     }
 
     public override MembershipUser GetUser(string userName, bool userIsOnline)
     {
-      var user = GetUserManagementService().GetUser(userName);
+      var user = GetUserService().GetUser(userName);
 
       if (user == null) return null;
 
@@ -141,7 +141,7 @@ namespace Contrive.Web.Membership
 
     public override bool ValidateUser(string userName, string password)
     {
-      return GetUserManagementService().ValidateUser(userName, password);
+      return GetUserService().ValidateUser(userName, password);
     }
 
     public override MembershipUser CreateUser(string userName,
@@ -153,7 +153,7 @@ namespace Contrive.Web.Membership
                                               object providerUserKey,
                                               out MembershipCreateStatus status)
     {
-      status = (MembershipCreateStatus)GetUserManagementService()
+      status = (MembershipCreateStatus)GetUserService()
                                           .CreateUser(userName,
                                                       password,
                                                       email,
@@ -169,7 +169,7 @@ namespace Contrive.Web.Membership
     {
       bool success = false;
 
-      ThrowMembership(() => success = GetUserManagementService().DeleteAccount(userName));
+      ThrowMembership(() => success = GetUserService().DeleteAccount(userName));
 
       if (deleteAllRelatedData)
       {
@@ -180,7 +180,7 @@ namespace Contrive.Web.Membership
 
     public override string GetUserNameByEmail(string emailAddress)
     {
-      return GetUserManagementService().GetUserByEmail(emailAddress).Username;
+      return GetUserService().GetUserByEmail(emailAddress).Username;
     }
 
     void ThrowMembership(Action test)

@@ -20,7 +20,7 @@ namespace Contrive.Core
     }
 
     const int MAX_HASHED_PASSWORD_LENGTH = 128;
-    const int DEFAULT_NUM_PASSWORD_FAILURES = 0;
+    const int DEFAULT_NUMBER_OF_PASSWORD_FAILURES = 0;
     const int ONE_DAY_IN_MINUTES = 24 * 60;
     readonly IConfigurationProvider _configurationProvider;
 
@@ -456,7 +456,7 @@ namespace Contrive.Core
       var currentDate = DateTime.UtcNow;
       if (verified)
       {
-        user.FailedPasswordAttemptCount = DEFAULT_NUM_PASSWORD_FAILURES;
+        user.FailedPasswordAttemptCount = DEFAULT_NUMBER_OF_PASSWORD_FAILURES;
         user.LastActivityDate = currentDate;
         user.LastPasswordFailureDate = DateTime.MinValue;
       }
