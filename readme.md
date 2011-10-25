@@ -8,6 +8,7 @@ Contrive is intended to mimic the ease of installation and configuration
 found in [Devise] (https://github.com/plataformatec/devise)
 
 Contrive was influenced by and steals liberally from:
+
 * [CodeCampServer] (http://codecampserver.codeplex.com/)
 * [OpenFaq] (http://openfaq.codeplex.com/)
 * [EFMembership] (http://efmembership.codeplex.com/)
