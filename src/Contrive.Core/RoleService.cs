@@ -69,10 +69,10 @@ namespace Contrive.Core
       Verify.NotEmpty(roleName, "roleName");
       Verify.NotEmpty(usernameToMatch, "usernameToMatch");
 
-      var query =
-        Queryable.Select(Queryable.Where(Queryable.SelectMany(_roles.GetQuery(), r => r.Users, (r, u) => new { r, u }), @t => @t.r.Name == roleName && @t.u.Username.Contains(usernameToMatch)), @t => @t.u);
+      var query = _roles.GetQuery().SelectMany(r => r.Users, (r, u) => new { r, u });
 
-      return query.ToArray<IUser>();
+      return query.Where(t => t.r.Name == roleName && t.u.Username.Contains(usernameToMatch))
+        .Select(t => t.u).ToArray();
     }
 
     public bool DeleteRole(string roleName, bool throwOnPopulatedRole)
@@ -86,11 +86,15 @@ namespace Contrive.Core
 
       if (throwOnPopulatedRole)
       {
-        if (Enumerable.Any<IUser>(role.Users))
+        if (role.Users.Any())
           throw new InvalidOperationException(string.Format("Role populated: {0}", roleName));
       }
       else
-        role.Users.Each(u => _users.Delete(u));
+        role.Users.Each(u =>
+        {
+          u.Roles.Remove(role);
+          _users.Update(u);
+        });
 
       _roles.Delete(role);
       _roles.SaveChanges();
@@ -107,7 +111,7 @@ namespace Contrive.Core
       if (user == null)
         throw new InvalidOperationException(string.Format("User not found: {0}", userName));
 
-      return Enumerable.ToArray<IRole>(user.Roles);
+      return user.Roles;
     }
 
     public void CreateRole(string roleName)
@@ -129,32 +133,49 @@ namespace Contrive.Core
 
     public void AddUsersToRoles(string[] userNames, string[] roleNames)
     {
-      var users = Enumerable.ToList<IUser>(_users.Where(u => userNames.Contains(u.Username)));
-      var roles = Enumerable.ToList<IRole>(_roles.Where(r => roleNames.Contains(r.Name)));
+      var users = _users.Where(u => userNames.Contains(u.Username)).ToArray();
+      var roles = _roles.Where(r => roleNames.Contains(r.Name)).ToArray();
+      AddUsersToRoles(users, roles);
+    }
 
-      users.Each(u =>
+    public void AddUsersToRoles(IEnumerable<IUser> users, IEnumerable<IRole> roles)
+    {
+      foreach (var u in users)
       {
-        var availableRoles = roles.Where(role => !u.Roles.Contains(role));
-        availableRoles.Each(u.Roles.Add);
-      });
+        var availableRoles = roles.Where(role => !u.Roles.Contains(role)).ToArray();
 
+        availableRoles.Each(r =>
+        {
+          u.Roles.Add(r);
+          r.Users.Add(u);
+          _roles.Update(r);
+        });
+        _users.Update(u);
+      }
       _roles.SaveChanges();
     }
 
     public void RemoveUsersFromRoles(string[] userNames, string[] roleNames)
     {
-      var users = userNames
-        .Select<string, IUser>(name => _users.FirstOrDefault(u => u.Username == name))
-        .Where(u => u != null);
+      var users = _users.Where(u => userNames.Contains(u.Username)).ToArray();
+      var roles = _roles.Where(r => roleNames.Contains(r.Name)).ToArray();
+      RemoveUsersFromRoles(users, roles);
+    }
 
-      users.Each(user =>
+    public void RemoveUsersFromRoles(IEnumerable<IUser> users, IEnumerable<IRole> roles)
+    {
+      foreach (var u in users)
       {
-        var roles = roleNames
-          .Select(n => Enumerable.FirstOrDefault<IRole>(user.Roles, r => r.Name == n))
-          .Where(r => r != null);
+        var availableRoles = roles.Where(role => u.Roles.Contains(role)).ToArray();
 
-        roles.Each(r => user.Roles.Remove(r));
-      });
+        availableRoles.Each(r =>
+        {
+          u.Roles.Remove(r);
+          r.Users.Remove(u);
+          _roles.Update(r);
+        });
+        _users.Update(u);
+      }
 
       _roles.SaveChanges();
     }

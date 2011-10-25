@@ -22,7 +22,7 @@ namespace Contrive.Core
 
     void CreateRole(string roleName);
 
-    void AddUsersToRoles(string[] userNames, string[] roleNames);
+    void AddUsersToRoles(string[] users, string[] roles);
 
     void RemoveUsersFromRoles(string[] userNames, string[] roleNames);
   }
