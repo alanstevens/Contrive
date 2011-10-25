@@ -4,18 +4,7 @@ namespace Contrive.Core
 {
   public interface IUserService
   {
-    string ApplicationName { get; set; }
-    int MinPasswordLength { get; }
-    bool EnablePasswordRetrieval { get; }
-    bool EnablePasswordReset { get; }
-    bool RequiresQuestionAndAnswer { get; }
-    int MaxInvalidPasswordAttempts { get; }
-    int PasswordAttemptWindow { get; }
-    bool RequiresUniqueEmail { get; }
-    UserPasswordFormat PasswordFormat { get; }
-    int MinRequiredPasswordLength { get; }
-    int MinRequiredNonAlphanumericCharacters { get; }
-    string PasswordStrengthRegularExpression { get; }
+    IUserServiceSettings Settings { get; }
 
     bool ChangePassword(string userName, string oldPassword, string newPassword);
 

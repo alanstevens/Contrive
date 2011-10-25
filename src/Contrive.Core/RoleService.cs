@@ -15,7 +15,7 @@ namespace Contrive.Core
     {
       _roles = roles;
       _users = users;
-      Initialize(configuration.RoleManagerConfiguration);
+      Initialize(configuration.RoleServiceConfiguration);
     }
 
     readonly IRoleRepository _roles;

@@ -52,6 +52,7 @@
     <Compile Include="IUser.cs" />
     <Compile Include="IUserService.cs" />
     <Compile Include="IUserRepository.cs" />
+    <Compile Include="IUserServiceSettings.cs" />
     <Compile Include="Properties\ApplicationServicesStrings.Designer.cs">
       <DependentUpon>ApplicationServicesStrings.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -62,6 +63,7 @@
     <Compile Include="UserCreateStatus.cs" />
     <Compile Include="UserService.cs" />
     <Compile Include="UserPasswordFormat.cs" />
+    <Compile Include="UserServiceSettings.cs" />
     <Compile Include="Verify.cs" />
   </ItemGroup>
   <ItemGroup>

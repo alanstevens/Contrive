@@ -102,19 +102,19 @@ namespace Contrive.Web.Membership
       // Initialize the abstract base class.
       base.Initialize(name, config);
 
-      var membership = GetUserService();
+      var settings = GetUserService().Settings;
 
-      _applicationName = membership.ApplicationName;
-      _enablePasswordReset = membership.EnablePasswordReset;
-      _enablePasswordRetrieval = membership.EnablePasswordRetrieval;
-      _requiresQuestionAndAnswer = membership.RequiresQuestionAndAnswer;
-      _maxInvalidPasswordAttempts = membership.MaxInvalidPasswordAttempts;
-      _passwordAttemptWindow = membership.PasswordAttemptWindow;
-      _requiresUniqueEmail = membership.RequiresUniqueEmail;
-      _minRequiredNonAlphanumericCharacters = membership.MinRequiredNonAlphanumericCharacters;
-      _minRequiredPasswordLength = membership.MinRequiredPasswordLength;
-      _passwordStrengthRegularExpression = membership.PasswordStrengthRegularExpression;
-      _passwordFormat = (MembershipPasswordFormat)membership.PasswordFormat;
+      _applicationName = settings.ApplicationName;
+      _enablePasswordReset = settings.EnablePasswordReset;
+      _enablePasswordRetrieval = settings.EnablePasswordRetrieval;
+      _requiresQuestionAndAnswer = settings.RequiresQuestionAndAnswer;
+      _maxInvalidPasswordAttempts = settings.MaxInvalidPasswordAttempts;
+      _passwordAttemptWindow = settings.PasswordAttemptWindow;
+      _requiresUniqueEmail = settings.RequiresUniqueEmail;
+      _minRequiredNonAlphanumericCharacters = settings.MinRequiredNonAlphanumericCharacters;
+      _minRequiredPasswordLength = settings.MinRequiredPasswordLength;
+      _passwordStrengthRegularExpression = settings.PasswordStrengthRegularExpression;
+      _passwordFormat = (MembershipPasswordFormat)settings.PasswordFormat;
     }
 
     public override bool ChangePassword(string userName, string oldPassword, string newPassword)

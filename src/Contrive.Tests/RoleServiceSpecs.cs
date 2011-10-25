@@ -14,7 +14,7 @@ namespace Contrive.Tests
   {
     public Using_RoleServiceSpecs()
     {
-      _configuration.SetupGet(c => c.RoleManagerConfiguration).Returns(new NameValueCollection());
+      _configuration.SetupGet(c => c.RoleServiceConfiguration).Returns(new NameValueCollection());
       _roleService = new RoleService(_roleRepository.Object, _userRepository.Object, _configuration.Object);
     }
 

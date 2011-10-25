@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Specialized;
 using System.Configuration.Provider;
 using System.Text.RegularExpressions;
 using Contrive.Core.Extensions;
@@ -16,7 +15,10 @@ namespace Contrive.Core
       _users = users;
       _cryptographer = cryptographer;
       _configurationProvider = configurationProvider;
-      Initialize(_configurationProvider.UserManagerConfiguration);
+      Settings = new UserServiceSettings(_configurationProvider.UserServiceConfiguration);
+
+      var realm = _configurationProvider.AppSettings["HTTP.Realm"];
+      Settings.Realm = realm.IsEmpty() ? "Application" : realm;
     }
 
     const int MAX_HASHED_PASSWORD_LENGTH = 128;
@@ -26,34 +28,8 @@ namespace Contrive.Core
 
     readonly ICryptographer _cryptographer;
     readonly IUserRepository _users;
-    public string Realm { get; private set; }
 
-    public string ApplicationName { get; set; }
-
-    public bool EnablePasswordRetrieval { get; private set; }
-
-    public bool EnablePasswordReset { get; private set; }
-
-    public bool RequiresQuestionAndAnswer { get; private set; }
-
-    public int MaxInvalidPasswordAttempts { get; private set; }
-
-    public int PasswordAttemptWindow { get; private set; }
-
-    public bool RequiresUniqueEmail { get; private set; }
-
-    public UserPasswordFormat PasswordFormat { get; private set; }
-
-    public int MinRequiredPasswordLength { get; private set; }
-
-    public int MinRequiredNonAlphanumericCharacters { get; private set; }
-
-    public string PasswordStrengthRegularExpression { get; private set; }
-
-    public int MinPasswordLength
-    {
-      get { return MinRequiredPasswordLength; }
-    }
+    public IUserServiceSettings Settings { get; private set; }
 
     public bool ValidateUser(string userName, string password)
     {
@@ -100,7 +76,7 @@ namespace Contrive.Core
       Verify.NotEmpty(password, "password");
       Verify.NotEmpty(email, "email");
 
-      if (RequiresQuestionAndAnswer)
+      if (Settings.RequiresQuestionAndAnswer)
       {
         Verify.NotEmpty(passwordQuestion, "passwordQuestion");
         Verify.NotEmpty(passwordAnswer, "passwordAnswer");
@@ -109,7 +85,7 @@ namespace Contrive.Core
       if (!IsValidPassword(password))
         return UserCreateStatus.InvalidPassword;
 
-      if (RequiresUniqueEmail)
+      if (Settings.RequiresUniqueEmail)
       {
         var emailUser = GetUserByEmail(email);
         if (emailUser != null)
@@ -336,19 +312,19 @@ namespace Contrive.Core
 
     bool IsValidPassword(string password)
     {
-      if (password.Length < MinRequiredPasswordLength)
+      if (password.Length < Settings.MinRequiredPasswordLength)
         return false;
 
-      if (MinRequiredNonAlphanumericCharacters > 0)
+      if (Settings.MinRequiredNonAlphanumericCharacters > 0)
       {
         int nonAlpahNumericCharsCount = Regex.Matches(password, "[^a-zA-Z0-9]").Count;
-        if (nonAlpahNumericCharsCount < MinRequiredNonAlphanumericCharacters)
+        if (nonAlpahNumericCharsCount < Settings.MinRequiredNonAlphanumericCharacters)
           return false;
       }
 
-      if (!PasswordStrengthRegularExpression.IsEmpty())
+      if (!Settings.PasswordStrengthRegularExpression.IsEmpty())
       {
-        if (!Regex.IsMatch(password, PasswordStrengthRegularExpression))
+        if (!Regex.IsMatch(password, Settings.PasswordStrengthRegularExpression))
           return false;
       }
 
@@ -359,7 +335,7 @@ namespace Contrive.Core
     {
       // a)
       // A1 = unq(username-value) ":" unq(realm-value) ":" passwd
-      var a1 = String.Format("{0}:{1}:{2}", userName, Realm, password);
+      var a1 = String.Format("{0}:{1}:{2}", userName, Settings.Realm, password);
 
       // b)
       // HA1 = MD5(A1)
@@ -373,61 +349,11 @@ namespace Contrive.Core
       return _users.FirstOrDefault(u => u.Email == emailAddress);
     }
 
-    void Initialize(NameValueCollection config)
-    {
-      Verify.NotNull(config, "config");
-
-      ApplicationName = GetConfigValue(config["applicationName"], "/"); //,HostingEnvironment.ApplicationVirtualPath);
-
-      EnablePasswordRetrieval = Convert.ToBoolean(GetConfigValue(config["enablePasswordReset"], "false"));
-
-      EnablePasswordReset = Convert.ToBoolean(GetConfigValue(config["enablePasswordRetrieval"], "true`"));
-
-      RequiresQuestionAndAnswer = Convert.ToBoolean(GetConfigValue(config["requiresQuestionAndAnswer"], "false"));
-
-      MaxInvalidPasswordAttempts = Convert.ToInt32(GetConfigValue(config["maxInvalidPasswordAttempts"], "5"));
-
-      PasswordAttemptWindow = Convert.ToInt32(GetConfigValue(config["passwordAttemptWindow"], "10"));
-
-      RequiresUniqueEmail = Convert.ToBoolean(GetConfigValue(config["requiresUniqueEmail"], "true"));
-
-      MinRequiredNonAlphanumericCharacters =
-        Convert.ToInt32(GetConfigValue(config["minRequiredNonAlphanumericCharacters"], "0"));
-
-      MinRequiredPasswordLength = Convert.ToInt32(GetConfigValue(config["minRequiredPasswordLength"], "6"));
-
-      PasswordStrengthRegularExpression = GetConfigValue(config["passwordStrengthRegularExpression"], "");
-
-      string format = config["passwordFormat"] ?? "Hashed";
-
-      switch (format)
-      {
-        case "Hashed":
-          PasswordFormat = UserPasswordFormat.Hashed;
-          break;
-        //case "Encrypted":
-        //  _passwordFormat = UserPasswordFormat.Encrypted;
-        //  break;
-        //case "Clear":
-        //  _passwordFormat = UserPasswordFormat.Clear;
-        //  break;
-        default:
-          throw new ProviderException("Password format not supported.");
-      }
-
-      Realm = GetConfigValue(_configurationProvider.AppSettings["HTTP.Realm"], "Application");
-    }
-
-    string GetConfigValue(string configValue, string defaultValue)
-    {
-      return configValue.IsEmpty() ? defaultValue : configValue;
-    }
-
     string EncodePassword(string password, string passwordSalt)
     {
       string encodedPassword;
 
-      switch (PasswordFormat)
+      switch (Settings.PasswordFormat)
       {
         //case UserPasswordFormat.Clear:
         //  break;

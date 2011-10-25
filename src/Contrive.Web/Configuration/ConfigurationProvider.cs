@@ -17,7 +17,7 @@ namespace Contrive.Web.Configuration
       get { return ConfigurationManager.AppSettings; }
     }
 
-    public NameValueCollection UserManagerConfiguration
+    public NameValueCollection UserServiceConfiguration
     {
       [DebuggerStepThrough]
       get
@@ -28,7 +28,7 @@ namespace Contrive.Web.Configuration
       }
     }
 
-    public NameValueCollection RoleManagerConfiguration
+    public NameValueCollection RoleServiceConfiguration
     {
       [DebuggerStepThrough]
       get
