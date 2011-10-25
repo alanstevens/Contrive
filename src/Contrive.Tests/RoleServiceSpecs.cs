@@ -91,8 +91,13 @@ namespace Contrive.Tests
       SetupUser();
       SetupRole();
       IEnumerable<IUser> usersInRole = null;
-      IQueryable<IRole> query = new EnumerableQuery<IRole>(new[] { roleMock.Object });
-      "Given ".Context(() => _roleRepository.Setup(rr => rr.GetQuery()).Returns(query));
+      "Given ".Context(() =>
+      {
+        _roleRepository.Setup(rr => rr.FirstOrDefault(It.IsAny<Func<IRole, bool>>()))
+                                 .Returns(roleMock.Object);
+        IQueryable<IRole> query = new EnumerableQuery<IRole>(new[] { roleMock.Object });
+        _roleRepository.Setup(rr => rr.GetQuery()).Returns(query);
+      });
       "When ".Do(() => usersInRole = _roleService.FindUsersInRole(roleName, userName.Substring(0, 4)));
       "It should ".Assert(() => usersInRole.Contains(userMock.Object));
       "It should ".Assert(() => usersInRole.Count().Should().Be(1));

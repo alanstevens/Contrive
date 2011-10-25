@@ -15,7 +15,18 @@ namespace Contrive.Core
     {
       _roles = roles;
       _users = users;
-      Initialize(configuration.RoleServiceConfiguration);
+
+      var config = configuration.RoleServiceConfiguration;
+
+      Verify.NotNull(config, "config");
+
+      if (string.IsNullOrEmpty(config["description"]))
+      {
+        config.Remove("description");
+        config.Add("description", "Contrive Role Provider");
+      }
+
+      ApplicationName = config["applicationName"];
     }
 
     readonly IRoleRepository _roles;
@@ -169,19 +180,6 @@ namespace Contrive.Core
       }
 
       _roles.SaveChanges();
-    }
-
-    void Initialize(NameValueCollection config)
-    {
-      Verify.NotNull(config, "config");
-
-      if (string.IsNullOrEmpty(config["description"]))
-      {
-        config.Remove("description");
-        config.Add("description", "Role Provider");
-      }
-
-      ApplicationName = config["applicationName"];
     }
 
     IEnumerable<IRole> GetRolesForRoleNames(IEnumerable<string> roleNames)
