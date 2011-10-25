@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Specialized;
+using System.Configuration.Provider;
 using System.Web.Security;
 using Contrive.Core;
+using Contrive.Core.Extensions;
 using Microsoft.Practices.ServiceLocation;
 
 namespace Contrive.Web.Membership
@@ -86,16 +88,15 @@ namespace Contrive.Web.Membership
 
     public override void Initialize(string name, NameValueCollection config)
     {
-      if (config == null)
-        throw new ArgumentNullException("config");
+      Verify.NotNull(config, "config");
 
-      if (String.IsNullOrEmpty(name))
-        name = "CustomMembershipProvider";
+      if (name.IsEmpty())
+        name = "ContriveMembershipProvider";
 
-      if (String.IsNullOrEmpty(config["description"]))
+      if (config["description"].IsEmpty())
       {
         config.Remove("description");
-        config.Add("description", "Entity Membership provider");
+        config.Add("description", "Contrive Membership Provider");
       }
 
       // Initialize the abstract base class.
@@ -118,7 +119,11 @@ namespace Contrive.Web.Membership
 
     public override bool ChangePassword(string userName, string oldPassword, string newPassword)
     {
-      return GetUserManagementService().ChangePassword(userName, oldPassword, newPassword);
+      bool success = false;
+
+      ThrowMembership(() => success = GetUserManagementService().ChangePassword(userName, oldPassword, newPassword));
+
+      return success;
     }
 
     public override MembershipUser GetUser(string userName, bool userIsOnline)
@@ -160,17 +165,42 @@ namespace Contrive.Web.Membership
       return status != MembershipCreateStatus.Success ? null : GetUser(userName, false);
     }
 
+    public override bool DeleteUser(string userName, bool deleteAllRelatedData)
+    {
+      bool success = false;
+
+      ThrowMembership(() => success = GetUserManagementService().DeleteAccount(userName));
+
+      if (deleteAllRelatedData)
+      {
+        // TODO: HAS 10/25/2011 Delete profile data.
+      }
+      return success;
+    }
+
+    public override string GetUserNameByEmail(string emailAddress)
+    {
+      return GetUserManagementService().GetUserByEmail(emailAddress).Username;
+    }
+
+    void ThrowMembership(Action test)
+    {
+      try
+      {
+        test();
+      }
+      catch (InvalidOperationException e)
+      {
+        throw new ProviderException(e.Message, e);
+      }
+    }
+
     #region "Not Needed"
 
     public override bool ChangePasswordQuestionAndAnswer(string userName, string password, string newPasswordQuestion,
                                                          string newPasswordAnswer)
     {
       throw new NotSupportedException();
-    }
-
-    public override bool DeleteUser(string userName, bool deleteAllRelatedData)
-    {
-      throw new NotImplementedException();
     }
 
     public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize,
@@ -201,11 +231,6 @@ namespace Contrive.Web.Membership
     }
 
     public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
-    {
-      throw new NotSupportedException();
-    }
-
-    public override string GetUserNameByEmail(string email)
     {
       throw new NotSupportedException();
     }

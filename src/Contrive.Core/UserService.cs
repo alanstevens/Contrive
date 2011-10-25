@@ -10,8 +10,8 @@ namespace Contrive.Core
   public class UserService : IUserService
   {
     public UserService(IUserRepository users,
-                                 ICryptographer cryptographer,
-                                 IConfigurationProvider configurationProvider)
+                       ICryptographer cryptographer,
+                       IConfigurationProvider configurationProvider)
     {
       _users = users;
       _cryptographer = cryptographer;
@@ -60,9 +60,23 @@ namespace Contrive.Core
       Verify.NotEmpty(userName, "userName");
       Verify.NotEmpty(password, "password");
 
-      var user = GetUser(userName);
+      return VerifyUser(GetUser(userName), password);
+    }
 
-      return VerifyUser(user, password);
+    public bool VerifyUser(IUser user, string password)
+    {
+      if (user == null)
+        return false;
+
+      if (!user.IsConfirmed)
+        return false;
+
+      var verified = VerifyPassword(user, password);
+
+      _users.Update(user);
+      _users.SaveChanges();
+
+      return verified;
     }
 
     public UserCreateStatus CreateUser(string userName, string password, string email)
@@ -157,10 +171,7 @@ namespace Contrive.Core
       Verify.NotEmpty(oldPassword, "oldPassword");
       Verify.NotEmpty(newPassword, "newPassword");
 
-      var user = GetUser(userName);
-
-      if (user == null)
-        return false;
+      var user = VerifyUserExists(userName);
 
       bool verificationSucceeded = VerifyPassword(user, oldPassword);
 
@@ -177,43 +188,6 @@ namespace Contrive.Core
       Verify.NotEmpty(userName, "userName");
 
       return _users.FirstOrDefault(u => u.Username == userName);
-    }
-
-    public bool IsValidPassword(string password)
-    {
-      if (password.Length < MinRequiredPasswordLength)
-        return false;
-
-      if (MinRequiredNonAlphanumericCharacters > 0)
-      {
-        int nonAlpahNumericCharsCount = Regex.Matches(password, "[^a-zA-Z0-9]").Count;
-        if (nonAlpahNumericCharsCount < MinRequiredNonAlphanumericCharacters)
-          return false;
-      }
-
-      if (!PasswordStrengthRegularExpression.IsEmpty())
-      {
-        if (!Regex.IsMatch(password, PasswordStrengthRegularExpression))
-          return false;
-      }
-
-      return true;
-    }
-
-    public bool VerifyUser(IUser user, string password)
-    {
-      if (user == null)
-        return false;
-
-      if (!user.IsConfirmed)
-        return false;
-
-      var verified = VerifyPassword(user, password);
-
-      _users.Update(user);
-      _users.SaveChanges();
-
-      return verified;
     }
 
     public string GeneratePasswordResetToken(string userName)
@@ -240,10 +214,7 @@ namespace Contrive.Core
     {
       Verify.NotEmpty(userName, "userName");
 
-      var user = GetUser(userName);
-
-      if (user == null)
-        return false;
+      var user = VerifyUserExists(userName);
 
       _users.Delete(user);
 
@@ -255,25 +226,16 @@ namespace Contrive.Core
     {
       Verify.NotEmpty(userName, "userName");
 
-      var user = GetUser(userName);
+      var user = VerifyUserExists(userName);
 
-      if (user == null)
-        return false;
-
-      if (user.IsConfirmed)
-        return true;
-
-      return false;
+      return user.IsConfirmed;
     }
 
     public string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow)
     {
       Verify.NotEmpty(userName, "userName");
 
-      var user = GetUser(userName);
-
-      if (user == null)
-        throw new InvalidOperationException(String.Format("User not found: {0}", userName));
+      var user = VerifyUserExists(userName);
 
       if (!user.IsConfirmed)
         throw new InvalidOperationException(String.Format("User not found: {0}", userName));
@@ -299,15 +261,17 @@ namespace Contrive.Core
 
       var user = _users
         .FirstOrDefault(u =>
-          u.PasswordVerificationToken == token
-          && u.PasswordVerificationTokenExpirationDate > DateTime.UtcNow);
+                        u.PasswordVerificationToken == token
+                        && u.PasswordVerificationTokenExpirationDate > DateTime.UtcNow);
 
       var validUser = user != null;
 
       if (validUser)
+      {
         SetPasswordFor(user, newPassword);
 
-      _users.SaveChanges();
+        _users.SaveChanges();
+      }
 
       return validUser;
     }
@@ -318,7 +282,7 @@ namespace Contrive.Core
       Verify.NotEmpty(password, "password");
 
       IUser user = GetUser(userNameOrEmail) ??
-                  GetUserByEmail(userNameOrEmail);
+                   GetUserByEmail(userNameOrEmail);
 
       if (user == null) return "";
 
@@ -329,10 +293,7 @@ namespace Contrive.Core
     {
       Verify.NotEmpty(userName, "userName");
 
-      var user = GetUser(userName);
-
-      if (user == null)
-        throw new InvalidOperationException(String.Format("User not found: {0}", userName));
+      var user = VerifyUserExists(userName);
 
       return user.PasswordChangedDate.GetValueOrDefault();
     }
@@ -341,10 +302,7 @@ namespace Contrive.Core
     {
       Verify.NotEmpty(userName, "userName");
 
-      var user = GetUser(userName);
-
-      if (user == null)
-        throw new InvalidOperationException(String.Format("User not found: {0}", userName));
+      var user = VerifyUserExists(userName);
 
       return user.DateCreated.GetValueOrDefault();
     }
@@ -353,10 +311,7 @@ namespace Contrive.Core
     {
       Verify.NotEmpty(userName, "userName");
 
-      var user = GetUser(userName);
-
-      if (user == null)
-        throw new InvalidOperationException(String.Format("User not found: {0}", userName));
+      var user = VerifyUserExists(userName);
 
       return user.FailedPasswordAttemptCount;
     }
@@ -374,12 +329,30 @@ namespace Contrive.Core
     {
       Verify.NotEmpty(userName, "userName");
 
-      var user = GetUser(userName);
-
-      if (user == null)
-        throw new InvalidOperationException(String.Format("User not found: {0}", userName));
+      var user = VerifyUserExists(userName);
 
       return user.LastPasswordFailureDate.GetValueOrDefault();
+    }
+
+    bool IsValidPassword(string password)
+    {
+      if (password.Length < MinRequiredPasswordLength)
+        return false;
+
+      if (MinRequiredNonAlphanumericCharacters > 0)
+      {
+        int nonAlpahNumericCharsCount = Regex.Matches(password, "[^a-zA-Z0-9]").Count;
+        if (nonAlpahNumericCharsCount < MinRequiredNonAlphanumericCharacters)
+          return false;
+      }
+
+      if (!PasswordStrengthRegularExpression.IsEmpty())
+      {
+        if (!Regex.IsMatch(password, PasswordStrengthRegularExpression))
+          return false;
+      }
+
+      return true;
     }
 
     string GetAuthDigest(string userName, string password)
@@ -393,7 +366,7 @@ namespace Contrive.Core
       return _cryptographer.ComputeMd5HashAsHex(a1);
     }
 
-    IUser GetUserByEmail(string emailAddress)
+    public IUser GetUserByEmail(string emailAddress)
     {
       Verify.NotEmpty(emailAddress, "emailAddress");
 
@@ -520,6 +493,16 @@ namespace Contrive.Core
 
       user.LastActivityDate = currentDate;
       user.PasswordChangedDate = currentDate;
+    }
+
+    IUser VerifyUserExists(string userName)
+    {
+      var user = GetUser(userName);
+
+      if (user == null)
+        throw new InvalidOperationException(string.Format("User not found: {0}", userName));
+
+      return user;
     }
   }
 }

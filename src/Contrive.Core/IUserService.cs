@@ -31,8 +31,6 @@ namespace Contrive.Core
                                 bool isApproved,
                                 object providerUserKey);
 
-    bool IsValidPassword(string password);
-
     bool VerifyUser(IUser user, string password);
 
     UserCreateStatus CreateUser(string userName, string password, string email);
@@ -62,5 +60,7 @@ namespace Contrive.Core
     Guid GetUserIdFromPasswordResetToken(string token);
 
     DateTime GetLastPasswordFailureDate(string userName);
+
+    IUser GetUserByEmail(string emailAddress);
   }
 }

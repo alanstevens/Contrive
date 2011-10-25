@@ -10,8 +10,8 @@ namespace Contrive.Core
   public class RoleService : IRoleService
   {
     public RoleService(IRoleRepository roles,
-                              IUserRepository users,
-                              IConfigurationProvider configuration)
+                       IUserRepository users,
+                       IConfigurationProvider configuration)
     {
       _roles = roles;
       _users = users;
@@ -49,25 +49,24 @@ namespace Contrive.Core
 
     public IEnumerable<IRole> GetAllRoles()
     {
-      return Enumerable.ToArray<IRole>(_roles.GetAll());
+      return _roles.GetAll();
     }
 
     public IEnumerable<IUser> GetUsersInRole(string roleName)
     {
       Verify.NotEmpty(roleName, "roleName");
 
-      var role = _roles.FirstOrDefault(r => r.Name == roleName);
+      var role = VerifyRole(roleName);
 
-      if (role == null)
-        throw new InvalidOperationException("Role not found");
-
-      return Enumerable.ToArray<IUser>(role.Users);
+      return role.Users;
     }
 
     public IEnumerable<IUser> FindUsersInRole(string roleName, string usernameToMatch)
     {
       Verify.NotEmpty(roleName, "roleName");
       Verify.NotEmpty(usernameToMatch, "usernameToMatch");
+
+      VerifyRole(roleName);
 
       var query = _roles.GetQuery().SelectMany(r => r.Users, (r, u) => new { r, u });
 
@@ -79,10 +78,7 @@ namespace Contrive.Core
     {
       Verify.NotEmpty(roleName, "roleName");
 
-      var role = _roles.FirstOrDefault(r => r.Name == roleName);
-
-      if (role == null)
-        throw new InvalidOperationException("Role not found");
+      var role = VerifyRole(roleName);
 
       if (throwOnPopulatedRole)
       {
@@ -90,11 +86,13 @@ namespace Contrive.Core
           throw new InvalidOperationException(string.Format("Role populated: {0}", roleName));
       }
       else
+      {
         role.Users.Each(u =>
         {
           u.Roles.Remove(role);
           _users.Update(u);
         });
+      }
 
       _roles.Delete(role);
       _roles.SaveChanges();
@@ -106,10 +104,7 @@ namespace Contrive.Core
     {
       Verify.NotEmpty(userName, "userName");
 
-      var user = _users.FirstOrDefault(u => u.Username == userName);
-
-      if (user == null)
-        throw new InvalidOperationException(string.Format("User not found: {0}", userName));
+      var user = VerifyUser(userName);
 
       return user.Roles;
     }
@@ -133,9 +128,12 @@ namespace Contrive.Core
 
     public void AddUsersToRoles(string[] userNames, string[] roleNames)
     {
-      var users = _users.Where(u => userNames.Contains(u.Username)).ToArray();
-      var roles = _roles.Where(r => roleNames.Contains(r.Name)).ToArray();
-      AddUsersToRoles(users, roles);
+      AddUsersToRoles(GetUsersForUserNames(userNames), GetRolesForRoleNames(roleNames));
+    }
+
+    public void RemoveUsersFromRoles(string[] userNames, string[] roleNames)
+    {
+      RemoveUsersFromRoles(GetUsersForUserNames(userNames), GetRolesForRoleNames(roleNames));
     }
 
     public void AddUsersToRoles(IEnumerable<IUser> users, IEnumerable<IRole> roles)
@@ -153,13 +151,6 @@ namespace Contrive.Core
         _users.Update(u);
       }
       _roles.SaveChanges();
-    }
-
-    public void RemoveUsersFromRoles(string[] userNames, string[] roleNames)
-    {
-      var users = _users.Where(u => userNames.Contains(u.Username)).ToArray();
-      var roles = _roles.Where(r => roleNames.Contains(r.Name)).ToArray();
-      RemoveUsersFromRoles(users, roles);
     }
 
     public void RemoveUsersFromRoles(IEnumerable<IUser> users, IEnumerable<IRole> roles)
@@ -191,6 +182,34 @@ namespace Contrive.Core
       }
 
       ApplicationName = config["applicationName"];
+    }
+
+    IEnumerable<IRole> GetRolesForRoleNames(IEnumerable<string> roleNames)
+    {
+      return _roles.Where(r => roleNames.Contains(r.Name)).ToArray();
+    }
+
+    IEnumerable<IUser> GetUsersForUserNames(IEnumerable<string> userNames)
+    {
+      return _users.Where(u => userNames.Contains(u.Username)).ToArray();
+    }
+
+    IRole VerifyRole(string roleName)
+    {
+      var role = _roles.FirstOrDefault(r => r.Name == roleName);
+
+      if (role == null)
+        throw new InvalidOperationException("Role not found");
+      return role;
+    }
+
+    IUser VerifyUser(string userName)
+    {
+      var user = _users.FirstOrDefault(u => u.Username == userName);
+
+      if (user == null)
+        throw new InvalidOperationException(string.Format("User not found: {0}", userName));
+      return user;
     }
   }
 }

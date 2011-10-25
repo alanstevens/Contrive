@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Specialized;
+using System.Configuration.Provider;
 using System.Linq;
+using System.Web.Security;
 using Contrive.Core;
+using Contrive.Core.Extensions;
 using Microsoft.Practices.ServiceLocation;
-using RoleProvider = System.Web.Security.RoleProvider;
 
 namespace Contrive.Web.Membership
 {
@@ -18,11 +20,10 @@ namespace Contrive.Web.Membership
 
     public override void Initialize(string name, NameValueCollection config)
     {
-      if (config == null)
-        throw new ArgumentNullException("config");
+      Verify.NotNull(config, "config");
 
-      if (string.IsNullOrEmpty(name))
-        name = "EntityRoleProvider";
+      if (name.IsEmpty())
+        name = "ContriveRoleProvider";
 
       if (string.IsNullOrEmpty(config["description"]))
       {
@@ -54,33 +55,49 @@ namespace Contrive.Web.Membership
 
     public override string[] GetUsersInRole(string roleName)
     {
-      return GetRoleManagementService()
-        .GetUsersInRole(roleName)
-        .Select(u => u.Username).ToArray();
+      string[] usersInRole = null;
+
+      ThrowMembership(() => usersInRole = GetRoleManagementService()
+                                            .GetUsersInRole(roleName)
+                                            .Select(u => u.Username).ToArray());
+
+      return usersInRole;
     }
 
     public override string[] FindUsersInRole(string roleName, string usernameToMatch)
     {
-      return GetRoleManagementService()
+      string[] usersInRole = null;
+
+      ThrowMembership(() => usersInRole = GetRoleManagementService()
         .FindUsersInRole(roleName, usernameToMatch)
-        .Select(u => u.Username).ToArray();
+        .Select(u => u.Username).ToArray());
+
+      return usersInRole;
     }
 
     public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
     {
-      return GetRoleManagementService().DeleteRole(roleName, throwOnPopulatedRole);
+      bool success = false;
+
+      ThrowMembership(() => success = GetRoleManagementService().DeleteRole(roleName, throwOnPopulatedRole));
+
+      return success;
     }
 
     public override string[] GetRolesForUser(string userName)
     {
-      return GetRoleManagementService()
+      string[] rolesForUser = null;
+
+      ThrowMembership(() => rolesForUser = GetRoleManagementService()
         .GetRolesForUser(userName)
-        .Select(r => r.Name).ToArray();
+        .Select(r => r.Name).ToArray());
+
+      return rolesForUser;
     }
 
     public override void CreateRole(string roleName)
     {
-      GetRoleManagementService().CreateRole(roleName);
+      ThrowMembership(() => GetRoleManagementService().CreateRole(roleName));
     }
 
     public override void AddUsersToRoles(string[] userNames, string[] roleNames)
@@ -91,6 +108,18 @@ namespace Contrive.Web.Membership
     public override void RemoveUsersFromRoles(string[] userNames, string[] roleNames)
     {
       GetRoleManagementService().RemoveUsersFromRoles(userNames, roleNames);
+    }
+
+    void ThrowMembership(Action test)
+    {
+      try
+      {
+        test();
+      }
+      catch (InvalidOperationException e)
+      {
+        throw new ProviderException(e.Message, e);
+      }
     }
   }
 }
