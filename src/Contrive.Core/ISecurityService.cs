@@ -1,8 +1,8 @@
 using System;
 
-namespace Contrive.Web.Membership
+namespace Contrive.Core
 {
-  public interface IWebSecurity
+  public interface ISecurityService
   {
     Guid CurrentUserId { get; }
     string CurrentUserName { get; }

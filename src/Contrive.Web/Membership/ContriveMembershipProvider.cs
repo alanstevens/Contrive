@@ -180,7 +180,7 @@ namespace Contrive.Web.Membership
 
     public override string GetUserNameByEmail(string emailAddress)
     {
-      return GetUserService().GetUserByEmail(emailAddress).Username;
+      return GetUserService().GetUserByEmail(emailAddress).UserName;
     }
 
     void ThrowMembership(Action test)

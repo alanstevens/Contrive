@@ -102,7 +102,7 @@ namespace Contrive.Core
       var newUser = ServiceLocator.Current.GetInstance<IUser>();
 
       newUser.Id = Guid.NewGuid();
-      newUser.Username = userName;
+      newUser.UserName = userName;
       newUser.PasswordSalt = passwordSalt;
       newUser.Email = email;
       newUser.IsApproved = isApproved;
@@ -163,7 +163,7 @@ namespace Contrive.Core
     {
       Verify.NotEmpty(userName, "userName");
 
-      return _users.FirstOrDefault(u => u.Username == userName);
+      return _users.FirstOrDefault(u => u.UserName == userName);
     }
 
     public string GeneratePasswordResetToken(string userName)
@@ -262,7 +262,7 @@ namespace Contrive.Core
 
       if (user == null) return "";
 
-      return VerifyUser(user, password) ? user.Username : String.Empty;
+      return VerifyUser(user, password) ? user.UserName : String.Empty;
     }
 
     public DateTime GetPasswordChangedDate(string userName)
@@ -411,7 +411,7 @@ namespace Contrive.Core
         throw new ArgumentException("Password too long");
 
       user.Password = newEncodedPassword;
-      user.AuthDigest = GetAuthDigest(user.Username, password);
+      user.AuthDigest = GetAuthDigest(user.UserName, password);
       user.PasswordVerificationToken = null;
       user.PasswordVerificationTokenExpirationDate = null;
 

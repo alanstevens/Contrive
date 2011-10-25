@@ -47,10 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationProvider.cs" />
+    <Compile Include="AuthenticationService.cs" />
     <Compile Include="Membership\ContriveMembershipProvider.cs" />
     <Compile Include="Membership\ContriveRoleProvider.cs" />
-    <Compile Include="Membership\IWebSecurity.cs" />
-    <Compile Include="Membership\WebSecurity.cs" />
+    <Compile Include="Membership\IProfileService.cs" />
+    <Compile Include="Membership\SecUtil.cs" />
+    <Compile Include="Membership\SqlProfileProvider.cs" />
+    <Compile Include="Membership\SecurityService.cs" />
+    <Compile Include="Membership\SR.cs" />
     <Compile Include="Modules\AuthenticationModuleBase.cs" />
     <Compile Include="Modules\BasicAuthenticationModule.cs" />
     <Compile Include="Modules\DigestAuthenticationModule.cs" />

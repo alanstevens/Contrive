@@ -10,11 +10,11 @@ namespace Contrive.Web.Membership
   /// <summary>
   ///   Duplicates the functionality of the WebSecurity class from ASP.NET WebPages.
   /// </summary>
-  public class WebSecurity : IWebSecurity
+  public class SecurityService : ISecurityService
   {
     readonly IUserService _userService;
 
-    public WebSecurity(IUserService userService)
+    public SecurityService(IUserService userService)
     {
       _userService = userService;
     }

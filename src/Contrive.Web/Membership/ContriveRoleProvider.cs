@@ -59,7 +59,7 @@ namespace Contrive.Web.Membership
 
       ThrowMembership(() => usersInRole = GetRoleManagementService()
                                             .GetUsersInRole(roleName)
-                                            .Select(u => u.Username).ToArray());
+                                            .Select(u => u.UserName).ToArray());
 
       return usersInRole;
     }
@@ -70,7 +70,7 @@ namespace Contrive.Web.Membership
 
       ThrowMembership(() => usersInRole = GetRoleManagementService()
         .FindUsersInRole(roleName, usernameToMatch)
-        .Select(u => u.Username).ToArray());
+        .Select(u => u.UserName).ToArray());
 
       return usersInRole;
     }

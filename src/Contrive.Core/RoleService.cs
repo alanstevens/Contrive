@@ -48,7 +48,7 @@ namespace Contrive.Core
       Verify.NotEmpty(userName, "userName");
       Verify.NotEmpty(roleName, "roleName");
 
-      var user = _users.FirstOrDefault(u => u.Username == userName);
+      var user = _users.FirstOrDefault(u => u.UserName == userName);
 
       if (user == null)
         return false;
@@ -81,11 +81,11 @@ namespace Contrive.Core
 
       var query = _roles.GetQuery().SelectMany(r => r.Users, (r, u) => new { r, u });
 
-      return query.Where(t => t.r.Name == roleName && t.u.Username.Contains(usernameToMatch))
+      return query.Where(t => t.r.Name == roleName && t.u.UserName.Contains(usernameToMatch))
         .Select(t => t.u).ToArray();
     }
 
-    public bool DeleteRole(string roleName, bool throwOnPopulatedRole)
+    public bool DeleteRole(string roleName, bool throwOnPopulatedRole = false)
     {
       Verify.NotEmpty(roleName, "roleName");
 
@@ -189,7 +189,7 @@ namespace Contrive.Core
 
     IEnumerable<IUser> GetUsersForUserNames(IEnumerable<string> userNames)
     {
-      return _users.Where(u => userNames.Contains(u.Username)).ToArray();
+      return _users.Where(u => userNames.Contains(u.UserName)).ToArray();
     }
 
     IRole VerifyRole(string roleName)
@@ -203,7 +203,7 @@ namespace Contrive.Core
 
     IUser VerifyUser(string userName)
     {
-      var user = _users.FirstOrDefault(u => u.Username == userName);
+      var user = _users.FirstOrDefault(u => u.UserName == userName);
 
       if (user == null)
         throw new InvalidOperationException(string.Format("User not found: {0}", userName));

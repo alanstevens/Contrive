@@ -41,14 +41,18 @@
   <ItemGroup>
     <Compile Include="CreateUserException.cs" />
     <Compile Include="Cryptographer.cs" />
+    <Compile Include="EmailService.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IConfigurationProvider.cs" />
     <Compile Include="ICryptographer.cs" />
+    <Compile Include="IEmailService.cs" />
+    <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IRole.cs" />
     <Compile Include="IRoleService.cs" />
     <Compile Include="IRoleRepository.cs" />
+    <Compile Include="ISecurityService.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IUserService.cs" />
     <Compile Include="IUserRepository.cs" />

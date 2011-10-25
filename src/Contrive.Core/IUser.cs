@@ -6,7 +6,7 @@ namespace Contrive.Core
   public interface IUser
   {
     Guid Id { get; set; }
-    string Username { get; set; }
+    string UserName { get; set; }
     string Email { get; set; }
     string Password { get; set; }
     string PasswordSalt { get; set; }

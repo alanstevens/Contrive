@@ -188,10 +188,10 @@ namespace Contrive.Tests
       _roleMock2.SetupGet(r => r.Name).Returns("user");
       _roleMock2.SetupGet(r => r.Users).Returns(new List<IUser>());
       userMock.SetupAllProperties();
-      userMock.SetupGet(u => u.Username).Returns(userName);
+      userMock.SetupGet(u => u.UserName).Returns(userName);
       userMock.SetupGet(u => u.Roles).Returns(new List<IRole>());
       _userMock2.SetupAllProperties();
-      _userMock2.SetupGet(u => u.Username).Returns("someOtherUser");
+      _userMock2.SetupGet(u => u.UserName).Returns("someOtherUser");
       _userMock2.SetupGet(u => u.Roles).Returns(new List<IRole>());
     }
 
@@ -205,7 +205,7 @@ namespace Contrive.Tests
     void SetupUser()
     {
       userMock.SetupAllProperties();
-      userMock.SetupGet(u => u.Username).Returns(userName);
+      userMock.SetupGet(u => u.UserName).Returns(userName);
       userMock.SetupGet(u => u.Roles).Returns(new List<IRole> { roleMock.Object });
     }
   }

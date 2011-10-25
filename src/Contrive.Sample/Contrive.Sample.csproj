@@ -63,12 +63,34 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Contrive\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Contrive\Controllers\MembershipController.cs" />
+    <Compile Include="Areas\Contrive\Controllers\RoleController.cs" />
+    <Compile Include="Areas\Contrive\Models\ChangePasswordModel.cs" />
+    <Compile Include="Areas\Contrive\Models\ChangePasswordViewModel.cs" />
+    <Compile Include="Areas\Contrive\Models\DashboardViewModel.cs" />
+    <Compile Include="Areas\Contrive\Models\ForgotPasswordViewModel.cs" />
+    <Compile Include="Areas\Contrive\Models\GrantRolesToUserViewModel.cs" />
+    <Compile Include="Areas\Contrive\Models\JsonResponse.cs" />
+    <Compile Include="Areas\Contrive\Models\LogOnModel.cs" />
+    <Compile Include="Areas\Contrive\Models\LogOnViewModel.cs" />
+    <Compile Include="Areas\Contrive\Models\ManageRolesViewModel.cs" />
+    <Compile Include="Areas\Contrive\Models\ManageUsersViewModel.cs" />
+    <Compile Include="Areas\Contrive\Models\RegisterModel.cs" />
+    <Compile Include="Areas\Contrive\Models\RegisterViewModel.cs" />
+    <Compile Include="Areas\Contrive\Models\ResponseItem.cs" />
+    <Compile Include="Areas\Contrive\Models\RoleViewModel.cs" />
+    <Compile Include="Areas\Contrive\Models\SelectObject.cs" />
+    <Compile Include="Areas\Contrive\Models\UserViewModel.cs" />
+    <Compile Include="Areas\Contrive\SecurityGuardAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\ChangePasswordModel.cs" />
+    <Compile Include="Models\LogOnModel.cs" />
+    <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +167,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Contrive\Views\Dashboard\Index.cshtml" />
+    <Content Include="Areas\Contrive\Views\Membership\CreateUser.cshtml" />
+    <Content Include="Areas\Contrive\Views\Membership\GrantRolesToUser.cshtml" />
+    <Content Include="Areas\Contrive\Views\Membership\Index.cshtml" />
+    <Content Include="Areas\Contrive\Views\Membership\Update.cshtml" />
+    <Content Include="Areas\Contrive\Views\Role\Index.cshtml" />
+    <Content Include="Areas\Contrive\Views\Shared\_SecurityGuardLayoutPage.cshtml" />
+    <Content Include="Areas\Contrive\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Contrive.Core\Contrive.Core.csproj">
+      <Project>{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}</Project>
+      <Name>Contrive.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

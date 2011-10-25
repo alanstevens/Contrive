@@ -16,7 +16,7 @@ namespace Contrive.Core
 
     IEnumerable<IUser> FindUsersInRole(string roleName, string usernameToMatch);
 
-    bool DeleteRole(string roleName, bool throwOnPopulatedRole);
+    bool DeleteRole(string roleName, bool throwOnPopulatedRole = false);
 
     IEnumerable<IRole> GetRolesForUser(string userName);
 
