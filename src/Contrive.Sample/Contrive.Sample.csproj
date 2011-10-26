@@ -66,6 +66,7 @@
     <Compile Include="Areas\Contrive\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Contrive\Controllers\MembershipController.cs" />
     <Compile Include="Areas\Contrive\Controllers\RoleController.cs" />
+    <Compile Include="Areas\Contrive\Controllers\ContriveAccountController.cs" />
     <Compile Include="Areas\Contrive\Models\ChangePasswordModel.cs" />
     <Compile Include="Areas\Contrive\Models\ChangePasswordViewModel.cs" />
     <Compile Include="Areas\Contrive\Models\DashboardViewModel.cs" />
@@ -82,7 +83,7 @@
     <Compile Include="Areas\Contrive\Models\RoleViewModel.cs" />
     <Compile Include="Areas\Contrive\Models\SelectObject.cs" />
     <Compile Include="Areas\Contrive\Models\UserViewModel.cs" />
-    <Compile Include="Areas\Contrive\SecurityGuardAreaRegistration.cs" />
+    <Compile Include="Areas\Contrive\ContriveAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -94,6 +95,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Contrive\images\blue_ico.png" />
+    <Content Include="Content\Contrive\images\blue_message.gif" />
+    <Content Include="Content\Contrive\images\green_ico.png" />
+    <Content Include="Content\Contrive\images\green_message.gif" />
+    <Content Include="Content\Contrive\images\negative.gif" />
+    <Content Include="Content\Contrive\images\positive.gif" />
+    <Content Include="Content\Contrive\images\red_ico.png" />
+    <Content Include="Content\Contrive\images\red_message.gif" />
+    <Content Include="Content\Contrive\images\td_bg1.gif" />
+    <Content Include="Content\Contrive\images\td_bg2.gif" />
+    <Content Include="Content\Contrive\images\white_ico.png" />
+    <Content Include="Content\Contrive\images\white_message.gif" />
+    <Content Include="Content\Contrive\images\yellow_ico.png" />
+    <Content Include="Content\Contrive\images\yellow_message.gif" />
+    <Content Include="Content\Contrive\scripts\jquery-1.6.1.min.js" />
+    <Content Include="Content\Contrive\scripts\jquery.jqia.selects.js" />
+    <Content Include="Content\Contrive\scripts\jquery.validate.min.js" />
+    <Content Include="Content\Contrive\scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Content\Contrive\scripts\modernizr-1.7.min.js" />
+    <Content Include="Content\Contrive\Contrive.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -175,7 +196,7 @@
     <Content Include="Areas\Contrive\Views\Membership\Index.cshtml" />
     <Content Include="Areas\Contrive\Views\Membership\Update.cshtml" />
     <Content Include="Areas\Contrive\Views\Role\Index.cshtml" />
-    <Content Include="Areas\Contrive\Views\Shared\_SecurityGuardLayoutPage.cshtml" />
+    <Content Include="Areas\Contrive\Views\Shared\_ContriveLayoutPage.cshtml" />
     <Content Include="Areas\Contrive\Views\Web.config" />
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,11 @@
 @using Contrive.Sample.Areas.Contrive.Models
-@using Contrive.Sample.Areas.SecurityGuard.Models
+@using Contrive.Sample.Areas.Contrive.Models
 @model ManageRolesViewModel
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Areas/SecurityGuard/Views/Shared/_SecurityGuardLayoutPage.cshtml";
+    Layout = "~/Areas/Contrive/Views/Shared/_ContriveLayoutPage.cshtml";
 }
-    <script src="@Url.Content("~/Content/SecurityGuard/scripts/jquery.jqia.selects.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/Contrive/scripts/jquery.jqia.selects.js")" type="text/javascript"></script>
 
 <div id="breadcrumb">
     @Html.ActionLink("Dashboard", "Index", "Dashboard") > Manage Roles
@@ -220,7 +220,7 @@
                 ul.append("<li>No user(s).</li>");
             } else {
                 $.each(data, function (index, item) {
-                    ul.append("<li><a href=\"/SecurityGuard/Membership/Update/" + item + "\">" + item + "</a></li>");
+                    ul.append("<li><a href=\"/Contrive/Membership/Update/" + item + "\">" + item + "</a></li>");
                 });
             }
         }

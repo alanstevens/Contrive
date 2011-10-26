@@ -4,7 +4,7 @@ using Contrive.Sample.Areas.Contrive.Models;
 
 namespace Contrive.Sample.Areas.Contrive.Controllers
 {
-  [Authorize(Roles = "SecurityGuard")]
+  [Authorize(Roles = "Contrive")]
   public class DashboardController : Controller
   {
     public DashboardController(IRoleService roleService, IUserService userService)

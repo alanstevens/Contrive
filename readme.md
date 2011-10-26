@@ -1,13 +1,13 @@
 #Contrive
 
-Contrive is an authentication and authorization system built for ASP.NET.
+Contrive is an authentication and authorization system for ASP.NET.
 
-Contrive provides backwards compatable with the ASP.NET Membership Provider.
+Contrive is backwards compatable with the ASP.NET Membership Provider.
 
 Contrive is intended to mimic the ease of installation and configuration
 found in [Devise] (https://github.com/plataformatec/devise).
 
-Contrive was influenced by and steals liberally from:
+Contrive was influenced by and borrows liberally from:
 
 * [CodeCampServer] (http://codecampserver.codeplex.com/)
 * [OpenFaq] (http://openfaq.codeplex.com/)

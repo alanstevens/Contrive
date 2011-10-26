@@ -1,9 +1,8 @@
 @using Contrive.Sample.Areas.Contrive.Models
-@using Contrive.Sample.Areas.SecurityGuard.Models
 @model DashboardViewModel
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Areas/SecurityGuard/Views/Shared/_SecurityGuardLayoutPage.cshtml";
+    Layout = "~/Areas/Contrive/Views/Shared/_ContriveLayoutPage.cshtml";
 }
 <h2>
     Manage Users and Roles</h2>
@@ -13,8 +12,8 @@
 <div class="fl w48pc mr20">
     <fieldset>
         <legend>Manage Users</legend>
-        <p>@Html.ActionLink("Manage Users", "Index", "Membership", new { area = "SecurityGuard" }, null)
-            | @Html.ActionLink("Create User", "CreateUser", "Membership", new { area = "SecurityGuard" }, null)</p>
+        <p>@Html.ActionLink("Manage Users", "Index", "Membership", new { area = "Contrive" }, null)
+            | @Html.ActionLink("Create User", "CreateUser", "Membership", new { area = "Contrive" }, null)</p>
         <table>
             <tr>
                 <td>
@@ -36,7 +35,7 @@
 <div class="fr w48pc">
     <fieldset>
         <legend>Manage Roles</legend>
-        <p>@Html.ActionLink("Manage Roles", "Index", "Role", new { area = "SecurityGuard" }, null)</p>
+        <p>@Html.ActionLink("Manage Roles", "Index", "Role", new { area = "Contrive" }, null)</p>
         <table>
             <tr>
                 <td>

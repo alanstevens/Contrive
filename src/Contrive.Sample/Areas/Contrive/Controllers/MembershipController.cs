@@ -9,23 +9,22 @@ using Contrive.Sample.Areas.Contrive.Models;
 
 namespace Contrive.Sample.Areas.Contrive.Controllers
 {
-  [Authorize(Roles = "SecurityGuard")]
+  [Authorize(Roles = "Contrive")]
   public class MembershipController : Controller
   {
     readonly IRoleService _roleService;
     readonly IUserService _userService;
 
-    public MembershipController(IRoleService _roleService, IUserService userService)
+    public MembershipController(IRoleService roleService, IUserService userService)
     {
-      _roleService = _roleService;
+      _roleService = roleService;
       _userService = userService;
     }
 
 
     public virtual ActionResult Index(string searchterm, string filterby)
     {
-      ManageUsersViewModel viewModel = new ManageUsersViewModel();
-      viewModel.Users = null;
+      var viewModel = new ManageUsersViewModel { Users = null };
 
       if (!string.IsNullOrEmpty(searchterm))
       {
@@ -49,11 +48,6 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       return View(model);
     }
 
-    /// <summary>
-    ///   This method redirects to the GrantRolesToUser method.
-    /// </summary>
-    /// <param name = "model"></param>
-    /// <returns></returns>
     [HttpPost]
     public virtual ActionResult CreateUser(RegisterViewModel model)
     {
@@ -66,16 +60,11 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
           new RouteValueDictionary(new { action = "GrantRolesToUser", controller = "Membership", username = user.UserName }));
     }
 
-    /// <summary>
-    ///   An Ajax method to check if a username is unique.
-    /// </summary>
-    /// <param name = "userName"></param>
-    /// <returns></returns>
     [HttpGet]
     public ActionResult CheckForUniqueUser(string userName)
     {
       var user = _userService.GetUser(userName);
-      JsonResponse response = new JsonResponse { Exists = (user != null) };
+      var response = new JsonResponse { Exists = (user != null) };
 
       return Json(response, JsonRequestBehavior.AllowGet);
     }
@@ -118,8 +107,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     //[MultiButtonFormSubmit(ActionName = "UpdateDeleteCancel", SubmitButton = "UpdateUser")]
     public ActionResult UpdateUser(string UserName)
     {
-      if (string.IsNullOrEmpty(UserName))
-        throw new ArgumentNullException("userName");
+      Verify.NotEmpty(UserName, "userName");
 
       var user = _userService.GetUser(UserName);
 
@@ -143,7 +131,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     [HttpPost]
     public ActionResult Unlock(string userName)
     {
-      JsonResponse response = new JsonResponse();
+      var response = new JsonResponse();
 
       var user = _userService.GetUser(userName);
 
@@ -167,7 +155,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     [HttpPost]
     public ActionResult ApproveDeny(string userName)
     {
-      JsonResponse response = new JsonResponse();
+      var response = new JsonResponse();
 
       var user = _userService.GetUser(userName);
 
@@ -199,19 +187,12 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       return RedirectToAction("Index");
     }
 
-    /// <summary>
-    ///   Return two lists:
-    ///   1)  a list of Roles not granted to the user
-    ///   2)  a list of Roles granted to the user
-    /// </summary>
-    /// <param name = "username"></param>
-    /// <returns></returns>
     public virtual ActionResult GrantRolesToUser(string username)
     {
       if (string.IsNullOrEmpty(username))
         return RedirectToAction("Index");
 
-      GrantRolesToUserViewModel model = new GrantRolesToUserViewModel();
+      var model = new GrantRolesToUserViewModel();
       model.UserName = username;
       IEnumerable<IRole> allRoles = _roleService.GetAllRoles();
       model.AvailableRoles = (string.IsNullOrEmpty(username)
@@ -224,16 +205,10 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       return View(model);
     }
 
-    /// <summary>
-    ///   Grant the selected roles to the user.
-    /// </summary>
-    /// <param name = "userName"></param>
-    /// <param name = "roleNames"></param>
-    /// <returns></returns>
     [HttpPost]
     public virtual ActionResult GrantRolesToUser(string userName, string roles)
     {
-      JsonResponse response = new JsonResponse();
+      var response = new JsonResponse();
 
       if (string.IsNullOrEmpty(userName))
       {
@@ -267,12 +242,6 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       return Json(response);
     }
 
-    /// <summary>
-    ///   Revoke the selected roles for the user.
-    /// </summary>
-    /// <param name = "userName"></param>
-    /// <param name = "roleNames"></param>
-    /// <returns></returns>
     [HttpPost]
     public ActionResult RevokeRolesForUser(string userName, string roles)
     {

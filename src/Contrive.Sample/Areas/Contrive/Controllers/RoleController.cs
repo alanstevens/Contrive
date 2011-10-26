@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration.Provider;
+using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Contrive.Core;
@@ -8,7 +9,7 @@ using Contrive.Sample.Areas.Contrive.Models;
 
 namespace Contrive.Sample.Areas.Contrive.Controllers
 {
-  [Authorize(Roles = "SecurityGuard")]
+  [Authorize(Roles = "Contrive")]
   public class RoleController : Controller
   {
     public RoleController(IRoleService roleService)
@@ -20,9 +21,11 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
     public virtual ActionResult Index()
     {
-      ManageRolesViewModel model = new ManageRolesViewModel();
-      model.Roles = new SelectList(_roleService.GetAllRoles());
-      model.RoleList = _roleService.GetAllRoles();
+      var model = new ManageRolesViewModel
+                  {
+                    Roles = new SelectList(_roleService.GetAllRoles()),
+                    RoleList = _roleService.GetAllRoles()
+                  };
 
       return View(model);
     }
@@ -36,7 +39,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     [HttpPost]
     public virtual ActionResult CreateRole(string roleName)
     {
-      JsonResponse response = new JsonResponse();
+      var response = new JsonResponse();
 
       if (string.IsNullOrEmpty(roleName))
       {
@@ -79,15 +82,10 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       return RedirectToAction("Index");
     }
 
-    /// <summary>
-    ///   This is an Ajax method.
-    /// </summary>
-    /// <param name = "roleName"></param>
-    /// <returns></returns>
     [HttpPost]
     public virtual ActionResult DeleteRole(string roleName)
     {
-      JsonResponse response = new JsonResponse();
+      var response = new JsonResponse();
 
       if (string.IsNullOrEmpty(roleName))
       {
@@ -110,7 +108,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     [HttpPost]
     public ActionResult DeleteRoles(string roles, bool throwOnPopulatedRole)
     {
-      JsonResponse response = new JsonResponse();
+      var response = new JsonResponse();
       response.Messages = new List<ResponseItem>();
 
       if (string.IsNullOrEmpty(roles))
@@ -121,36 +119,37 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       }
 
       string[] roleNames = roles.Split(',');
-      StringBuilder sb = new StringBuilder();
+      var sb = new StringBuilder();
 
-      ResponseItem item = null;
-
-      foreach (var role in roleNames)
+      var validRoleNames = roleNames.Where(role => !string.IsNullOrEmpty(role));
+      foreach (var role in validRoleNames)
       {
-        if (!string.IsNullOrEmpty(role))
+        ResponseItem item;
+        try
         {
-          try
-          {
-            _roleService.DeleteRole(role, throwOnPopulatedRole);
+          _roleService.DeleteRole(role, throwOnPopulatedRole);
 
-            item = new ResponseItem();
-            item.Success = true;
-            item.Message = "Deleted this role successfully - " + role;
-            item.CssClass = "green";
-            response.Messages.Add(item);
+          item = new ResponseItem
+                 {
+                   Success = true,
+                   Message = "Deleted this role successfully - " + role,
+                   CssClass = "green"
+                 };
+          response.Messages.Add(item);
 
-            //sb.AppendLine("Deleted this role successfully - " + role + "<br />");
-          }
-          catch (ProviderException ex)
-          {
-            //sb.AppendLine(role + " - " + ex.Message + "<br />");
+          //sb.AppendLine("Deleted this role successfully - " + role + "<br />");
+        }
+        catch (ProviderException ex)
+        {
+          //sb.AppendLine(role + " - " + ex.Message + "<br />");
 
-            item = new ResponseItem();
-            item.Success = false;
-            item.Message = ex.Message;
-            item.CssClass = "yellow";
-            response.Messages.Add(item);
-          }
+          item = new ResponseItem
+                 {
+                   Success = false,
+                   Message = ex.Message,
+                   CssClass = "yellow"
+                 };
+          response.Messages.Add(item);
         }
       }
 
@@ -160,21 +159,11 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       return Json(response);
     }
 
-    /// <summary>
-    ///   This is an Ajax method that populates the 
-    ///   Roles drop down list.
-    /// </summary>
-    /// <returns></returns>
     public ActionResult GetAllRoles()
     {
       var list = _roleService.GetAllRoles();
 
-      List<SelectObject> selectList = new List<SelectObject>();
-
-      foreach (var item in list)
-      {
-        selectList.Add(new SelectObject {caption = item.Name, value = item.Name});
-      }
+      var selectList = list.Select(item => new SelectObject { caption = item.Name, value = item.Name }).ToList();
 
       return Json(selectList, JsonRequestBehavior.AllowGet);
     }
