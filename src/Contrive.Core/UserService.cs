@@ -16,9 +16,6 @@ namespace Contrive.Core
       _cryptographer = cryptographer;
       _configurationProvider = configurationProvider;
       Settings = new UserServiceSettings(_configurationProvider.UserServiceConfiguration);
-
-      var realm = _configurationProvider.AppSettings["HTTP.Realm"];
-      Settings.Realm = realm.IsEmpty() ? "Application" : realm;
     }
 
     const int MAX_HASHED_PASSWORD_LENGTH = 128;
@@ -166,11 +163,6 @@ namespace Contrive.Core
       return _users.FirstOrDefault(u => u.UserName == userName);
     }
 
-    public string GeneratePasswordResetToken(string userName)
-    {
-      return GeneratePasswordResetToken(userName, ONE_DAY_IN_MINUTES);
-    }
-
     public bool ConfirmAccount(string accountConfirmationToken)
     {
       Verify.NotEmpty(accountConfirmationToken, "accountConfirmationToken");
@@ -205,6 +197,11 @@ namespace Contrive.Core
       var user = VerifyUserExists(userName);
 
       return user.IsConfirmed;
+    }
+
+    public string GeneratePasswordResetToken(string userName)
+    {
+      return GeneratePasswordResetToken(userName, ONE_DAY_IN_MINUTES);
     }
 
     public string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow)

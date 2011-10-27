@@ -2,7 +2,7 @@
 
 Contrive is an authentication and authorization system for ASP.NET.
 
-Contrive is backwards compatable with the ASP.NET Membership Provider.
+Contrive is (mostly) backwards compatable with the ASP.NET Membership Provider. (Contrive does not support secret question/answer of mailing passwords in plain text)
 
 Contrive is intended to mimic the ease of installation and configuration
 found in [Devise] (https://github.com/plataformatec/devise).

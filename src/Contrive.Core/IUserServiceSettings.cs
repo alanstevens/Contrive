@@ -15,5 +15,8 @@ namespace Contrive.Core
     int MinRequiredNonAlphanumericCharacters { get; }
     string PasswordStrengthRegularExpression { get; }
     int MinPasswordLength { get; }
+    string ContriveEmailFrom { get; }
+    string ContriveEmailSubject { get; }
+    string ContriveEmailTemplatePath { get; }
   }
 }

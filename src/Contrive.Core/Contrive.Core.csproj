@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="CreateUserException.cs" />
     <Compile Include="Cryptographer.cs" />
-    <Compile Include="EmailService.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

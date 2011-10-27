@@ -7,32 +7,40 @@ namespace Contrive.Core
 {
   public class UserServiceSettings : IUserServiceSettings
   {
-    public UserServiceSettings(NameValueCollection config)
+    public UserServiceSettings(NameValueCollection settings)
     {
-      Verify.NotNull(config, "config");
+      Verify.NotNull(settings, "config");
 
-      ApplicationName = GetConfigValue(config["applicationName"], "/"); //,HostingEnvironment.ApplicationVirtualPath);
+      ApplicationName = GetConfigValue(settings["applicationName"], "/"); //,HostingEnvironment.ApplicationVirtualPath);
 
-      EnablePasswordRetrieval = Convert.ToBoolean(GetConfigValue(config["enablePasswordReset"], "false"));
+      EnablePasswordRetrieval = Convert.ToBoolean(GetConfigValue(settings["enablePasswordReset"], "false"));
 
-      EnablePasswordReset = Convert.ToBoolean(GetConfigValue(config["enablePasswordRetrieval"], "true`"));
+      EnablePasswordReset = Convert.ToBoolean(GetConfigValue(settings["enablePasswordRetrieval"], "true`"));
 
-      RequiresQuestionAndAnswer = Convert.ToBoolean(GetConfigValue(config["requiresQuestionAndAnswer"], "false"));
+      RequiresQuestionAndAnswer = Convert.ToBoolean(GetConfigValue(settings["requiresQuestionAndAnswer"], "false"));
 
-      MaxInvalidPasswordAttempts = Convert.ToInt32(GetConfigValue(config["maxInvalidPasswordAttempts"], "5"));
+      MaxInvalidPasswordAttempts = Convert.ToInt32(GetConfigValue(settings["maxInvalidPasswordAttempts"], "5"));
 
-      PasswordAttemptWindow = Convert.ToInt32(GetConfigValue(config["passwordAttemptWindow"], "10"));
+      PasswordAttemptWindow = Convert.ToInt32(GetConfigValue(settings["passwordAttemptWindow"], "10"));
 
-      RequiresUniqueEmail = Convert.ToBoolean(GetConfigValue(config["requiresUniqueEmail"], "true"));
+      RequiresUniqueEmail = Convert.ToBoolean(GetConfigValue(settings["requiresUniqueEmail"], "true"));
 
       MinRequiredNonAlphanumericCharacters =
-        Convert.ToInt32(GetConfigValue(config["minRequiredNonAlphanumericCharacters"], "0"));
+        Convert.ToInt32(GetConfigValue(settings["minRequiredNonAlphanumericCharacters"], "0"));
 
-      MinRequiredPasswordLength = Convert.ToInt32(GetConfigValue(config["minRequiredPasswordLength"], "6"));
+      MinRequiredPasswordLength = Convert.ToInt32(GetConfigValue(settings["minRequiredPasswordLength"], "6"));
 
-      PasswordStrengthRegularExpression = GetConfigValue(config["passwordStrengthRegularExpression"], "");
+      PasswordStrengthRegularExpression = GetConfigValue(settings["passwordStrengthRegularExpression"], "");
 
-      string format = config["passwordFormat"] ?? "Hashed";
+      Realm = GetConfigValue(settings["HTTP.Realm"], "Application");
+
+      ContriveEmailFrom = GetConfigValue(settings["ContriveEmailFrom"], "Application");
+
+      ContriveEmailSubject = GetConfigValue(settings["ContriveEmailSubject"], "Password Reset Request");
+
+      ContriveEmailTemplatePath = GetConfigValue(settings["ContriveEmailTemplatePath"], "~/Content/Contrive/ResetPassword.html");
+
+      string format = settings["passwordFormat"] ?? "Hashed";
 
       switch (format)
       {
@@ -73,6 +81,12 @@ namespace Contrive.Core
     public int MinRequiredNonAlphanumericCharacters { get; internal set; }
 
     public string PasswordStrengthRegularExpression { get; internal set; }
+
+    public string ContriveEmailFrom { get; internal set; }
+
+    public string ContriveEmailSubject { get; internal set; }
+
+    public string ContriveEmailTemplatePath { get; internal set; }
 
     public int MinPasswordLength
     {

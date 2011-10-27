@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Web.Mvc;
 using System.Web.Security;
 using Contrive.Core;
@@ -11,11 +10,13 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
   {
     readonly IUserService _userService;
     readonly IAuthenticationService _authenticationService;
+    readonly IEmailService _emailService;
 
-    public ContriveAccountController(IUserService userService, IAuthenticationService authenticationService)
+    public ContriveAccountController(IUserService userService, IAuthenticationService authenticationService, IEmailService emailService)
     {
       _userService = userService;
       _authenticationService = authenticationService;
+      _emailService = emailService;
     }
 
     public virtual ActionResult Index()
@@ -28,7 +29,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     {
       var viewModel = new LogOnViewModel
                       {
-                        EnablePasswordReset = _userService.EnablePasswordReset
+                        EnablePasswordReset = _userService.Settings.EnablePasswordReset
                       };
       return View(viewModel);
     }
@@ -77,10 +78,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
     public virtual ActionResult Register()
     {
-      var model = new RegisterViewModel
-                  {
-                    RequireSecretQuestionAndAnswer = _userService.RequiresQuestionAndAnswer
-                  };
+      var model = new RegisterViewModel();
       return View(model);
     }
 
@@ -91,8 +89,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       {
         // Attempt to register the user
         MembershipCreateStatus createStatus;
-        Membership.CreateUser(model.UserName, model.Password, model.Email, model.SecretQuestion, model.SecretAnswer,
-                              true, out createStatus);
+        Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, out createStatus);
 
         if (createStatus == MembershipCreateStatus.Success)
         {
@@ -148,44 +145,42 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       return View();
     }
 
-    public ActionResult ForgotPassword()
+    public ActionResult ResetPassword()
     {
-      var viewModel = new ForgotPasswordViewModel
-                      {
-                        RequiresQuestionAndAnswer = _userService.RequiresQuestionAndAnswer
-                      };
+      var viewModel = new ResetPasswordViewModel();
+      //{
+      //  RequiresQuestionAndAnswer = _userService.Settings.RequiresQuestionAndAnswer
+      //};
       return View(viewModel);
     }
 
     [HttpPost]
-    public ActionResult ForgotPassword(ForgotPasswordViewModel model)
+    public ActionResult ResetPassword(ResetPasswordViewModel model)
     {
       // Get the userName by the email address
-      string userName = _userService.GetUserNameByEmail(model.Email);
-
-      // Get the user by the userName
-      var user = _userService.GetUser(userName);
+      var user = _userService.GetUserByEmail(model.EmailOrUserName);
 
       // Now reset the password
-      string newPassword = string.Empty;
+      string passwordResetToken = string.Empty;
 
-      if (_userService.RequiresQuestionAndAnswer)
-        newPassword = user.ResetPassword(model.PasswordAnswer);
-      else
-        newPassword = user.ResetPassword();
+      //if (_userService.RequiresQuestionAndAnswer)
+      //  newPassword = user.ResetPassword(model.PasswordAnswer);
+      //else
+      passwordResetToken = _userService.GeneratePasswordResetToken(user.UserName);
 
-      // Email the new pasword to the user
+      // Email the reset url to the user
       try
       {
-        string body = BuildMessageBody(user.UserName, newPassword, ConfigSettings.SecurityGuardEmailTemplatePath);
-        Mail(model.Email, ConfigSettings.SecurityGuardEmailFrom, ConfigSettings.SecurityGuardEmailSubject, body, true);
+        var settings = _userService.Settings;
+        string body = _emailService.BuildMessageBody(user.UserName, passwordResetToken, settings.ContriveEmailTemplatePath);
+        _emailService.SendEmail(settings.ContriveEmailFrom, user.Email, settings.ContriveEmailSubject, body);
       }
       catch (Exception) { }
 
-      return RedirectToAction("ForgotPasswordSuccess");
+      return RedirectToAction("ResetPasswordSuccess");
     }
 
-    public ActionResult ForgotPasswordSuccess()
+    public ActionResult ResetPasswordSuccess()
     {
       return View();
     }
@@ -229,39 +224,6 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
           return
             "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
       }
-    }
-
-    void Mail(string emailTo, string emailFrom, string subject, string body, bool isHtml)
-    {
-      Email email = new Email();
-      email.ToList = emailTo;
-      email.FromEmail = emailFrom;
-      email.Subject = subject;
-      email.MessageBody = body;
-      email.isHTML = isHtml;
-
-      email.SendEmail(email);
-    }
-
-    string BuildMessageBody(string userName, string password, string filePath)
-    {
-      string body = string.Empty;
-
-      FileInfo fi = new FileInfo(Server.MapPath(filePath));
-      string text = string.Empty;
-
-      if (fi.Exists)
-      {
-        using (StreamReader sr = fi.OpenText())
-        {
-          text = sr.ReadToEnd();
-        }
-        text = text.Replace("%UserName%", userName);
-        text = text.Replace("%Password%", password);
-      }
-      body = text;
-
-      return body;
     }
   }
 }

@@ -24,7 +24,12 @@ namespace Contrive.Web.Configuration
       {
         var membershipSection = WebConfigurationManager.GetSection("system.web/membership").As<MembershipSection>();
         string defaultProvider = membershipSection.DefaultProvider;
-        return membershipSection.Providers[defaultProvider].Parameters;
+        var settings = membershipSection.Providers[defaultProvider].Parameters;
+        settings.Add("HTTP.Realm", AppSettings["HTTP.Realm"]);
+        settings.Add("ContriveEmailFrom", AppSettings["ContriveEmailFrom"]);
+        settings.Add("ContriveEmailSubject", AppSettings["ContriveEmailSubject"]);
+        settings.Add("ContriveEmailTemplatePath", AppSettings["ContriveEmailTemplatePath"]);
+        return settings;
       }
     }
 

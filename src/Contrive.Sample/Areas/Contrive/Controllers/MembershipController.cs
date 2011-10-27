@@ -51,8 +51,8 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     [HttpPost]
     public virtual ActionResult CreateUser(RegisterViewModel model)
     {
-      var status = _userService.CreateUser(model.UserName, model.Password, model.Email, model.SecretQuestion,
-                                                    model.SecretAnswer, model.Approve, null);
+      //var status = _userService.CreateUser(model.UserName, model.Password, model.Email, model.SecretQuestion,
+      //                                              model.SecretAnswer, model.Approve, null);
 
       var user = _userService.GetUser(model.UserName);
 

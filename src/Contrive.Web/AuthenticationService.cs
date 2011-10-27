@@ -12,15 +12,17 @@ namespace Contrive.Web
       _userService = userService;
     }
 
-    public void LogOn(string userName, string password, bool rememberMe = false)
+    public bool LogOn(string userName, string password, bool rememberMe = false)
     {
       if (_userService.ValidateUser(userName, password))
       {
         FormsAuthentication.SetAuthCookie(userName, rememberMe);
+        return true;
       }
+      return false;
     }
 
-    public void SignOut()
+    public void LogOff()
     {
       FormsAuthentication.SignOut();
     }
