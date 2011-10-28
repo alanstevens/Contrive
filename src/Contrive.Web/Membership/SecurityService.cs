@@ -112,7 +112,7 @@ namespace Contrive.Web.Membership
 
     public Guid GetUserIdFromPasswordResetToken(string token)
     {
-      return _userService.GetUserIdFromPasswordResetToken(token);
+      return _userService.GetUserFromPasswordResetToken(token).Id;
     }
 
     public bool IsCurrentUser(string userName)

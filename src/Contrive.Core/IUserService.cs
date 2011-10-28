@@ -24,8 +24,6 @@ namespace Contrive.Core
 
     UserCreateStatus CreateUser(string userName, string password, string email);
 
-    string GeneratePasswordResetToken(string userName);
-
     string CreateAccount(string userName, string password, string email, bool requireConfirmationToken = false);
 
     bool ConfirmAccount(string accountConfirmationToken);
@@ -46,7 +44,7 @@ namespace Contrive.Core
 
     int GetPasswordFailuresSinceLastSuccess(string userName);
 
-    Guid GetUserIdFromPasswordResetToken(string token);
+    IUser GetUserFromPasswordResetToken(string token);
 
     DateTime GetLastPasswordFailureDate(string userName);
 

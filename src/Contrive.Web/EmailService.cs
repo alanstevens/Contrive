@@ -21,27 +21,24 @@ namespace Contrive.Web
       new SmtpClient().Send(mm);
     }
 
-    public string BuildMessageBody(string userName, string token, string filePath)
+    public string BuildMessageBody(string userName, string token, string rootUrl, int timeSpanInHours, string filePath)
     {
-      string body = "";
-
       var file = new FileInfo(_server.MapPath(filePath));
-      string text = string.Empty;
+      string text = "";
 
       if (file.Exists)
       {
-        using (StreamReader sr = file.OpenText())
+        using (var sr = file.OpenText())
         {
           text = sr.ReadToEnd();
         }
         text = text.Replace("%UserName%", userName);
         text = text.Replace("%Token%", token);
-        //text = text.Replace("%RootUrl%", rootUrl);
-        //text = text.Replace("%TimeSpan%", timeSpan);
+        text = text.Replace("%RootUrl%", rootUrl);
+        text = text.Replace("%TimeSpan%", timeSpanInHours.ToString());
       }
-      body = text;
 
-      return body;
+      return text;
     }
   }
 }

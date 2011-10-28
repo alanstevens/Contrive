@@ -40,19 +40,17 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
     public virtual ActionResult CreateUser()
     {
-      var model = new RegisterViewModel
-                  {
-                    // TODO: HAS 10/25/2011 Determine what to do with this.
-                    //RequireSecretQuestionAndAnswer = _userService.RequiresQuestionAndAnswer
-                  };
+      var model = new RegisterViewModel { MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength };
+                  //{
+                  //  RequireSecretQuestionAndAnswer = _userService.RequiresQuestionAndAnswer
+                  //};
       return View(model);
     }
 
     [HttpPost]
     public virtual ActionResult CreateUser(RegisterViewModel model)
     {
-      //var status = _userService.CreateUser(model.UserName, model.Password, model.Email, model.SecretQuestion,
-      //                                              model.SecretAnswer, model.Approve, null);
+      var status = _userService.CreateUser(model.UserName, model.Password, model.Email, null, null, model.Approve, null);
 
       var user = _userService.GetUser(model.UserName);
 
@@ -94,10 +92,12 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     {
       var user = _userService.GetUser(userName);
 
-      UserViewModel viewModel = new UserViewModel();
-      viewModel.User = user;
+      UserViewModel viewModel = new UserViewModel
+                                {
+                                  User = user, 
+                                  Roles = _roleService.GetRolesForUser(userName)
+                                };
       //viewModel.RequiresSecretQuestionAndAnswer = _userService.RequiresQuestionAndAnswer;
-      viewModel.Roles = _roleService.GetRolesForUser(userName);
 
       return View(viewModel);
     }

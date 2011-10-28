@@ -20,7 +20,6 @@ namespace Contrive.Core
 
     const int MAX_HASHED_PASSWORD_LENGTH = 128;
     const int DEFAULT_NUMBER_OF_PASSWORD_FAILURES = 0;
-    const int ONE_DAY_IN_MINUTES = 24 * 60;
     readonly IConfigurationProvider _configurationProvider;
 
     readonly ICryptographer _cryptographer;
@@ -199,11 +198,6 @@ namespace Contrive.Core
       return user.IsConfirmed;
     }
 
-    public string GeneratePasswordResetToken(string userName)
-    {
-      return GeneratePasswordResetToken(userName, ONE_DAY_IN_MINUTES);
-    }
-
     public string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow)
     {
       Verify.NotEmpty(userName, "userName");
@@ -213,16 +207,14 @@ namespace Contrive.Core
       if (!user.IsConfirmed)
         throw new InvalidOperationException(String.Format("User not found: {0}", userName));
 
-      string token = user.PasswordVerificationTokenExpirationDate > DateTime.UtcNow
-                       ? user.PasswordVerificationToken
-                       : _cryptographer.GenerateToken();
+      if (user.PasswordVerificationTokenExpirationDate <= DateTime.UtcNow)
+      {
+        user.PasswordVerificationToken = _cryptographer.GenerateToken();
+        user.PasswordVerificationTokenExpirationDate = DateTime.UtcNow.AddMinutes(tokenExpirationInMinutesFromNow);
+        _users.SaveChanges();
+      }
 
-      user.PasswordVerificationToken = token;
-      user.PasswordVerificationTokenExpirationDate = DateTime.UtcNow.AddMinutes(tokenExpirationInMinutesFromNow);
-
-      _users.SaveChanges();
-
-      return token;
+      return user.PasswordVerificationToken;
     }
 
     public bool ResetPasswordWithToken(string token, string newPassword)
@@ -289,13 +281,14 @@ namespace Contrive.Core
       return user.FailedPasswordAttemptCount;
     }
 
-    public Guid GetUserIdFromPasswordResetToken(string token)
+    public IUser GetUserFromPasswordResetToken(string token)
     {
       Verify.NotEmpty(token, "token");
 
-      var result = _users.FirstOrDefault(user => user.PasswordVerificationToken == token);
+      var result = _users.FirstOrDefault(user => user.PasswordVerificationToken == token
+                        && user.PasswordVerificationTokenExpirationDate > DateTime.UtcNow);
 
-      return result != null ? result.Id : Guid.Empty;
+      return result;
     }
 
     public DateTime GetLastPasswordFailureDate(string userName)
@@ -410,7 +403,7 @@ namespace Contrive.Core
       user.Password = newEncodedPassword;
       user.AuthDigest = GetAuthDigest(user.UserName, password);
       user.PasswordVerificationToken = null;
-      user.PasswordVerificationTokenExpirationDate = null;
+      user.PasswordVerificationTokenExpirationDate = DateTime.MinValue;
 
       var currentDate = DateTime.UtcNow;
 
