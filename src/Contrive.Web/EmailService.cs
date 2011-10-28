@@ -7,12 +7,12 @@ namespace Contrive.Web
 {
   public class EmailService : IEmailService
   {
-    readonly HttpServerUtilityBase _server;
-
     public EmailService(HttpServerUtilityBase server)
     {
       _server = server;
     }
+
+    readonly HttpServerUtilityBase _server;
 
     public void SendEmail(string fromAddress, string toAddress, string subject, string messageBody)
     {

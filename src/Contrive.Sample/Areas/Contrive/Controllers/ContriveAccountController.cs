@@ -19,10 +19,10 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       _emailService = emailService;
     }
 
-    public virtual ActionResult Index()
-    {
-      return View();
-    }
+    //public virtual ActionResult Index()
+    //{
+    //  return View();
+    //}
 
     [HttpGet]
     public virtual ActionResult LogOn()
