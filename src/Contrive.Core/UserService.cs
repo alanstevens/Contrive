@@ -10,17 +10,15 @@ namespace Contrive.Core
   {
     public UserService(IUserRepository users,
                        ICryptographer cryptographer,
-                       IConfigurationProvider configurationProvider)
+                       IUserServiceSettings settings)
     {
       _users = users;
       _cryptographer = cryptographer;
-      _configurationProvider = configurationProvider;
-      Settings = new UserServiceSettings(_configurationProvider.UserServiceConfiguration);
+      Settings = settings;
     }
 
     const int MAX_HASHED_PASSWORD_LENGTH = 128;
     const int DEFAULT_NUMBER_OF_PASSWORD_FAILURES = 0;
-    readonly IConfigurationProvider _configurationProvider;
 
     readonly ICryptographer _cryptographer;
     readonly IUserRepository _users;

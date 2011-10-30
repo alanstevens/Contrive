@@ -45,7 +45,7 @@ namespace Contrive.Core.Properties
       {
         if (object.ReferenceEquals(resourceMan, null))
         {
-          global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Bastille.Common.Properties.ApplicationServicesStrings", typeof(ApplicationServicesStrings).Assembly);
+          global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Contrive.Core.Properties.ApplicationServicesStrings", typeof(ApplicationServicesStrings).Assembly);
           resourceMan = temp;
         }
         return resourceMan;

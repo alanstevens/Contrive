@@ -43,7 +43,14 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\SqlServerCompact.4.0.8482.1\lib\System.Data.SqlServerCe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -70,6 +77,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\ContriveInitializer.cs" />
     <Compile Include="Areas\Contrive\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Contrive\Controllers\MembershipController.cs" />
     <Compile Include="Areas\Contrive\Controllers\PasswordResetModel.cs" />
@@ -194,7 +202,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="App_Start\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -213,6 +220,18 @@
     <ProjectReference Include="..\Contrive.Core\Contrive.Core.csproj">
       <Project>{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}</Project>
       <Name>Contrive.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contrive.EntityFramework\Contrive.EntityFramework.csproj">
+      <Project>{776207CC-CC74-49BA-8FCD-B1E7A0784257}</Project>
+      <Name>Contrive.EntityFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contrive.StructureMap\Contrive.StructureMap.csproj">
+      <Project>{FC138A58-C976-4704-BC55-89970007E66A}</Project>
+      <Name>Contrive.StructureMap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contrive.Web\Contrive.Web.csproj">
+      <Project>{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}</Project>
+      <Name>Contrive.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -256,4 +275,11 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>
+if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+xcopy /s /y "$(SolutionDir)packages\SqlServerCompact.4.0.8482.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+xcopy /s /y "$(SolutionDir)packages\SqlServerCompact.4.0.8482.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

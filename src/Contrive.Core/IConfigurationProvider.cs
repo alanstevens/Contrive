@@ -6,9 +6,9 @@ namespace Contrive.Core
   {
     NameValueCollection AppSettings { get; }
 
-    NameValueCollection UserServiceConfiguration { get; }
-
     NameValueCollection RoleServiceConfiguration { get; }
+
+    IUserServiceSettings UserServiceSettings { get; }
 
     T GetSection<T>(string sectionName);
 

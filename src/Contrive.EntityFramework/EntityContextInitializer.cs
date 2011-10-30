@@ -20,9 +20,7 @@ namespace Contrive.EntityFramework
       using (var db = new EntityContext())
       {
         //This will create the database
-        // ReSharper disable ReturnValueOfPureMethodIsNotUsed
         var test = db.Users.FirstOrDefault(usr => usr.UserName == "test");
-        // ReSharper restore ReturnValueOfPureMethodIsNotUsed
       }
     }
   }
@@ -31,8 +29,8 @@ namespace Contrive.EntityFramework
   {
     protected override void Seed(EntityContext context)
     {
-      var userManagementService = ServiceLocator.Current.GetInstance<IUserService>();
-      var roleManagementService = ServiceLocator.Current.GetInstance<IRoleService>();
+      var userService = ServiceLocator.Current.GetInstance<IUserService>();
+      var roleService = ServiceLocator.Current.GetInstance<IRoleService>();
       var seedRoles = new[]
                   {
                     "Admin", 
@@ -40,7 +38,7 @@ namespace Contrive.EntityFramework
                     "Developer",
                   };
 
-      seedRoles.Each(roleManagementService.CreateRole);
+      seedRoles.Each(roleService.CreateRole);
 
       var seedUsers = new[]
                   {
@@ -49,15 +47,14 @@ namespace Contrive.EntityFramework
                           Username = "test",
                           Password = "test",
                           Email = "test@test.com",
-                          Roles = seedRoles
                         }
                   };
 
-      seedUsers.Each(u => userManagementService.CreateUser(u.Username, u.Password, u.Email));
+      seedUsers.Each(u => userService.CreateUser(u.Username, u.Password, u.Email));
 
       var userNames = seedUsers.Select(u => u.Username).ToArray();
 
-      roleManagementService.AddUsersToRoles(userNames, seedRoles);
+      roleService.AddUsersToRoles(userNames, seedRoles);
     }
   }
 }

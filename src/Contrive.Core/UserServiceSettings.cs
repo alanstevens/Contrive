@@ -15,7 +15,7 @@ namespace Contrive.Core
 
       EnablePasswordRetrieval = Convert.ToBoolean(GetConfigValue(settings["enablePasswordReset"], "false"));
 
-      EnablePasswordReset = Convert.ToBoolean(GetConfigValue(settings["enablePasswordRetrieval"], "true`"));
+      EnablePasswordReset = Convert.ToBoolean(GetConfigValue(settings["enablePasswordRetrieval"], "true"));
 
       RequiresQuestionAndAnswer = Convert.ToBoolean(GetConfigValue(settings["requiresQuestionAndAnswer"], "false"));
 

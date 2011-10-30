@@ -17,7 +17,16 @@ namespace Contrive.Web.Configuration
       get { return ConfigurationManager.AppSettings; }
     }
 
-    public NameValueCollection UserServiceConfiguration
+    public IUserServiceSettings UserServiceSettings
+    {
+      [DebuggerStepThrough]
+      get
+      {
+        return new UserServiceSettings(UserServiceConfiguration);
+      }
+    }
+
+    NameValueCollection UserServiceConfiguration
     {
       [DebuggerStepThrough]
       get
@@ -47,7 +56,7 @@ namespace Contrive.Web.Configuration
     [DebuggerStepThrough]
     public T GetSection<T>(string sectionName)
     {
-      return (T) ConfigurationManager.GetSection(sectionName);
+      return (T)ConfigurationManager.GetSection(sectionName);
     }
 
     [DebuggerStepThrough]
@@ -59,6 +68,7 @@ namespace Contrive.Web.Configuration
         throw new ConfigurationErrorsException("Explicit Algorithm Required");
 
       var bytes = HexStringToByteArray(decryptionKey);
+
       return Convert.ToBase64String(bytes);
     }
 
@@ -77,14 +87,14 @@ namespace Contrive.Web.Configuration
     {
       Verify.NotEmpty(hexString, "hexString");
 
-      if (hexString.Length%2 == 1)
+      if (hexString.Length % 2 == 1)
         hexString = '0' + hexString;
 
-      byte[] buffer = new byte[hexString.Length/2];
+      byte[] buffer = new byte[hexString.Length / 2];
 
       for (int i = 0; i < buffer.Length; ++i)
       {
-        buffer[i] = byte.Parse(hexString.Substring(i*2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        buffer[i] = byte.Parse(hexString.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
       }
 
       return buffer;
