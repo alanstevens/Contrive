@@ -2,7 +2,7 @@ using System;
 using System.Web.UI;
 using Microsoft.Practices.ServiceLocation;
 
-namespace Contrive.Web.Common
+namespace Contrive.Web.Common.WebForms
 {
   public abstract class ControlViewBase<V, T> : UserControl, IView where V : IView where T : PresenterBase<V>
   {

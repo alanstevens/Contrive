@@ -1,6 +1,6 @@
 using System;
 
-namespace Contrive.Web.Common
+namespace Contrive.Web.Common.WebForms
 {
   public interface IView : IDisposable
   {

@@ -1,54 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
+using System.Diagnostics;
 using System.Web.Configuration;
 using Contrive.Common;
-using Contrive.Common.Extensions;
 using Contrive.Common.Web;
 
 namespace Contrive.Web.Common
 {
   public class WebConfigurationProvider : ConfigurationProvider, IWebConfigurationProvider
   {
-    public NameValueCollection MembershipSettings
+    public string DefaultRedirect
     {
-      get
-      {
-        var membershipSection = (MembershipSection) WebConfigurationManager.GetSection("system.web/membership");
-        var defaultProvider = membershipSection.DefaultProvider;
-        return membershipSection.Providers[defaultProvider].Parameters;
-      }
+      [DebuggerStepThrough] get { return GetErrorsSection().DefaultRedirect; }
     }
-
-    public NameValueCollection RoleManagerSettings
-    {
-      get
-      {
-        var roleManagerSection = (RoleManagerSection) WebConfigurationManager.GetSection("system.web/roleManager");
-        var defaultProvider = roleManagerSection.DefaultProvider;
-        return roleManagerSection.Providers[defaultProvider].Parameters;
-      }
-    }
-
-    public string MachineKey
-    {
-      get
-      {
-        var decryptionKey = GetMachineKeySection().DecryptionKey;
-
-        if (decryptionKey.Contains("AutoGenerate")) throw new ConfigurationErrorsException("Explicit Algorithm Required");
-
-        return decryptionKey;
-      }
-    }
-
-    public string DecryptionAlgorithm { get { return GetMachineKeySection().Decryption; } }
-
-    public string DefaultRedirect { get { return GetErrorsSection().DefaultRedirect; } }
 
     public Dictionary<int, string> CustomRedirects
     {
+      [DebuggerStepThrough]
       get
       {
         var customErrorCollection = GetErrorsSection().Errors;
@@ -67,6 +35,7 @@ namespace Contrive.Web.Common
 
     public string CustomErrorsMode
     {
+      [DebuggerStepThrough]
       get
       {
         var customErrorsMode = GetErrorsSection().Mode;
@@ -89,23 +58,9 @@ namespace Contrive.Web.Common
       }
     }
 
-    static MachineKeySection GetMachineKeySection()
+    CustomErrorsSection GetErrorsSection()
     {
-      MachineKeySection machineKeySection;
-      try
-      {
-        machineKeySection = ConfigurationManager.GetSection("system.web/machineKey").As<MachineKeySection>();
-      }
-      catch (Exception ex)
-      {
-        throw new ConfigurationErrorsException("Machine Key not found", ex);
-      }
-      return machineKeySection;
-    }
-
-    static CustomErrorsSection GetErrorsSection()
-    {
-      return ConfigurationManager.GetSection("system.web/customErrors").As<CustomErrorsSection>();
+      return GetSection<CustomErrorsSection>("system.web/customErrors");
     }
   }
 }

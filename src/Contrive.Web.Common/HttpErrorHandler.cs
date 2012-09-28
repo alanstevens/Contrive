@@ -17,57 +17,40 @@ namespace Contrive.Web.Common
 
     readonly IWebConfigurationProvider _configurationProvider;
 
-    public void HandleError(HttpContextBase context, int statusCode = 400)
+    public void HandleError(HttpContextBase context, int statusCode)
     {
-      // Lets remember the current error.
       var currentError = context.Error;
 
       this.LogException(currentError);
 
-      // Do not show the custom errors if
-      // a) CustomErrors mode == "off" or not set.
-      // b) Mode == RemoteOnly and we are on our local development machine.
-      if (!context.IsCustomErrorEnabled || !UseCustomErrors(context))
-      {
-        // Damn it :( Fine.... lets just bounce outta-here!
-        return;
-      }
+      if (!context.IsCustomErrorEnabled || !UseCustomErrors(context.Request.IsLocal)) return;
 
-      // Do we have an HttpErrorException? Eg. 404 Not found or 401 Not Authorized?
       var httpErrorException = currentError as HttpException;
       if (httpErrorException != null) statusCode = httpErrorException.GetHttpCode();
 
-      // Lets make sure we set the correct Error Status code :)
       context.Response.StatusCode = statusCode;
 
-      // Render the view, be it html or json, etc.
       RenderErrorView(context, statusCode, currentError);
 
-      // Lets clear all the errors otherwise it shows the error page.
       HttpContext.Current.ClearError();
 
-      // Avoid any IIS low level errors.
       context.Response.TrySkipIisCustomErrors = true;
     }
 
     void RenderErrorView(HttpContextBase context, int statusCode, Exception currentError)
     {
-      // Is this an AJAX request?
       if (context.Request.IsAjaxRequest()) RenderAjaxView(context, currentError);
       else
       {
-        // What is the view we require?
         var redirectPath = GetCustomErrorRedirect(statusCode);
 
-        // Now - what do we render? The view provided or some basic content because one HASN'T been provided?
-        if (String.IsNullOrEmpty(redirectPath)) RenderFallBackErrorView(context, currentError);
+        if (redirectPath.Blank()) RenderFallBackErrorView(context, currentError);
         else RenderCustomErrorView(context, redirectPath, currentError);
       }
     }
 
-    void RenderAjaxView(HttpContextBase context, Exception currentError)
+    static void RenderAjaxView(HttpContextBase context, Exception currentError)
     {
-      // Ok. lets check if this content type contains a request for json.
       var errorMessage = context.Request.ContentType.Contains("json")
                            ? currentError.Message
                            : String.Format(
@@ -80,38 +63,37 @@ namespace Contrive.Web.Common
       jsonResult.ExecuteResult(controllerContext);
     }
 
-    void RenderCustomErrorView(HttpContextBase context, string viewPath, Exception currentError)
+    static void RenderCustomErrorView(HttpContextBase context, string redirectPath, Exception currentError)
     {
       try
       {
-        // We need to render the view now.
-        // This means we need a viewContext ... which requires a controller.
-        // So we instantiate a fake controller which does nothing
-        // and then work our way to rendering the view.
-        var errorController = new FakeErrorController();
-        var controllerContext = new ControllerContext(context.Request.RequestContext, errorController);
-        var view = new RazorView(controllerContext, viewPath, null, false, null);
-        var viewModel = new ErrorViewModel { Exception = currentError };
-        var tempData = new TempDataDictionary();
-        var viewContext = new ViewContext(controllerContext, view, new ViewDataDictionary(viewModel), tempData,
-                                          context.Response.Output);
-        view.Render(viewContext, context.Response.Output);
+        // TODO: HAS 09/28/2012 Check if we are in MVC or WebForms
+        RenderMvcErrorView(context, redirectPath, currentError);
       }
       catch (Exception exception)
       {
-        // Damn it! Something -really- crap just happened. 
-        // eg. the path to the redirect might not exist, etc.
         var errorMessage =
-          String.Format(
-                        "An error occurred while trying to Render the custom error view which you provided, for this HttpStatusCode. ViewPath: {0}; Message: {1}",
-                        String.IsNullOrEmpty(viewPath) ? "--no view path was provided!! --" : viewPath,
+                        "An error occurred while trying to render the custom error for this HttpStatusCode. RedirectPath: {0}; Message: {1}"
+                        .FormatWith(redirectPath.Blank() ? "--no redirect path was provided!! --" : redirectPath,
                         exception.Message);
 
         RenderFallBackErrorView(context, new InvalidOperationException(errorMessage, currentError));
       }
     }
 
-    void RenderFallBackErrorView(HttpContextBase context, Exception currentError)
+    static void RenderMvcErrorView(HttpContextBase context, string redirectPath, Exception currentError)
+    {
+      var errorController = new FakeErrorController();
+      var controllerContext = new ControllerContext(context.Request.RequestContext, errorController);
+      var view = new RazorView(controllerContext, redirectPath, null, false, null);
+      var viewModel = new ErrorViewModel {Exception = currentError};
+      var tempData = new TempDataDictionary();
+      var viewContext = new ViewContext(controllerContext, view, new ViewDataDictionary(viewModel), tempData,
+                                        context.Response.Output);
+      view.Render(viewContext, context.Response.Output);
+    }
+
+    static void RenderFallBackErrorView(HttpContextBase context, Exception currentError)
     {
       currentError = currentError.GetBaseException();
 
@@ -120,16 +102,14 @@ namespace Contrive.Web.Common
       context.Response.Output.Write(simpleErrorMessage, currentError.Message, currentError.StackTrace);
     }
 
-    bool UseCustomErrors(HttpContextBase context)
+    bool UseCustomErrors(bool isLocal)
     {
-      if (context.IsNull()) return false;
-
       switch (_configurationProvider.CustomErrorsMode)
       {
         case "Off":
           return false;
         case "RemoteOnly":
-          return !context.Request.IsLocal;
+          return !isLocal;
         default:
           return true;
       }
@@ -139,17 +119,12 @@ namespace Contrive.Web.Common
     {
       var redirect = _configurationProvider.CustomRedirects[statusCode];
 
-      redirect = String.IsNullOrEmpty(redirect) ? _configurationProvider.DefaultRedirect : redirect;
+      redirect = redirect.Blank() ? _configurationProvider.DefaultRedirect : redirect;
 
-      if (redirect.Blank()) Debug.Assert(false, "No redirect path was determined.");
+      if (redirect.Blank()) Debug.Assert(false, "No redirect path configured.");
 
       return redirect;
     }
-  }
-
-  public interface IErrorViewModel
-  {
-    Exception Exception { get; set; }
   }
 
   public class ErrorViewModel

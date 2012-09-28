@@ -9,21 +9,7 @@ namespace Contrive.Common
 {
   public class Cryptographer : ICryptographer
   {
-    //public Cryptographer(IAuthConfigurationProvider configurationProvider)
-    //{
-    //  var decryptionKey = configurationProvider.GetMachineKey();
-
-    //  var algorithmName = configurationProvider.GetDecryptionAlgorithm();
-
-    //  Initialize(decryptionKey, algorithmName);
-    //}
-
     public Cryptographer(string decryptionKey, string algorithmName)
-    {
-      Initialize(decryptionKey, algorithmName);
-    }
-
-    void Initialize(string decryptionKey, string algorithmName)
     {
       Verify.NotEmpty(decryptionKey, "decryptionKey");
       Verify.NotEmpty(algorithmName, "algorithmName");
@@ -37,8 +23,8 @@ namespace Contrive.Common
     const int TOKEN_SIZE = 16;
     const int SALT_SIZE = 64;
 
-    string _algorithmName;
-    byte[] _key;
+    readonly string _algorithmName;
+    readonly byte[] _key;
 
     Type EncryptionAlgorithmType
     {
@@ -49,13 +35,13 @@ namespace Contrive.Common
         switch (_algorithmName)
         {
           case "AES":
-            algorithm = typeof(AesCryptoServiceProvider);
+            algorithm = typeof (AesCryptoServiceProvider);
             break;
           case "3DES":
-            algorithm = typeof(TripleDESCryptoServiceProvider);
+            algorithm = typeof (TripleDESCryptoServiceProvider);
             break;
           case "DES":
-            algorithm = typeof(DESCryptoServiceProvider);
+            algorithm = typeof (DESCryptoServiceProvider);
             break;
           default:
             var message = "Unrecognized Algorithm Name: {0}".FormatWith(_algorithmName);
@@ -78,7 +64,7 @@ namespace Contrive.Common
 
     public string CalculatePasswordHash(string password, string salt)
     {
-      return CalculateHash("{0}{1}".FormatWith(password, salt));
+      return "{0}{1}".FormatWith(password, salt).CalculateHash();
     }
 
     public string ComputeSha512HashAsBase64(string valueToHash)
@@ -170,13 +156,6 @@ namespace Contrive.Common
       }
 
       return Convert.ToBase64String(outputBuffer);
-    }
-
-    string CalculateHash(string valueToHash)
-    {
-      var hash = SHA512.Create().ComputeHash(Encoding.UTF8.GetBytes(valueToHash));
-
-      return Convert.ToBase64String(hash);
     }
 
     static string GetBufferAsBase64(int bufferSize)

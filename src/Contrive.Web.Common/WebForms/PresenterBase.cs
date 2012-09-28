@@ -1,7 +1,7 @@
 using System;
 using Contrive.Common;
 
-namespace Contrive.Web.Common
+namespace Contrive.Web.Common.WebForms
 {
   public abstract class PresenterBase<T> : DisposableBase where T : IView
   {

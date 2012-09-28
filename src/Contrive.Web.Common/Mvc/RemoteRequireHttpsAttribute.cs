@@ -2,7 +2,7 @@ using System.Web.Mvc;
 using Contrive.Common;
 using Contrive.Common.Extensions;
 
-namespace Contrive.Web.Common
+namespace Contrive.Web.Common.Mvc
 {
   public class RemoteRequireHttpsAttribute : RequireHttpsAttribute
   {

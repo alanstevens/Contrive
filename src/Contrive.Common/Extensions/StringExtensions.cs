@@ -37,14 +37,14 @@ namespace Contrive.Common.Extensions
     }
 
     [DebuggerStepThrough]
-    public static string Hash(this string value)
+    public static string CalculateHash(this string value)
     {
       Verify.NotEmpty(value, "value");
 
-      using (var md5 = MD5.Create())
+      using(var sha512 = SHA512.Create())
       {
-        var data = Encoding.Unicode.GetBytes(value);
-        var hash = md5.ComputeHash(data);
+        var data = Encoding.UTF8.GetBytes(value);
+        var hash = sha512.ComputeHash(data);
 
         return Convert.ToBase64String(hash);
       }

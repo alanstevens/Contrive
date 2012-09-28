@@ -7,10 +7,10 @@ namespace Contrive.Auth
   {
     NameValueCollection RoleServiceConfiguration { get; }
 
-    IUserServiceSettings UserServiceSettings { get; }
+    NameValueCollection UserServiceConfiguration { get; }
 
-    string GetMachineKey();
+    string DecryptionKey { get; }
 
-    string GetDecryptionAlgorithm();
+    string DecryptionAlgorithm { get; }
   }
 }

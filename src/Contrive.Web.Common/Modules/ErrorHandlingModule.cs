@@ -19,11 +19,11 @@ namespace Contrive.Web.Common.Modules
     public void Init(HttpApplication application)
     {
       var context = new HttpContextWrapper(application.Context);
-      var errorHandledKey = DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture).Hash();
+      var errorHandledKey = DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture).CalculateHash();
 
       application.Error += (s, e) =>
                            {
-                             _httpErrorHandler.HandleError(context);
+                             _httpErrorHandler.HandleError(context, 400);
 
                              context.Items.Add(errorHandledKey, true);
                            };
@@ -35,7 +35,7 @@ namespace Contrive.Web.Common.Modules
                                 };
     }
 
-    bool IsAnErrorResponse(HttpResponseBase httpResponse)
+    static bool IsAnErrorResponse(HttpResponseBase httpResponse)
     {
       return httpResponse.StatusCode >= 400;
     }

@@ -1,8 +1,8 @@
-﻿using System.Web.Mvc;
+using System.Web.Mvc;
 using System.Web.Routing;
 using Contrive.Common;
 
-namespace Contrive.Web.Common
+namespace Contrive.Web.Common.Mvc
 {
   public class WebStartupTask : IStartupTask
   {
