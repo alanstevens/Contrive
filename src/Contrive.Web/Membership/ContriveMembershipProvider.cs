@@ -25,61 +25,27 @@ namespace Contrive.Web.Membership
     bool _requiresQuestionAndAnswer;
     bool _requiresUniqueEmail;
 
-    public override string ApplicationName
-    {
-      get { return _applicationName; }
-      set { _applicationName = value; }
-    }
+    public override string ApplicationName { get { return _applicationName; } set { _applicationName = value; } }
 
-    public override bool EnablePasswordRetrieval
-    {
-      get { return _enablePasswordReset; }
-    }
+    public override bool EnablePasswordRetrieval { get { return _enablePasswordReset; } }
 
-    public override bool EnablePasswordReset
-    {
-      get { return _enablePasswordRetrieval; }
-    }
+    public override bool EnablePasswordReset { get { return _enablePasswordRetrieval; } }
 
-    public override bool RequiresQuestionAndAnswer
-    {
-      get { return _requiresQuestionAndAnswer; }
-    }
+    public override bool RequiresQuestionAndAnswer { get { return _requiresQuestionAndAnswer; } }
 
-    public override int MaxInvalidPasswordAttempts
-    {
-      get { return _maxInvalidPasswordAttempts; }
-    }
+    public override int MaxInvalidPasswordAttempts { get { return _maxInvalidPasswordAttempts; } }
 
-    public override int PasswordAttemptWindow
-    {
-      get { return _passwordAttemptWindow; }
-    }
+    public override int PasswordAttemptWindow { get { return _passwordAttemptWindow; } }
 
-    public override bool RequiresUniqueEmail
-    {
-      get { return _requiresUniqueEmail; }
-    }
+    public override bool RequiresUniqueEmail { get { return _requiresUniqueEmail; } }
 
-    public override MembershipPasswordFormat PasswordFormat
-    {
-      get { return _passwordFormat; }
-    }
+    public override MembershipPasswordFormat PasswordFormat { get { return _passwordFormat; } }
 
-    public override int MinRequiredPasswordLength
-    {
-      get { return _minRequiredPasswordLength; }
-    }
+    public override int MinRequiredPasswordLength { get { return _minRequiredPasswordLength; } }
 
-    public override int MinRequiredNonAlphanumericCharacters
-    {
-      get { return _minRequiredNonAlphanumericCharacters; }
-    }
+    public override int MinRequiredNonAlphanumericCharacters { get { return _minRequiredNonAlphanumericCharacters; } }
 
-    public override string PasswordStrengthRegularExpression
-    {
-      get { return _passwordStrengthRegularExpression; }
-    }
+    public override string PasswordStrengthRegularExpression { get { return _passwordStrengthRegularExpression; } }
 
     IUserService GetUserService()
     {
@@ -90,8 +56,7 @@ namespace Contrive.Web.Membership
     {
       Verify.NotNull(config, "config");
 
-      if (name.IsEmpty())
-        name = "ContriveMembershipProvider";
+      if (name.IsEmpty()) name = "ContriveMembershipProvider";
 
       if (config["description"].IsEmpty())
       {
@@ -114,29 +79,25 @@ namespace Contrive.Web.Membership
       _minRequiredNonAlphanumericCharacters = settings.MinRequiredNonAlphanumericCharacters;
       _minRequiredPasswordLength = settings.MinRequiredPasswordLength;
       _passwordStrengthRegularExpression = settings.PasswordStrengthRegularExpression;
-      _passwordFormat = (MembershipPasswordFormat)settings.PasswordFormat;
+      _passwordFormat = (MembershipPasswordFormat) settings.PasswordFormat;
     }
 
     public override bool ChangePassword(string userName, string oldPassword, string newPassword)
     {
-      bool success = false;
+      var success = false;
 
-      ThrowMembership(() => success = GetUserService().ChangePassword(userName, oldPassword, newPassword));
+      ThrowProviderExceptionOnError(() => success = GetUserService().ChangePassword(userName, oldPassword, newPassword));
 
       return success;
     }
 
     public override MembershipUser GetUser(string userName, bool userIsOnline)
     {
-      var user = GetUserService().GetUser(userName);
+      var user = GetUserService().GetUserByUserName(userName);
 
       if (user == null) return null;
 
-      return new MembershipUser(System.Web.Security.Membership.Provider.Name,
-                                userName, user.Id, user.Email, null,
-                                null, true, false,
-                                user.DateCreated.GetValueOrDefault(), DateTime.MinValue,
-                                DateTime.MinValue, DateTime.MinValue, DateTime.MinValue);
+      return new MembershipUser(System.Web.Security.Membership.Provider.Name, userName, user.Id, user.Email, null, null, true, false, user.DateCreated.GetValueOrDefault(), DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue);
     }
 
     public override bool ValidateUser(string userName, string password)
@@ -144,32 +105,18 @@ namespace Contrive.Web.Membership
       return GetUserService().ValidateUser(userName, password);
     }
 
-    public override MembershipUser CreateUser(string userName,
-                                              string password,
-                                              string email,
-                                              string passwordQuestion,
-                                              string passwordAnswer,
-                                              bool isApproved,
-                                              object providerUserKey,
-                                              out MembershipCreateStatus status)
+    public override MembershipUser CreateUser(string userName, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
     {
-      status = (MembershipCreateStatus)GetUserService()
-                                          .CreateUser(userName,
-                                                      password,
-                                                      email,
-                                                      passwordQuestion,
-                                                      passwordAnswer,
-                                                      isApproved,
-                                                      providerUserKey);
+      status = (MembershipCreateStatus) GetUserService().CreateUser(userName, password, email, isApproved);
 
       return status != MembershipCreateStatus.Success ? null : GetUser(userName, false);
     }
 
     public override bool DeleteUser(string userName, bool deleteAllRelatedData)
     {
-      bool success = false;
+      var success = false;
 
-      ThrowMembership(() => success = GetUserService().DeleteAccount(userName));
+      ThrowProviderExceptionOnError(() => success = GetUserService().DeleteAccount(userName));
 
       if (deleteAllRelatedData)
       {
@@ -183,7 +130,7 @@ namespace Contrive.Web.Membership
       return GetUserService().GetUserByEmail(emailAddress).UserName;
     }
 
-    void ThrowMembership(Action test)
+    void ThrowProviderExceptionOnError(Action test)
     {
       try
       {
@@ -195,22 +142,17 @@ namespace Contrive.Web.Membership
       }
     }
 
-    #region "Not Needed"
-
-    public override bool ChangePasswordQuestionAndAnswer(string userName, string password, string newPasswordQuestion,
-                                                         string newPasswordAnswer)
+    public override bool ChangePasswordQuestionAndAnswer(string userName, string password, string newPasswordQuestion, string newPasswordAnswer)
     {
       throw new NotSupportedException();
     }
 
-    public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize,
-                                                              out int totalRecords)
+    public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
     {
       throw new NotSupportedException();
     }
 
-    public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize,
-                                                             out int totalRecords)
+    public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
     {
       throw new NotSupportedException();
     }
@@ -249,7 +191,5 @@ namespace Contrive.Web.Membership
     {
       throw new NotSupportedException();
     }
-
-    #endregion
   }
 }

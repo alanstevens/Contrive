@@ -25,8 +25,7 @@ namespace Contrive.Core
 
       RequiresUniqueEmail = Convert.ToBoolean(GetConfigValue(settings["requiresUniqueEmail"], "true"));
 
-      MinRequiredNonAlphanumericCharacters =
-        Convert.ToInt32(GetConfigValue(settings["minRequiredNonAlphanumericCharacters"], "0"));
+      MinRequiredNonAlphanumericCharacters = Convert.ToInt32(GetConfigValue(settings["minRequiredNonAlphanumericCharacters"], "0"));
 
       MinRequiredPasswordLength = Convert.ToInt32(GetConfigValue(settings["minRequiredPasswordLength"], "6"));
 
@@ -40,19 +39,19 @@ namespace Contrive.Core
 
       ContriveEmailTemplatePath = GetConfigValue(settings["ContriveEmailTemplatePath"], "~/Content/Contrive/ResetPassword.html");
 
-      string format = settings["passwordFormat"] ?? "Hashed";
+      var format = settings["passwordFormat"] ?? "Hashed";
 
       switch (format)
       {
         case "Hashed":
           PasswordFormat = UserPasswordFormat.Hashed;
           break;
-        //case "Encrypted":
-        //  _passwordFormat = UserPasswordFormat.Encrypted;
-        //  break;
-        //case "Clear":
-        //  _passwordFormat = UserPasswordFormat.Clear;
-        //  break;
+          //case "Encrypted":
+          //  _passwordFormat = UserPasswordFormat.Encrypted;
+          //  break;
+          //case "Clear":
+          //  _passwordFormat = UserPasswordFormat.Clear;
+          //  break;
         default:
           throw new ProviderException("Password format not supported.");
       }
@@ -88,10 +87,7 @@ namespace Contrive.Core
 
     public string ContriveEmailTemplatePath { get; internal set; }
 
-    public int MinPasswordLength
-    {
-      get { return MinRequiredPasswordLength; }
-    }
+    public int MinPasswordLength { get { return MinRequiredPasswordLength; } }
 
     string GetConfigValue(string configValue, string defaultValue)
     {

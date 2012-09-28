@@ -9,7 +9,7 @@ using Contrive.Sample.Areas.Contrive.Models;
 
 namespace Contrive.Sample.Areas.Contrive.Controllers
 {
-  [Authorize(Roles = "Contrive")]
+  [Authorize(Roles = "Admin")]
   public class RoleController : Controller
   {
     public RoleController(IRoleService roleService)
@@ -21,20 +21,16 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
     public virtual ActionResult Index()
     {
-      var model = new ManageRolesViewModel
-                  {
-                    Roles = new SelectList(_roleService.GetAllRoles()),
-                    RoleList = _roleService.GetAllRoles()
-                  };
+      var model = new ManageRolesViewModel {Roles = new SelectList(_roleService.GetAllRoles()), RoleList = _roleService.GetAllRoles()};
 
       return View(model);
     }
 
-    [HttpGet]
-    public virtual ActionResult CreateRole()
-    {
-      return View(new RoleViewModel());
-    }
+    //[HttpGet]
+    //public virtual ActionResult CreateRole()
+    //{
+    //  return View(new RoleViewModel());
+    //}
 
     [HttpPost]
     public virtual ActionResult CreateRole(string roleName)
@@ -118,7 +114,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
         return Json(response);
       }
 
-      string[] roleNames = roles.Split(',');
+      var roleNames = roles.Split(',');
       var sb = new StringBuilder();
 
       var validRoleNames = roleNames.Where(role => !string.IsNullOrEmpty(role));
@@ -129,12 +125,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
         {
           _roleService.DeleteRole(role, throwOnPopulatedRole);
 
-          item = new ResponseItem
-                 {
-                   Success = true,
-                   Message = "Deleted this role successfully - " + role,
-                   CssClass = "green"
-                 };
+          item = new ResponseItem {Success = true, Message = "Deleted this role successfully - " + role, CssClass = "green"};
           response.Messages.Add(item);
 
           //sb.AppendLine("Deleted this role successfully - " + role + "<br />");
@@ -143,12 +134,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
         {
           //sb.AppendLine(role + " - " + ex.Message + "<br />");
 
-          item = new ResponseItem
-                 {
-                   Success = false,
-                   Message = ex.Message,
-                   CssClass = "yellow"
-                 };
+          item = new ResponseItem {Success = false, Message = ex.Message, CssClass = "yellow"};
           response.Messages.Add(item);
         }
       }
@@ -163,7 +149,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     {
       var list = _roleService.GetAllRoles();
 
-      var selectList = list.Select(item => new SelectObject { caption = item.Name, value = item.Name }).ToList();
+      var selectList = list.Select(item => new SelectObject {caption = item.Name, value = item.Name}).ToList();
 
       return Json(selectList, JsonRequestBehavior.AllowGet);
     }

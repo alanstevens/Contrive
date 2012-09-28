@@ -9,7 +9,7 @@ namespace Contrive.Web.Modules
   {
     protected AuthenticationModuleBase()
     {
-      _users = ServiceLocator.Current.GetInstance<IUserService>();
+      _userService = ServiceLocator.Current.GetInstance<IUserService>();
       _config = ServiceLocator.Current.GetInstance<IConfigurationProvider>();
     }
 
@@ -19,19 +19,21 @@ namespace Contrive.Web.Modules
     public const string RESPONSE_HEADER_NAME = "Authorization";
     protected readonly IConfigurationProvider _config;
 
-    protected readonly IUserService _users;
+    protected readonly IUserService _userService;
     protected string _realm;
 
     /// <summary>
     ///   Inits the specified module.
     /// </summary>
-    /// <param name = "application">The HTTP application containing the module.</param>
+    /// <param name="application"> The HTTP application containing the module. </param>
     public virtual void Init(HttpApplication application)
     {
       // Attach event handlers
       application.AuthenticateRequest += ApplicationAuthenticateRequest;
       application.EndRequest += ApplicationEndRequest;
     }
+
+    public virtual void Dispose() { }
 
     protected static void AccessDenied(HttpApplication app)
     {
@@ -44,8 +46,8 @@ namespace Contrive.Web.Modules
     /// <summary>
     ///   Handles the AuthenticateRequest event of the application control.
     /// </summary>
-    /// <param name = "sender">The source of the event.</param>
-    /// <param name = "e">The <see cref = "System.EventArgs" /> instance containing the event data.</param>
+    /// <param name="sender"> The source of the event. </param>
+    /// <param name="e"> The <see cref="System.EventArgs" /> instance containing the event data. </param>
     /// <remarks>
     ///   The main work is done here. We parse incoming headers, get user name and password from them.
     ///   Then we verify the user name and password against configured membership provider.
@@ -63,8 +65,8 @@ namespace Contrive.Web.Modules
     /// <summary>
     ///   Handles the EndRequest event of the application control.
     /// </summary>
-    /// <param name = "sender">The source of the event.</param>
-    /// <param name = "e">The <see cref = "System.EventArgs" /> instance containing the event data.</param>
+    /// <param name="sender"> The source of the event. </param>
+    /// <param name="e"> The <see cref="System.EventArgs" /> instance containing the event data. </param>
     /// <remarks>
     ///   This methods adds the "WWW-Authenticate" challenge header to all requests ending with the
     ///   HTTP status code 401 (Access Denied), set either in this module's application_AuthenticateRequest
@@ -81,7 +83,5 @@ namespace Contrive.Web.Modules
     }
 
     protected abstract string BuildChallengeHeader(HttpApplication app);
-
-    public virtual void Dispose() { }
   }
 }

@@ -8,49 +8,55 @@ namespace Contrive.EntityFramework
 {
   public class RoleRepository : IRoleRepository
   {
-    readonly Repository<Role> _repository;
-
     public RoleRepository(Repository<Role> repository)
     {
       _repository = repository;
     }
 
-    public IQueryable<IRole> GetQuery()
-    {
-      return _repository.GetQuery();
-    }
+    readonly Repository<Role> _repository;
 
     public IEnumerable<IRole> GetAll()
     {
       return _repository.GetAll();
     }
 
-    public IEnumerable<IRole> Where(Func<IRole, bool> @where)
+    public IRole GetRoleByName(string roleName)
     {
-      return _repository.Where(@where);
+      return _repository.FirstOrDefault(r => r.Name == roleName);
     }
 
-    public IRole FirstOrDefault(Func<IRole, bool> @where)
+    public IEnumerable<IUser> FindUsersInRole(string roleName, string usernameToMatch)
     {
-      return _repository.FirstOrDefault(@where);
+      //var users = _repository.GetQuery().Select(r => r.Name == roleName).Where(r=>r.Users.Co)
+      var usersInRole = GetRoleByName(roleName).Users;
+
+      return usersInRole.Where(u => u.UserName.Contains(usernameToMatch));
+    }
+
+    public IEnumerable<IRole> GetRolesForRoleNames(IEnumerable<string> roleNames)
+    {
+      return _repository.Where(r => roleNames.Contains(r.Name)).ToArray();
     }
 
     public void Insert(IRole role)
     {
       _repository.Insert(role.As<Role>());
+      SaveChanges();
     }
 
     public void Update(IRole role)
     {
       _repository.Update(role.As<Role>());
+      SaveChanges();
     }
 
     public void Delete(IRole role)
     {
       _repository.Delete(role.As<Role>());
+      SaveChanges();
     }
 
-    public void SaveChanges()
+    void SaveChanges()
     {
       _repository.SaveChanges();
     }

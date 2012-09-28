@@ -11,10 +11,6 @@ namespace Contrive.Web.Modules
 {
   public class DigestHelper
   {
-    static readonly IConfigurationProvider _config;
-    static readonly IUserService _userAuth;
-    static readonly ICryptographer _cryptographer;
-
     static DigestHelper()
     {
       _config = ServiceLocator.Current.GetInstance<IConfigurationProvider>();
@@ -23,6 +19,9 @@ namespace Contrive.Web.Modules
     }
 
     const string AUTHENTICATION_METHOD_NAME = "HTTPDigest.Components.AuthDigest";
+    static readonly IConfigurationProvider _config;
+    static readonly IUserService _userAuth;
+    static readonly ICryptographer _cryptographer;
 
     static string GenerateNonce()
     {
@@ -31,32 +30,31 @@ namespace Contrive.Web.Modules
       // More strong example of nonce - 
       // use additionally ETag and unique key, which is
       // known by the server
-      DateTime expiration = DateTime.UtcNow + TimeSpan.FromMinutes(3);
+      var expiration = DateTime.UtcNow + TimeSpan.FromMinutes(3);
 
-      byte[] buffer = new ASCIIEncoding().GetBytes(expiration.ToString("G"));
+      var buffer = new ASCIIEncoding().GetBytes(expiration.ToString("G"));
 
-      string nonce = Convert.ToBase64String(buffer);
+      var nonce = Convert.ToBase64String(buffer);
 
       // Strip "=" characters added by Base64 encoding 
       // which are forbidden by the server
-      nonce = nonce.TrimEnd(new[] { '=' });
+      nonce = nonce.TrimEnd(new[] {'='});
       return nonce;
     }
 
     static bool IsValidNonce(string encodedNonce)
     {
       DateTime expiration;
-      int padCharCount = encodedNonce.Length % 4;
+      var padCharCount = encodedNonce.Length%4;
 
-      if (padCharCount > 0)
-        padCharCount = 4 - padCharCount;
+      if (padCharCount > 0) padCharCount = 4 - padCharCount;
 
       encodedNonce = encodedNonce.PadRight(encodedNonce.Length + padCharCount, '=');
 
       try
       {
-        byte[] buffer = Convert.FromBase64String(encodedNonce);
-        string nonce = new ASCIIEncoding().GetString(buffer);
+        var buffer = Convert.FromBase64String(encodedNonce);
+        var nonce = new ASCIIEncoding().GetString(buffer);
         expiration = DateTime.Parse(nonce);
       }
       catch (FormatException)
@@ -68,13 +66,13 @@ namespace Contrive.Web.Modules
 
     static Dictionary<string, string> ParseAuthHeader(string authHeader)
     {
-      string[] parts = authHeader.Substring(7).Split(new[] { ',' });
+      var parts = authHeader.Substring(7).Split(new[] {','});
       var results = new Dictionary<string, string>();
-      foreach (string part in parts)
+      foreach (var part in parts)
       {
-        string[] subParts = part.Split(new[] { '=' }, 2);
-        string key = subParts[0].Trim(new[] { ' ', '\"' });
-        string val = subParts[1].Trim(new[] { ' ', '\"' });
+        var subParts = part.Split(new[] {'='}, 2);
+        var key = subParts[0].Trim(new[] {' ', '\"'});
+        var val = subParts[1].Trim(new[] {' ', '\"'});
         results.Add(key, val);
       }
       return results;
@@ -84,23 +82,22 @@ namespace Contrive.Web.Modules
     {
       var request = app.Request;
       var context = app.Context;
-      string authHeader = request.Headers[AuthenticationModuleBase.RESPONSE_HEADER_NAME].Trim();
+      var authHeader = request.Headers[AuthenticationModuleBase.RESPONSE_HEADER_NAME].Trim();
       var httpMethod = request.HttpMethod;
 
-      if (authHeader.IsEmpty() || authHeader.IndexOf("Digest", 0) != 0)
-        return false;
+      if (authHeader.IsEmpty() || authHeader.IndexOf("Digest", 0) != 0) return false;
 
       var authHeaderContents = ParseAuthHeader(authHeader);
 
       var username = authHeaderContents["username"];
 
-      string ha1 = GetDigestFor(username);
+      var ha1 = GetDigestFor(username);
 
       if (ha1.IsEmpty()) return false;
 
-      string digest = GenerateDigest(ha1, authHeaderContents, httpMethod);
+      var digest = GenerateDigest(ha1, authHeaderContents, httpMethod);
 
-      bool isNonceStale = !IsValidNonce(authHeaderContents["nonce"]);
+      var isNonceStale = !IsValidNonce(authHeaderContents["nonce"]);
 
       context.Items["staleNonce"] = isNonceStale;
 
@@ -121,11 +118,11 @@ namespace Contrive.Web.Modules
 
       // c)
       // A2 = HTTP Method ":" digest-uri-value
-      string a2 = String.Format("{0}:{1}", httpMethod, authHeaderContents["uri"]);
+      var a2 = String.Format("{0}:{1}", httpMethod, authHeaderContents["uri"]);
 
       // d)
       // HA2 = MD5(A2)
-      string ha2 = _cryptographer.ComputeMd5HashAsHex(a2);
+      var ha2 = _cryptographer.ComputeMd5HashAsHex(a2);
 
       // e)
       // GENRESPONSE = 
@@ -134,25 +131,15 @@ namespace Contrive.Web.Modules
 
       var nonce = authHeaderContents["nonce"];
 
-      if (authHeaderContents["qop"] != null)
-      {
-        genresponse = String.Format("{0}:{1}:{2}:{3}:{4}:{5}",
-                                    ha1,
-                                    nonce,
-                                    authHeaderContents["nc"],
-                                    authHeaderContents["cnonce"],
-                                    authHeaderContents["qop"],
-                                    ha2);
-      }
-      else
-        genresponse = String.Format("{0}:{1}:{2}", ha1, nonce, ha2);
+      if (authHeaderContents["qop"] != null) genresponse = String.Format("{0}:{1}:{2}:{3}:{4}:{5}", ha1, nonce, authHeaderContents["nc"], authHeaderContents["cnonce"], authHeaderContents["qop"], ha2);
+      else genresponse = String.Format("{0}:{1}:{2}", ha1, nonce, ha2);
 
       return _cryptographer.ComputeMd5HashAsHex(genresponse);
     }
 
     static string GetDigestFor(string userName)
     {
-      var user = _userAuth.GetUser(userName);
+      var user = _userAuth.GetUserByUserName(userName);
 
       if (user.IsNull()) return "";
 
@@ -166,34 +153,33 @@ namespace Contrive.Web.Modules
       var algorithm = _config.AppSettings["HTTPDigest.Components.AuthDigest_Algorithm"];
       var qualityOfProtection = _config.AppSettings["HTTPDigest.Components.AuthDigest_Qop"];
 
-      string nonce = GenerateNonce();
+      var nonce = GenerateNonce();
 
-      bool isNonceStale = false;
+      var isNonceStale = false;
 
-      object staleObj = app.Context.Items["staleNonce"];
+      var staleObj = app.Context.Items["staleNonce"];
 
-      if (staleObj != null)
-        isNonceStale = (bool)staleObj;
+      if (staleObj != null) isNonceStale = (bool) staleObj;
 
       // Show Digest modal window
       // build WWW-Authenticate server response header
       var builder = new StringBuilder("Digest");
       builder.Append(" realm=\"");
-      builder.Append((string)realm);
+      builder.Append(realm);
       builder.Append("\"");
       builder.Append(", nonce=\"");
       builder.Append(nonce);
       builder.Append("\"");
       builder.Append(", opaque=\"");
-      builder.Append((string)opaque);
+      builder.Append(opaque);
       builder.Append("\"");
       builder.Append(", stale=");
       builder.Append(isNonceStale ? "true" : "false");
       builder.Append(", algorithm=\"");
-      builder.Append((string)algorithm);
+      builder.Append(algorithm);
       builder.Append("\"");
       builder.Append(", qop=\"");
-      builder.Append((string)qualityOfProtection);
+      builder.Append(qualityOfProtection);
       builder.Append("\"");
 
       return builder.ToString();

@@ -22,8 +22,7 @@ namespace Contrive.Web.Membership
     {
       Verify.NotNull(config, "config");
 
-      if (name.IsEmpty())
-        name = "ContriveRoleProvider";
+      if (name.IsEmpty()) name = "ContriveRoleProvider";
 
       if (string.IsNullOrEmpty(config["description"]))
       {
@@ -48,18 +47,14 @@ namespace Contrive.Web.Membership
 
     public override string[] GetAllRoles()
     {
-      return GetRoleManagementService()
-        .GetAllRoles()
-        .Select(r => r.Name).ToArray();
+      return GetRoleManagementService().GetAllRoles().Select(r => r.Name).ToArray();
     }
 
     public override string[] GetUsersInRole(string roleName)
     {
       string[] usersInRole = null;
 
-      ThrowMembership(() => usersInRole = GetRoleManagementService()
-                                            .GetUsersInRole(roleName)
-                                            .Select(u => u.UserName).ToArray());
+      ThrowMembership(() => usersInRole = GetRoleManagementService().GetUsersInRole(roleName).Select(u => u.UserName).ToArray());
 
       return usersInRole;
     }
@@ -68,16 +63,14 @@ namespace Contrive.Web.Membership
     {
       string[] usersInRole = null;
 
-      ThrowMembership(() => usersInRole = GetRoleManagementService()
-        .FindUsersInRole(roleName, usernameToMatch)
-        .Select(u => u.UserName).ToArray());
+      ThrowMembership(() => usersInRole = GetRoleManagementService().FindUsersInRole(roleName, usernameToMatch).Select(u => u.UserName).ToArray());
 
       return usersInRole;
     }
 
     public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
     {
-      bool success = false;
+      var success = false;
 
       ThrowMembership(() => success = GetRoleManagementService().DeleteRole(roleName, throwOnPopulatedRole));
 
@@ -88,9 +81,7 @@ namespace Contrive.Web.Membership
     {
       string[] rolesForUser = null;
 
-      ThrowMembership(() => rolesForUser = GetRoleManagementService()
-        .GetRolesForUser(userName)
-        .Select(r => r.Name).ToArray());
+      ThrowMembership(() => rolesForUser = GetRoleManagementService().GetRolesForUser(userName).Select(r => r.Name).ToArray());
 
       return rolesForUser;
     }

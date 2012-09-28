@@ -23,6 +23,7 @@ namespace Contrive.EntityFramework
     [MaxLength(128)]
     [DataType(DataType.Password)]
     public string Password { get; set; }
+
     public string PasswordSalt { get; set; }
 
     public bool IsApproved { get; set; }

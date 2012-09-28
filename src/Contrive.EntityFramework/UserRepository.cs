@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using Contrive.Core;
 using Contrive.Core.Extensions;
 
@@ -8,39 +8,72 @@ namespace Contrive.EntityFramework
 {
   public class UserRepository : IUserRepository
   {
-    readonly Repository<User> _repository;
-
     public UserRepository(Repository<User> repository)
     {
       _repository = repository;
     }
 
-    public IUser FirstOrDefault(Func<IUser, bool> @where)
+    readonly Repository<User> _repository;
+
+    public IEnumerable<IUser> GetAll()
     {
-      return _repository.FirstOrDefault(@where);
+      return _repository.GetAll();
     }
 
-    public IEnumerable<IUser> Where(Func<IUser, bool> @where)
+    public IUser GetUserByUserName(string userName)
     {
-      return _repository.Where(@where);
+      return _repository.FirstOrDefault(u => u.UserName == userName);
+    }
+
+    public IUser GetUserByEmailAddress(string emailAddress)
+    {
+      return _repository.FirstOrDefault(u => u.Email == emailAddress);
+    }
+
+    public IEnumerable<IUser> FindUsersForUserName(string searchTerm)
+    {
+      return _repository.Where(u => u.UserName.Contains(searchTerm));
+    }
+
+    public IEnumerable<IUser> FindUsersForEmailAddress(string searchTerm)
+    {
+      return _repository.Where(u => u.Email.Contains(searchTerm));
+    }
+
+    public IEnumerable<IUser> GetUsersForUserName(IEnumerable<string> userNames)
+    {
+      return _repository.Where(u => userNames.Contains(u.UserName));
+    }
+
+    public IUser GetUserByConfirmationToken(string token)
+    {
+      return _repository.FirstOrDefault(u => u.ConfirmationToken == token);
+    }
+
+    public IUser GetUserByPasswordVerificationToken(string token)
+    {
+      return _repository.FirstOrDefault(user => String.Equals(user.PasswordVerificationToken, token, StringComparison.OrdinalIgnoreCase) && user.PasswordVerificationTokenExpirationDate > DateTime.UtcNow);
     }
 
     public void Insert(IUser user)
     {
       _repository.Insert(user.As<User>());
+      SaveChanges();
     }
 
     public void Update(IUser user)
     {
       _repository.Update(user.As<User>());
+      SaveChanges();
     }
 
     public void Delete(IUser user)
     {
       _repository.Delete(user.As<User>());
+      SaveChanges();
     }
 
-    public void SaveChanges()
+    void SaveChanges()
     {
       _repository.SaveChanges();
     }

@@ -4,6 +4,7 @@ using System.Net;
 using System.Web;
 using System.Web.Security;
 using Contrive.Core;
+using Contrive.Core.Extensions;
 
 namespace Contrive.Web.Membership
 {
@@ -12,59 +13,33 @@ namespace Contrive.Web.Membership
   /// </summary>
   public class SecurityService : ISecurityService
   {
-    readonly IUserService _userService;
-
-    public SecurityService(IUserService userService)
+    public SecurityService(IUserService userService, IAuthenticationService authenticationService)
     {
       _userService = userService;
+      _authenticationService = authenticationService;
     }
 
-    public Guid CurrentUserId
+    readonly IAuthenticationService _authenticationService;
+    readonly IUserService _userService;
+    HttpContextBase Context { get { return new HttpContextWrapper(HttpContext.Current); } }
+
+    HttpRequestBase Request { get { return Context.Request; } }
+
+    HttpResponseBase Response { get { return Context.Response; } }
+
+    public Guid CurrentUserId { get { return GetUserId(CurrentUserName); } }
+
+    public string CurrentUserName { get { return Context.User.Identity.Name; } }
+
+    public bool HasUserId { get { return !(CurrentUserId == Guid.Empty); } }
+
+    public bool IsAuthenticated { get { return Request.IsAuthenticated; } }
+
+    public bool Login(string userNameOrEmail, string password, bool rememberMe = false)
     {
-      get { return GetUserId(CurrentUserName); }
-    }
-
-    public string CurrentUserName
-    {
-      get { return Context.User.Identity.Name; }
-    }
-
-    public bool HasUserId
-    {
-      get { return !(CurrentUserId == Guid.Empty); }
-    }
-
-    public bool IsAuthenticated
-    {
-      get { return Request.IsAuthenticated; }
-    }
-
-    HttpContextBase Context
-    {
-      get { return new HttpContextWrapper(HttpContext.Current); }
-    }
-
-    HttpRequestBase Request
-    {
-      get { return Context.Request; }
-    }
-
-    HttpResponseBase Response
-    {
-      get { return Context.Response; }
-    }
-
-    public bool Login(string userNameOrEmail, string password, bool persistCookie = false)
-    {
-      var success = _userService.ValidateUserExtended(userNameOrEmail, password);
-
-      if (!(string.IsNullOrEmpty(success)))
-      {
-        FormsAuthentication.SetAuthCookie(success, persistCookie);
-        return true;
-      }
-
-      return false;
+      var user = _userService.GetUserByUserNameOrEmail(userNameOrEmail);
+      if (user.IsNull()) return false;
+      return _authenticationService.LogOn(user.UserName, password, rememberMe);
     }
 
     public void Logout()
@@ -74,7 +49,7 @@ namespace Contrive.Web.Membership
 
     public bool ChangePassword(string userName, string currentPassword, string newPassword)
     {
-      bool success = false;
+      var success = false;
       try
       {
         success = _userService.ChangePassword(userName, currentPassword, newPassword);
@@ -88,8 +63,7 @@ namespace Contrive.Web.Membership
       return _userService.ConfirmAccount(accountConfirmationToken);
     }
 
-    public string CreateAccount(string userName, string password, string email,
-                                       bool requireConfirmationToken = false)
+    public string CreateAccount(string userName, string password, string email, bool requireConfirmationToken = false)
     {
       return _userService.CreateAccount(userName, password, email, requireConfirmationToken);
     }
@@ -101,12 +75,12 @@ namespace Contrive.Web.Membership
 
     public bool UserExists(string userName)
     {
-      return _userService.GetUser(userName) != null;
+      return _userService.GetUserByUserName(userName) != null;
     }
 
     public Guid GetUserId(string userName)
     {
-      var user = _userService.GetUser(userName);
+      var user = _userService.GetUserByUserName(userName);
       return user == null ? Guid.Empty : user.Id;
     }
 
@@ -125,28 +99,20 @@ namespace Contrive.Web.Membership
       return _userService.IsConfirmed(userName);
     }
 
-    bool IsUserLoggedOn(Guid userId)
-    {
-      return CurrentUserId == userId;
-    }
-
     public void RequireAuthenticatedUser()
     {
       var user = Context.User;
-      if (user == null || !user.Identity.IsAuthenticated)
-        Response.SetStatus(HttpStatusCode.Unauthorized);
+      if (user == null || !user.Identity.IsAuthenticated) Response.SetStatus(HttpStatusCode.Unauthorized);
     }
 
     public void RequireUser(Guid userId)
     {
-      if (!IsUserLoggedOn(userId))
-        Response.SetStatus(HttpStatusCode.Unauthorized);
+      if (!IsUserLoggedOn(userId)) Response.SetStatus(HttpStatusCode.Unauthorized);
     }
 
     public void RequireUser(string userName)
     {
-      if (!string.Equals(CurrentUserName, userName, StringComparison.OrdinalIgnoreCase))
-        Response.SetStatus(HttpStatusCode.Unauthorized);
+      if (!string.Equals(CurrentUserName, userName, StringComparison.OrdinalIgnoreCase)) Response.SetStatus(HttpStatusCode.Unauthorized);
     }
 
     public void RequireRoles(params string[] arrayOfRoles)
@@ -172,9 +138,7 @@ namespace Contrive.Web.Membership
     {
       var userManagementService = _userService;
 
-      return (userManagementService.GetUser(userName) != null &&
-              userManagementService.GetPasswordFailuresSinceLastSuccess(userName) > allowedPasswordAttempts &&
-              userManagementService.GetLastPasswordFailureDate(userName).Add(interval) > DateTime.UtcNow);
+      return (userManagementService.GetUserByUserName(userName) != null && userManagementService.GetPasswordFailuresSinceLastSuccess(userName) > allowedPasswordAttempts && userManagementService.GetLastPasswordFailureDate(userName).Add(interval) > DateTime.UtcNow);
     }
 
     public int GetPasswordFailuresSinceLastSuccess(string userName)
@@ -196,13 +160,18 @@ namespace Contrive.Web.Membership
     {
       return _userService.GetLastPasswordFailureDate(userName);
     }
+
+    bool IsUserLoggedOn(Guid userId)
+    {
+      return CurrentUserId == userId;
+    }
   }
 
   public static class HttpContextBaseExtensions
   {
     public static void SetStatus(this HttpResponseBase response, HttpStatusCode httpStatusCode)
     {
-      SetStatus(response, (int)httpStatusCode);
+      SetStatus(response, (int) httpStatusCode);
     }
 
     public static void SetStatus(this HttpResponseBase response, int httpStatusCode)

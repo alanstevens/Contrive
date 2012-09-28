@@ -26,10 +26,10 @@ namespace Contrive.Core.Extensions
     }
 
     /// <summary>
-    /// Returns a DateTime value parsed from the <paramref name="dateTimeValue"/> parameter.
+    ///   Returns a DateTime value parsed from the <paramref name="dateTimeValue" /> parameter.
     /// </summary>
-    /// <param name="dateTimeValue">A valid, parseable DateTime value</param>
-    /// <returns>The parsed DateTime value</returns>
+    /// <param name="dateTimeValue"> A valid, parseable DateTime value </param>
+    /// <returns> The parsed DateTime value </returns>
     public static DateTime ToDateTime(this string dateTimeValue)
     {
       return DateTime.Parse(dateTimeValue);

@@ -5,16 +5,26 @@ namespace Contrive.Core
 {
   public interface IUserRepository
   {
-    IUser FirstOrDefault(Func<IUser, bool> where);
+    IEnumerable<IUser> GetAll();
 
-    IEnumerable<IUser> Where(Func<IUser, bool> where);
+    IUser GetUserByUserName(string userName);
+
+    IUser GetUserByEmailAddress(string emailAddress);
+
+    IEnumerable<IUser> FindUsersForUserName(string searchTerm);
+
+    IEnumerable<IUser> FindUsersForEmailAddress(string searchTerm);
+
+    IEnumerable<IUser> GetUsersForUserName(IEnumerable<string> userNames);
+
+    IUser GetUserByConfirmationToken(string token);
+
+    IUser GetUserByPasswordVerificationToken(string token);
 
     void Insert(IUser user);
 
     void Update(IUser user);
 
     void Delete(IUser user);
-
-    void SaveChanges();
   }
 }

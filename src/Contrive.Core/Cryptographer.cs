@@ -15,8 +15,7 @@ namespace Contrive.Core
 
       _algorithmName = configurationProvider.GetDecryptionAlgorithm();
 
-      if (_algorithmName == "Auto")
-        throw new ConfigurationErrorsException("Explicit Algorithm Required");
+      if (_algorithmName == "Auto") throw new ConfigurationErrorsException("Explicit Algorithm Required");
     }
 
     const int TOKEN_SIZE = 16;
@@ -43,7 +42,7 @@ namespace Contrive.Core
     public string ComputeSha512HashAsBase64(string valueToHash)
     {
       HashAlgorithm algorithm = SHA512.Create();
-      byte[] hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(valueToHash));
+      var hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(valueToHash));
 
       return Convert.ToBase64String(hash);
     }
@@ -52,11 +51,10 @@ namespace Contrive.Core
     {
       Encoding enc = new ASCIIEncoding();
       MD5 md5 = new MD5CryptoServiceProvider();
-      byte[] bToConvert = md5.ComputeHash(enc.GetBytes(valueToHash));
-      string md5Hash = "";
+      var bToConvert = md5.ComputeHash(enc.GetBytes(valueToHash));
+      var md5Hash = "";
 
-      for (int i = 0; i < 16; i++)
-        md5Hash += String.Format("{0:x02}", bToConvert[i]);
+      for (var i = 0; i < 16; i++) md5Hash += String.Format("{0:x02}", bToConvert[i]);
 
       return md5Hash;
     }
@@ -67,7 +65,7 @@ namespace Contrive.Core
 
       byte[] outputBuffer;
 
-      SymmetricAlgorithm algorithm = GetCryptAlgorithm();
+      var algorithm = GetCryptAlgorithm();
 
       using (var ms = new MemoryStream())
       {
@@ -80,7 +78,7 @@ namespace Contrive.Core
 
         using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
         {
-          byte[] buffer = Convert.FromBase64String(plainText);
+          var buffer = Convert.FromBase64String(plainText);
           cs.Write(buffer, 0, buffer.Length);
           cs.FlushFinalBlock();
         }
@@ -97,7 +95,7 @@ namespace Contrive.Core
 
       byte[] outputBuffer;
 
-      SymmetricAlgorithm algorithm = GetCryptAlgorithm();
+      var algorithm = GetCryptAlgorithm();
 
       try
       {
@@ -131,7 +129,7 @@ namespace Contrive.Core
 
     static string GetBuffer(int bufferSize)
     {
-      byte[] buffer = new byte[bufferSize];
+      var buffer = new byte[bufferSize];
 
       using (var rng = new RNGCryptoServiceProvider())
       {
@@ -156,8 +154,7 @@ namespace Contrive.Core
           algorithm = new DESCryptoServiceProvider();
           break;
         default:
-          string message = string.Format(CultureInfo.InvariantCulture, "Unrecognized Algorithm Name: {0}",
-                                         _algorithmName);
+          var message = string.Format(CultureInfo.InvariantCulture, "Unrecognized Algorithm Name: {0}", _algorithmName);
           throw new ConfigurationErrorsException(message);
       }
 

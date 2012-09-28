@@ -9,15 +9,14 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 {
   public class ContriveAccountController : Controller
   {
-    public ContriveAccountController(IUserService userService, IAuthenticationService authenticationService,
-                                     IEmailService emailService)
+    public ContriveAccountController(IUserService userService, IAuthenticationService authenticationService, IEmailService emailService)
     {
       _userService = userService;
       _authenticationService = authenticationService;
       _emailService = emailService;
     }
 
-    const int ONE_DAY_IN_MINUTES = 24 * 60;
+    const int ONE_DAY_IN_MINUTES = 24*60;
     readonly IAuthenticationService _authenticationService;
     readonly IEmailService _emailService;
     readonly IUserService _userService;
@@ -30,10 +29,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     [HttpGet]
     public virtual ActionResult LogOn()
     {
-      var viewModel = new LogOnViewModel
-                      {
-                        EnablePasswordReset = _userService.Settings.EnablePasswordReset
-                      };
+      var viewModel = new LogOnViewModel {EnablePasswordReset = _userService.Settings.EnablePasswordReset};
       return View(viewModel);
     }
 
@@ -44,24 +40,18 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
       {
         if (_authenticationService.LogOn(model.UserName, model.Password, model.RememberMe))
         {
-          if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-              && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
-            return Redirect(returnUrl);
+          if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/") && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\")) return Redirect(returnUrl);
 
           return RedirectToAction("Index", "Home");
         }
 
-        var user = _userService.GetUser(model.UserName);
-        if (user == null)
-          ModelState.AddModelError("", "The user name or password provided is incorrect.");
+        var user = _userService.GetUserByUserName(model.UserName);
+        if (user == null) ModelState.AddModelError("", "The user name or password provided is incorrect.");
         else
         {
-          if (!user.IsApproved)
-            ModelState.AddModelError("", "Your account has not been approved yet.");
-          else if (user.IsLockedOut)
-            ModelState.AddModelError("", "Your account is currently locked.");
-          else
-            ModelState.AddModelError("", "The user name or password provided is incorrect.");
+          if (!user.IsApproved) ModelState.AddModelError("", "Your account has not been approved yet.");
+          else if (user.IsLockedOut) ModelState.AddModelError("", "Your account is currently locked.");
+          else ModelState.AddModelError("", "The user name or password provided is incorrect.");
         }
       }
 
@@ -79,7 +69,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
     public virtual ActionResult Register()
     {
-      var model = new RegisterViewModel { MinRequiredPasswordLength = _userService.Settings.MinPasswordLength };
+      var model = new RegisterViewModel {MinRequiredPasswordLength = _userService.Settings.MinPasswordLength};
       return View(model);
     }
 
@@ -97,8 +87,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
           FormsAuthentication.SetAuthCookie(model.UserName, createPersistentCookie: false);
           return RedirectToAction("Index", "Home");
         }
-        else
-          ModelState.AddModelError("", ErrorCodeToString(createStatus));
+        else ModelState.AddModelError("", ErrorCodeToString(createStatus));
       }
 
       return RedirectToAction("Register");
@@ -107,12 +96,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     [Authorize]
     public virtual ActionResult ChangePassword()
     {
-      var viewModel = new ChangePasswordViewModel
-                      {
-                        MinRequiredNonAlphanumericCharacters =
-                          _userService.Settings.MinRequiredNonAlphanumericCharacters,
-                        MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength
-                      };
+      var viewModel = new ChangePasswordViewModel {MinRequiredNonAlphanumericCharacters = _userService.Settings.MinRequiredNonAlphanumericCharacters, MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength};
 
       return View(viewModel);
     }
@@ -123,10 +107,9 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     {
       if (ModelState.IsValid)
       {
-        bool changePasswordSucceeded = _userService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
+        var changePasswordSucceeded = _userService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
 
-        if (changePasswordSucceeded)
-          return RedirectToAction("ChangePasswordSuccess");
+        if (changePasswordSucceeded) return RedirectToAction("ChangePasswordSuccess");
 
         ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
       }
@@ -153,8 +136,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     public ActionResult ResetPassword(ResetPasswordViewModel model)
     {
       // Get the userName by the email address
-      var user = _userService.GetUser(model.EmailOrUserName) ??
-                   _userService.GetUserByEmail(model.EmailOrUserName);
+      var user = _userService.GetUserByUserName(model.EmailOrUserName) ?? _userService.GetUserByEmail(model.EmailOrUserName);
 
       if (user.IsNotNull())
       {
@@ -165,14 +147,14 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
         //else
         var settings = _userService.Settings;
         // TODO: HAS 10/28/2011 Read duration from settings.
-        string passwordResetToken = _userService.GeneratePasswordResetToken(user.UserName, ONE_DAY_IN_MINUTES);
+        var passwordResetToken = _userService.GeneratePasswordResetToken(user.UserName, ONE_DAY_IN_MINUTES);
 
         // Email the reset url to the user
         try
         {
           var duration = user.PasswordVerificationTokenExpirationDate.GetValueOrDefault() - DateTime.UtcNow;
-          string rootUrl = Request.Url.GetLeftPart(UriPartial.Authority);
-          string body = _emailService.BuildMessageBody(user.UserName, passwordResetToken, rootUrl, Convert.ToInt32(duration.TotalHours), settings.ContriveEmailTemplatePath);
+          var rootUrl = Request.Url.GetLeftPart(UriPartial.Authority);
+          var body = _emailService.BuildMessageBody(user.UserName, passwordResetToken, rootUrl, Convert.ToInt32(duration.TotalHours), settings.ContriveEmailTemplatePath);
           _emailService.SendEmail(settings.ContriveEmailFrom, user.Email, settings.ContriveEmailSubject, body);
         }
         catch (Exception) { }
@@ -190,16 +172,9 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     {
       var user = _userService.GetUserFromPasswordResetToken(token);
 
-      if (user.IsNull())
-        return RedirectToAction("Index", "Home");
+      if (user.IsNull()) return RedirectToAction("Index", "Home");
 
-      var model = new PasswordResetModel
-      {
-        User = user,
-        MinRequiredNonAlphanumericCharacters =
-          _userService.Settings.MinRequiredNonAlphanumericCharacters,
-        MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength
-      };
+      var model = new PasswordResetModel {User = user, MinRequiredNonAlphanumericCharacters = _userService.Settings.MinRequiredNonAlphanumericCharacters, MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength};
 
       return View(model);
     }
@@ -207,10 +182,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     [HttpPost]
     public ActionResult PasswordReset(PasswordResetModel model)
     {
-      if (ModelState.IsValid)
-      {
-        _userService.ResetPasswordWithToken(model.User.PasswordVerificationToken, model.NewPassword);
-      }
+      if (ModelState.IsValid) _userService.ResetPasswordWithToken(model.User.PasswordVerificationToken, model.NewPassword);
 
       return RedirectToAction("Index", "Home");
     }
@@ -243,16 +215,13 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
           return "The user name provided is invalid. Please check the value and try again.";
 
         case MembershipCreateStatus.ProviderError:
-          return
-            "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+          return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
 
         case MembershipCreateStatus.UserRejected:
-          return
-            "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+          return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
 
         default:
-          return
-            "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+          return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
       }
     }
   }

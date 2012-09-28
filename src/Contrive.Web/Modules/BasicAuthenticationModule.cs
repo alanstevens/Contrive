@@ -9,23 +9,22 @@ namespace Contrive.Web.Modules
   // These constants are pretty much all given by RFC2616 and RFC2617
   public class BasicAuthenticationModule : AuthenticationModuleBase
   {
-    const string AUTHENTICATION_METHOD_NAME = "Basic";
-    const string CHALLENGE_HEADER_VALUE = "Basic realm=\"{0}\"";
-
     public BasicAuthenticationModule()
     {
       _realm = _config.AppSettings["HTTPAuth.Components.AuthBasic_Realm"];
     }
 
+    const string AUTHENTICATION_METHOD_NAME = "Basic";
+    const string CHALLENGE_HEADER_VALUE = "Basic realm=\"{0}\"";
+
     protected override bool Authenticate(HttpApplication app)
     {
       // Get authentication data
-      string authString = app.Request.Headers[RESPONSE_HEADER_NAME];
+      var authString = app.Request.Headers[RESPONSE_HEADER_NAME];
 
       if (String.IsNullOrEmpty(authString)) return true;
 
-      if (!authString.StartsWith(AUTHENTICATION_METHOD_NAME, StringComparison.OrdinalIgnoreCase))
-        return true;
+      if (!authString.StartsWith(AUTHENTICATION_METHOD_NAME, StringComparison.OrdinalIgnoreCase)) return true;
 
       // Get username and password
       string userName, password;
@@ -33,7 +32,7 @@ namespace Contrive.Web.Modules
       ParseUserNameAndPassword(authString, out userName, out password);
 
       // Validate user
-      if (_users.ValidateUser(userName, password))
+      if (_userService.ValidateUser(userName, password))
       {
         // Success - set user
         var identity = new GenericIdentity(userName, AUTHENTICATION_METHOD_NAME);
@@ -53,7 +52,7 @@ namespace Contrive.Web.Modules
       try
       {
         authString = Encoding.UTF8.GetString(Convert.FromBase64String(authString.Substring(6)));
-        string[] authParts = authString.Split(new[] { ':' }, 2);
+        var authParts = authString.Split(new[] {':'}, 2);
         userName = authParts[0];
         password = authParts[1];
       }

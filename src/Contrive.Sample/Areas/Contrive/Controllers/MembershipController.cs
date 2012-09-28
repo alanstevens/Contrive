@@ -1,38 +1,32 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.Security;
 using Contrive.Core;
 using Contrive.Sample.Areas.Contrive.Models;
 
 namespace Contrive.Sample.Areas.Contrive.Controllers
 {
-  [Authorize(Roles = "Contrive")]
+  [Authorize(Roles = "Admin")]
   public class MembershipController : Controller
   {
-    readonly IRoleService _roleService;
-    readonly IUserService _userService;
-
     public MembershipController(IRoleService roleService, IUserService userService)
     {
       _roleService = roleService;
       _userService = userService;
     }
 
+    readonly IRoleService _roleService;
+    readonly IUserService _userService;
 
     public virtual ActionResult Index(string searchterm, string filterby)
     {
-      var viewModel = new ManageUsersViewModel { Users = null };
+      var viewModel = new ManageUsersViewModel {Users = null};
 
       if (!string.IsNullOrEmpty(searchterm))
       {
-        string query = searchterm + "%";
-        if (filterby == "email")
-          viewModel.Users = _userService.GetUserByEmail(query);
-        else if (filterby == "username")
-          viewModel.Users = _userService.GetUser(query);
+        if (filterby == "email") viewModel.Users = _userService.FindUsersForEmail(searchterm);
+        else if (filterby == "username") viewModel.Users = _userService.FindUsersForUserName(searchterm);
       }
 
       return View(viewModel);
@@ -40,29 +34,33 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
     public virtual ActionResult CreateUser()
     {
-      var model = new RegisterViewModel { MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength };
-                  //{
-                  //  RequireSecretQuestionAndAnswer = _userService.RequiresQuestionAndAnswer
-                  //};
+      var model = new RegisterViewModel {MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength};
+      //{
+      //  RequireSecretQuestionAndAnswer = _userService.RequiresQuestionAndAnswer
+      //};
       return View(model);
     }
 
     [HttpPost]
     public virtual ActionResult CreateUser(RegisterViewModel model)
     {
-      var status = _userService.CreateUser(model.UserName, model.Password, model.Email, null, null, model.Approve, null);
+      var status = _userService.CreateUser(model.UserName, model.Password, model.Email, model.Approve);
 
-      var user = _userService.GetUser(model.UserName);
+      if (status == UserCreateStatus.Success)
+      {
+        var user = _userService.GetUserByUserName(model.UserName);
 
-      return new RedirectToRouteResult(
-          new RouteValueDictionary(new { action = "GrantRolesToUser", controller = "Membership", username = user.UserName }));
+        return new RedirectToRouteResult(new RouteValueDictionary(new {action = "GrantRolesToUser", controller = "Membership", username = user.UserName}));
+      }
+      // TODO: HAS 09/27/2012 Report create failure
+      return RedirectToAction("Index");
     }
 
     [HttpGet]
     public ActionResult CheckForUniqueUser(string userName)
     {
-      var user = _userService.GetUser(userName);
-      var response = new JsonResponse { Exists = (user != null) };
+      var user = _userService.GetUserByUserName(userName);
+      var response = new JsonResponse {Exists = (user != null)};
 
       return Json(response, JsonRequestBehavior.AllowGet);
     }
@@ -71,8 +69,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     //[MultiButtonFormSubmit(ActionName = "UpdateDeleteCancel", SubmitButton = "DeleteUser")]
     public ActionResult DeleteUser(string userName)
     {
-      if (string.IsNullOrEmpty(userName))
-        throw new ArgumentNullException("userName");
+      if (string.IsNullOrEmpty(userName)) throw new ArgumentNullException("userName");
 
       try
       {
@@ -84,19 +81,15 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
         TempData["ErrorMessage"] = "There was an error deleting this user. - " + ex.Message;
       }
 
-      return RedirectToAction("Update", new { userName = userName });
+      return RedirectToAction("Update", new {userName});
     }
 
     [HttpGet]
     public ActionResult Update(string userName)
     {
-      var user = _userService.GetUser(userName);
+      var user = _userService.GetUserByUserName(userName);
 
-      UserViewModel viewModel = new UserViewModel
-                                {
-                                  User = user, 
-                                  Roles = _roleService.GetRolesForUser(userName)
-                                };
+      var viewModel = new UserViewModel {User = user, Roles = _roleService.GetRolesForUser(userName)};
       //viewModel.RequiresSecretQuestionAndAnswer = _userService.RequiresQuestionAndAnswer;
 
       return View(viewModel);
@@ -109,15 +102,15 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     {
       Verify.NotEmpty(UserName, "userName");
 
-      var user = _userService.GetUser(UserName);
+      var user = _userService.GetUserByUserName(UserName);
 
       try
       {
         //user.Comment = Request["User.Comment"];
         user.Email = Request["User.Email"];
 
-        // TODO: HAS 10/25/2011 Decide what to do here
-        //_userService.UpdateUser(user);
+        _userService.UpdateUser(user);
+
         TempData["SuccessMessage"] = "The user was updated successfully!";
       }
       catch (Exception)
@@ -125,7 +118,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
         TempData["ErrorMessage"] = "There was an error updating this user.";
       }
 
-      return RedirectToAction("Update", new { userName = user.UserName });
+      return RedirectToAction("Update", new {userName = user.UserName});
     }
 
     [HttpPost]
@@ -133,7 +126,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     {
       var response = new JsonResponse();
 
-      var user = _userService.GetUser(userName);
+      var user = _userService.GetUserByUserName(userName);
 
       try
       {
@@ -157,14 +150,14 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     {
       var response = new JsonResponse();
 
-      var user = _userService.GetUser(userName);
+      var user = _userService.GetUserByUserName(userName);
 
       try
       {
         user.IsApproved = !user.IsApproved;
-        //_userService.UpdateUser(user);
+        _userService.UpdateUser(user);
 
-        string approvedMsg = (user.IsApproved) ? "Approved" : "Denied";
+        var approvedMsg = (user.IsApproved) ? "Approved" : "Denied";
 
         response.Success = true;
         response.Message = "User " + approvedMsg + " successfully!";
@@ -189,18 +182,13 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
     public virtual ActionResult GrantRolesToUser(string username)
     {
-      if (string.IsNullOrEmpty(username))
-        return RedirectToAction("Index");
+      if (string.IsNullOrEmpty(username)) return RedirectToAction("Index");
 
       var model = new GrantRolesToUserViewModel();
       model.UserName = username;
-      IEnumerable<IRole> allRoles = _roleService.GetAllRoles();
-      model.AvailableRoles = (string.IsNullOrEmpty(username)
-                                ? new SelectList(allRoles)
-                                : new SelectList(allRoles.Where(r => !_roleService.GetRolesForUser(username).Contains(r))));
-      model.GrantedRoles = (string.IsNullOrEmpty(username)
-                              ? new SelectList(new string[] { })
-                              : new SelectList(_roleService.GetRolesForUser(username)));
+      var allRoles = _roleService.GetAllRoles();
+      model.AvailableRoles = (string.IsNullOrEmpty(username) ? new SelectList(allRoles) : new SelectList(allRoles.Where(r => !_roleService.GetRolesForUser(username).Contains(r))));
+      model.GrantedRoles = (string.IsNullOrEmpty(username) ? new SelectList(new string[] {}) : new SelectList(_roleService.GetRolesForUser(username)));
 
       return View(model);
     }
@@ -217,7 +205,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
         return Json(response);
       }
 
-      string[] roleNames = roles.Substring(0, roles.Length - 1).Split(',');
+      var roleNames = roles.Substring(0, roles.Length - 1).Split(',');
 
       if (roleNames.Length == 0)
       {
@@ -228,7 +216,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
       try
       {
-        _roleService.AddUsersToRoles(new[] { userName }, roleNames);
+        _roleService.AddUsersToRoles(new[] {userName}, roleNames);
 
         response.Success = true;
         response.Message = "The Role(s) has been GRANTED successfully to " + userName;
@@ -245,7 +233,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
     [HttpPost]
     public ActionResult RevokeRolesForUser(string userName, string roles)
     {
-      JsonResponse response = new JsonResponse();
+      var response = new JsonResponse();
 
       if (string.IsNullOrEmpty(userName))
       {
@@ -261,7 +249,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
         return Json(response);
       }
 
-      string[] roleNames = roles.Substring(0, roles.Length - 1).Split(',');
+      var roleNames = roles.Substring(0, roles.Length - 1).Split(',');
 
       if (roleNames.Length == 0)
       {
@@ -272,7 +260,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
       try
       {
-        _roleService.RemoveUsersFromRoles(new[] { userName }, roleNames);
+        _roleService.RemoveUsersFromRoles(new[] {userName}, roleNames);
 
         response.Success = true;
         response.Message = "The Role(s) has been REVOKED successfully for " + userName;

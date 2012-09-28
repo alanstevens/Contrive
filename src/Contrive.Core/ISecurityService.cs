@@ -9,7 +9,7 @@ namespace Contrive.Core
     bool HasUserId { get; }
     bool IsAuthenticated { get; }
 
-    bool Login(string userNameOrEmail, string password, bool persistCookie = false);
+    bool Login(string userNameOrEmail, string password, bool rememberMe = false);
 
     void Logout();
 
@@ -17,8 +17,7 @@ namespace Contrive.Core
 
     bool ConfirmAccount(string accountConfirmationToken);
 
-    string CreateAccount(string userName, string password, string email,
-                         bool requireConfirmationToken = false);
+    string CreateAccount(string userName, string password, string email, bool requireConfirmationToken = false);
 
     string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow = 1440);
 

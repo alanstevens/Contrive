@@ -8,8 +8,7 @@ using Contrive.Core.Extensions;
 
 namespace Contrive.EntityFramework
 {
-  public class Repository<T>
-    : DisposableBase, IRepository<T> where T : class
+  public class Repository<T> : DisposableBase, IRepository<T> where T : class
   {
     public Repository(DbContext context)
     {
@@ -57,7 +56,7 @@ namespace Contrive.EntityFramework
 
     public virtual void Delete(object id)
     {
-      T entity = GetByID(id);
+      var entity = GetByID(id);
       Delete(entity);
     }
 
@@ -90,14 +89,12 @@ namespace Contrive.EntityFramework
 
     protected override void OnDisposing(bool disposing)
     {
-      if (_context.IsNotNull())
-        _context.Dispose();
+      if (_context.IsNotNull()) _context.Dispose();
     }
 
     void AttachIfNeeded(T entity)
     {
-      if (_context.Entry(entity).State == EntityState.Detached)
-        _dbSet.Attach(entity);
+      if (_context.Entry(entity).State == EntityState.Detached) _dbSet.Attach(entity);
     }
   }
 }

@@ -10,10 +10,7 @@ namespace Contrive.Core.Extensions
     [DebuggerStepThrough]
     public static IEnumerable<T> Each<T>(this IEnumerable<T> values, Action<T> eachAction)
     {
-      foreach (T item in values)
-      {
-        eachAction(item);
-      }
+      foreach (var item in values) eachAction(item);
 
       return values;
     }
@@ -21,10 +18,7 @@ namespace Contrive.Core.Extensions
     [DebuggerStepThrough]
     public static IEnumerable Each(this IEnumerable values, Action<object> eachAction)
     {
-      foreach (object item in values)
-      {
-        eachAction(item);
-      }
+      foreach (var item in values) eachAction(item);
 
       return values;
     }

@@ -24,7 +24,7 @@ namespace Contrive.Web
     public string BuildMessageBody(string userName, string token, string rootUrl, int timeSpanInHours, string filePath)
     {
       var file = new FileInfo(_server.MapPath(filePath));
-      string text = "";
+      var text = "";
 
       if (file.Exists)
       {

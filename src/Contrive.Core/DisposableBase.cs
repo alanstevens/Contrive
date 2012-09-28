@@ -16,10 +16,7 @@ namespace Contrive.Core
 
     void Dispose(bool disposing)
     {
-      if (!_isDisposed)
-      {
-        OnDisposing(disposing);
-      }
+      if (!_isDisposed) OnDisposing(disposing);
       _isDisposed = true;
     }
 

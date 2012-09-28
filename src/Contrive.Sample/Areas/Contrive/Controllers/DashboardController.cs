@@ -4,7 +4,7 @@ using Contrive.Sample.Areas.Contrive.Models;
 
 namespace Contrive.Sample.Areas.Contrive.Controllers
 {
-  [Authorize(Roles = "Contrive")]
+  [Authorize(Roles = "Admin")]
   public class DashboardController : Controller
   {
     public DashboardController(IRoleService roleService, IUserService userService)
@@ -18,7 +18,7 @@ namespace Contrive.Sample.Areas.Contrive.Controllers
 
     public virtual ActionResult Index()
     {
-      DashboardViewModel viewModel = new DashboardViewModel();
+      var viewModel = new DashboardViewModel();
       //viewModel.TotalUserCount = _userService.GetAllUsers().Count.ToString();
       //viewModel.TotalUsersOnlineCount = _userService.GetNumberOfUsersOnline().ToString();
       //viewModel.TotalRolesCount = _roleService.GetAllRoles().Length.ToString();

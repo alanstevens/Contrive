@@ -1,15 +1,16 @@
 using Contrive.EntityFramework;
+using Contrive.Sample.App_Start;
+using WebActivator;
 
-[assembly: WebActivator.PostApplicationStartMethod(
-    typeof(Contrive.App_Start.ContriveInitializer), "PostStart")]
+[assembly: PostApplicationStartMethod(typeof (ContriveInitializer), "PostStart")]
 
-namespace Contrive.App_Start
+namespace Contrive.Sample.App_Start
 {
   public static class ContriveInitializer
   {
     public static void PostStart()
     {
-      new ContextInitialization().Execute();
+      ContriveContextInitializer.Initialize();
     }
   }
 }

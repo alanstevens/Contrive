@@ -15,92 +15,79 @@ namespace Contrive.Core
     [DebuggerStepThrough]
     public static void NotEmpty(Guid argument, string argumentName)
     {
-      if (argument == Guid.Empty)
-        throw new ArgumentException(argumentName + " cannot be empty guid.", argumentName);
+      if (argument == Guid.Empty) throw new ArgumentException(argumentName + " cannot be empty guid.", argumentName);
     }
 
     [DebuggerStepThrough]
     public static void NotEmpty(string argument, string argumentName)
     {
-      if (string.IsNullOrEmpty((argument ?? string.Empty).Trim()))
-        throw new ArgumentException(argumentName + " cannot be empty.", argumentName);
+      if (string.IsNullOrEmpty((argument ?? string.Empty).Trim())) throw new ArgumentException(argumentName + " cannot be empty.", argumentName);
     }
 
     [DebuggerStepThrough]
     public static void WithinLength(string argument, int length, string argumentName)
     {
-      if (argument.Trim().Length > length)
-        throw new ArgumentException(argumentName + " cannot be more than " + length + " characters", argumentName);
+      if (argument.Trim().Length > length) throw new ArgumentException(argumentName + " cannot be more than " + length + " characters", argumentName);
     }
 
     [DebuggerStepThrough]
     public static void Null(object argument, string argumentName)
     {
-      if (argument != null)
-        throw new ArgumentException(argumentName + " must be null", argumentName);
+      if (argument != null) throw new ArgumentException(argumentName + " must be null", argumentName);
     }
 
     [DebuggerStepThrough]
     public static void NotNull(object argument, string argumentName)
     {
-      if (argument == null)
-        throw new ArgumentNullException(argumentName);
+      if (argument == null) throw new ArgumentNullException(argumentName);
     }
 
     [DebuggerStepThrough]
     public static void PositiveOrZero(int argument, string argumentName)
     {
-      if (argument < 0)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument < 0) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     [DebuggerStepThrough]
     public static void Positive(int argument, string argumentName)
     {
-      if (argument <= 0)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument <= 0) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     [DebuggerStepThrough]
     public static void PositiveOrZero(long argument, string argumentName)
     {
-      if (argument < 0)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument < 0) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     [DebuggerStepThrough]
     public static void Positive(long argument, string argumentName)
     {
-      if (argument <= 0)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument <= 0) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     [DebuggerStepThrough]
     public static void PositiveOrZero(float argument, string argumentName)
     {
-      if (argument < 0)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument < 0) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     [DebuggerStepThrough]
     public static void Positive(float argument, string argumentName)
     {
-      if (argument <= 0)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument <= 0) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     [DebuggerStepThrough]
     public static void PositiveOrZero(decimal argument, string argumentName)
     {
-      if (argument < 0)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument < 0) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     [DebuggerStepThrough]
     public static void Positive(decimal argument, string argumentName)
     {
-      if (argument <= 0)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument <= 0) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     /*
@@ -129,15 +116,13 @@ namespace Contrive.Core
     [DebuggerStepThrough]
     public static void PositiveOrZero(TimeSpan argument, string argumentName)
     {
-      if (argument < TimeSpan.Zero)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument < TimeSpan.Zero) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     [DebuggerStepThrough]
     public static void Positive(TimeSpan argument, string argumentName)
     {
-      if (argument <= TimeSpan.Zero)
-        throw new ArgumentOutOfRangeException(argumentName);
+      if (argument <= TimeSpan.Zero) throw new ArgumentOutOfRangeException(argumentName);
     }
 
     [DebuggerStepThrough]
@@ -145,22 +130,18 @@ namespace Contrive.Core
     {
       NotNull(argument, argumentName);
 
-      if (argument.Count == 0)
-        throw new ArgumentException("List cannot be empty.", argumentName);
+      if (argument.Count == 0) throw new ArgumentException("List cannot be empty.", argumentName);
     }
 
     [DebuggerStepThrough]
     public static void InRange(int argument, int min, int max, string argumentName)
     {
-      if ((argument < min) || (argument > max))
-        throw new ArgumentOutOfRangeException(argumentName, argumentName + "must be between " + min + "-" + max + ".");
+      if ((argument < min) || (argument > max)) throw new ArgumentOutOfRangeException(argumentName, argumentName + "must be between " + min + "-" + max + ".");
     }
 
     public static void AreEqual<T>(T expected, T actual, string argumentName)
     {
-      if (!EqualityComparer<T>.Default.Equals(expected, actual))
-        throw new ArgumentOutOfRangeException(argumentName,
-                                              argumentName + " must be " + expected + ", but was " + actual + ".");
+      if (!EqualityComparer<T>.Default.Equals(expected, actual)) throw new ArgumentOutOfRangeException(argumentName, argumentName + " must be " + expected + ", but was " + actual + ".");
     }
 
     public static void True(bool actual, string argumentName)
@@ -175,8 +156,7 @@ namespace Contrive.Core
 
     public static void AreNotEqual<T>(T expected, T actual, string argumentName)
     {
-      if (EqualityComparer<T>.Default.Equals(expected, actual))
-        throw new ArgumentOutOfRangeException(argumentName, argumentName + " must not be equal to " + expected + ".");
+      if (EqualityComparer<T>.Default.Equals(expected, actual)) throw new ArgumentOutOfRangeException(argumentName, argumentName + " must not be equal to " + expected + ".");
     }
 
     /*

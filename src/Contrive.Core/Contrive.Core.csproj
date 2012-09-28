@@ -12,6 +12,8 @@
     <AssemblyName>Contrive.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,10 +37,10 @@
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticationService.cs" />
     <Compile Include="CreateUserException.cs" />
     <Compile Include="Cryptographer.cs" />
     <Compile Include="DisposableBase.cs" />
@@ -49,6 +51,8 @@
     <Compile Include="ICryptographer.cs" />
     <Compile Include="IEmailService.cs" />
     <Compile Include="IAuthenticationService.cs" />
+    <Compile Include="IPlatformAuthenticationService.cs" />
+    <Compile Include="IRepository.cs" />
     <Compile Include="IRole.cs" />
     <Compile Include="IRoleService.cs" />
     <Compile Include="IRoleRepository.cs" />
@@ -82,6 +86,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

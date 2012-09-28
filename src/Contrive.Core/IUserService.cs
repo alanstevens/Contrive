@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Contrive.Core
 {
@@ -8,17 +9,11 @@ namespace Contrive.Core
 
     bool ChangePassword(string userName, string oldPassword, string newPassword);
 
-    IUser GetUser(string userName);
+    IUser GetUserByUserName(string userName);
 
     bool ValidateUser(string userName, string password);
 
-    UserCreateStatus CreateUser(string userName,
-                                string password,
-                                string email,
-                                string passwordQuestion,
-                                string passwordAnswer,
-                                bool isApproved,
-                                object providerUserKey);
+    UserCreateStatus CreateUser(string userName, string password, string email, bool isApproved);
 
     bool VerifyUser(IUser user, string password);
 
@@ -26,7 +21,7 @@ namespace Contrive.Core
 
     string CreateAccount(string userName, string password, string email, bool requireConfirmationToken = false);
 
-    bool ConfirmAccount(string accountConfirmationToken);
+    bool ConfirmAccount(string token);
 
     bool DeleteAccount(string userName);
 
@@ -49,5 +44,13 @@ namespace Contrive.Core
     DateTime GetLastPasswordFailureDate(string userName);
 
     IUser GetUserByEmail(string emailAddress);
+
+    void UpdateUser(IUser user);
+
+    IUser GetUserByUserNameOrEmail(string userNameOrEmail);
+
+    IEnumerable<IUser> FindUsersForUserName(string searchTerm);
+
+    IEnumerable<IUser> FindUsersForEmail(string searchTerm);
   }
 }

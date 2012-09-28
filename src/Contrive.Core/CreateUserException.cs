@@ -9,36 +9,30 @@ namespace Contrive.Core
   [Serializable]
   public class CreateUserException : Exception
   {
-    public CreateUserException(UserCreateStatus statusCode)
-      : base(GetMessageFromStatusCode(statusCode))
+    public CreateUserException(UserCreateStatus statusCode) : base(GetMessageFromStatusCode(statusCode))
     {
       _statusCode = statusCode;
     }
 
-    public CreateUserException(string message)
-      : base(message) { }
+    public CreateUserException(string message) : base(message) { }
 
-    protected CreateUserException(SerializationInfo info, StreamingContext context)
-      : base(info, context)
+    protected CreateUserException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
-      _statusCode = (UserCreateStatus)info.GetInt32("_StatusCode");
+      _statusCode = (UserCreateStatus) info.GetInt32("_StatusCode");
     }
 
     public CreateUserException() { }
 
-    public CreateUserException(string message, Exception innerException)
-      : base(message, innerException) { }
+    public CreateUserException(string message, Exception innerException) : base(message, innerException) { }
 
     readonly UserCreateStatus _statusCode = UserCreateStatus.ProviderError;
 
     public UserCreateStatus StatusCode
     {
-      [TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")]
-      get { return _statusCode; }
+      [TargetedPatchingOptOut("Performance critical to inline this type of method across NGen image boundaries")] get { return _statusCode; }
     }
 
-    [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.SerializationFormatter,
-      SerializationFormatter = true)]
+    [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.SerializationFormatter, SerializationFormatter = true)]
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
       base.GetObjectData(info, context);
