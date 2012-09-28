@@ -1,0 +1,1 @@
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Contrive.Auth.Web.Mvc.MvcApplication" Language="C#" %>

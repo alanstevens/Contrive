@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using Contrive.Core;
-using Contrive.Core.Extensions;
+using Contrive.Common;
+using Contrive.Common.Extensions;
+using DisposableBase = Contrive.Common.DisposableBase;
 
 namespace Contrive.EntityFramework
 {

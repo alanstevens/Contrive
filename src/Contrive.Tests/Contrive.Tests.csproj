@@ -63,9 +63,13 @@
     <Content Include="SubSpec\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contrive.Core\Contrive.Core.csproj">
+    <ProjectReference Include="..\Contrive.Auth\Contrive.Auth.csproj">
       <Project>{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}</Project>
-      <Name>Contrive.Core</Name>
+      <Name>Contrive.Auth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contrive.Common\Contrive.Common.csproj">
+      <Project>{00B479B8-86CD-4EDB-B6B0-F0C574B1F00B}</Project>
+      <Name>Contrive.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

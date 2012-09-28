@@ -1,0 +1,477 @@
+html, body { height: auto; }
+
+body {
+  color: #696969;
+  font-family: "Trebuchet MS", Verdana, Helvetica, Sans-Serif;
+  font-size: .85em;
+  margin: 0;
+  padding: 0;
+}
+
+#wrapper {
+  left: 0;
+  min-height: 100%;
+  min-width: 1000px;
+  position: relative;
+  top: 0;
+}
+
+#header { margin: 0 auto; }
+
+h1 {
+  float: left;
+  width: auto;
+}
+
+.title {
+  float: left;
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  width: auto;
+}
+
+.title span {
+  font-size: .4em;
+  font-weight: normal;
+}
+
+.inner {
+  margin: 0 auto;
+  width: 960px;
+}
+
+#menu {
+  float: right;
+  margin-top: 20px;
+  width: auto;
+}
+
+#content { clear: both; }
+
+.fl { float: left; }
+
+.fr { float: right; }
+
+.w40pc { width: 40%; }
+
+.w48pc { width: 48%; }
+
+.w50pc { width: 50%; }
+
+.mr20 { margin-right: 20px; }
+
+
+
+
+
+/*************************************
+* Begin Dashboard Styles
+*************************************/
+
+
+
+/*************************************
+* End Dashboard Styles
+*************************************/
+
+
+
+
+
+
+
+
+/*************************************
+* Begin Membership Styles
+*************************************/
+
+#available-roles, #granted-roles, #grant-controls {
+  float: left;
+  height: 100%;
+  width: auto;
+}
+
+#available-roles h3, #granted-roles h3 { margin: 0; }
+
+#available-roles select, #granted-roles select {
+  height: 280px;
+  margin-bottom: 1.4em;
+  min-width: 150px;
+  width: auto;
+}
+
+#grant-controls { margin: 75px 10px 0 10px; }
+
+#grant-controls button { width: 110px; }
+
+#username-to-grant-roles {
+  background-color: #FFFF99;
+  border: 1px solid #FFCC66;
+  font-size: medium;
+  font-weight: bold;
+  padding: 3px;
+}
+
+.approved {
+  background-image: url(images/positive.gif);
+  background-repeat: no-repeat;
+  float: left;
+  padding-right: 10px;
+  width: 16px;
+}
+
+.notapproved {
+  background-image: url(images/negative.gif);
+  background-repeat: no-repeat;
+  float: left;
+  padding-right: 10px;
+  width: 16px;
+}
+
+/*************************************
+* End Membership Styles
+*************************************/
+
+
+
+
+
+
+
+
+/*************************************
+* Begin Roles Styles
+*************************************/
+
+#role-column-left, #role-column-right {
+  float: left;
+  margin-right: 20px;
+  width: 45%;
+}
+
+/*
+#users-in-role-div ul
+{
+    list-style-type: none;
+}
+*/
+/*************************************
+* End Roles Styles
+*************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*************************************
+* Begin Common Styles
+*************************************/
+
+
+div.row {
+  overflow: hidden;
+  padding: 0 0 11px 0;
+  width: 100%;
+}
+
+div.row label {
+  display: block;
+  float: left;
+  font-weight: bold;
+  width: 160px;
+}
+
+div.row div.inputs { /*width: 520px;*/width: 790px; }
+
+div.row div.inputs .input_wrapper {
+  float: left;
+  margin: 0 8px 0 0;
+  padding: 2px 4px;
+  width: 300px;
+  /*border: 1px solid #cecece;*/
+}
+
+div.row div.inputs .input_wrapper input.text { /*border: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    width: 100%;
+    display: block;*/ }
+
+div.row div.inputs .textarea_wrapper {
+  height: 120px;
+  margin: 0 !important;
+  width: 508px;
+}
+
+
+div.row div.inputs .textarea_wrapper textarea {
+  background: transparent;
+  display: block;
+  font-family: 'Trebuchet Ms';
+  /*border: 0;*/
+  font-size: 13px;
+  height: 100%;
+  margin: 0;
+  overflow: auto;
+  padding: 2px;
+  width: 100%;
+}
+
+
+.system {
+  background-position: left center;
+  background-repeat: no-repeat;
+  display: block;
+  float: left;
+  font-weight: bold;
+  padding: 0 0 0 19px;
+  white-space: nowrap;
+}
+
+.positive {
+  background-image: url(images/positive.gif);
+  color: #82a800;
+}
+
+.negative {
+  background-image: url(images/negative.gif);
+  color: #b86464;
+}
+
+.system_messages {
+  margin: 0;
+  padding: 15px 0 0;
+}
+
+.system_messages li {
+  font-size: 11px;
+  left: 0;
+  list-style: none;
+  list-style-position: outside;
+  margin: 0 0 7px;
+  min-height: 1px;
+  padding: 6px 0 6px 38px;
+  position: relative;
+  top: 0;
+}
+
+.white {
+  background: #fefefe url(images/white_message.gif) repeat-x;
+  border: 1px solid #dbdbdb;
+}
+
+.system_title { font-size: 11px; }
+
+.ico {
+  background-repeat: no-repeat;
+  display: block;
+  height: 23px;
+  left: 4px;
+  overflow: hidden;
+  position: absolute;
+  top: 1px;
+  width: 23px;
+}
+
+.white .system_title { color: #4f4f4f; }
+
+.white .ico { background-image: url(images/white_ico.png); }
+
+.red {
+  background: #e2c5c5 url(images/red_message.gif) repeat-x;
+  border: 1px solid #cf9e9e;
+}
+
+.red .system_title { color: #ae2727; }
+
+.red .ico { background-image: url(images/red_ico.png); }
+
+
+
+.blue {
+  background: #c4dde3 url(images/blue_message.gif) repeat-x;
+  border: 1px solid #9cc6d0;
+}
+
+.blue .system_title { color: #0f4b74; }
+
+.blue .ico { background-image: url(images/blue_ico.png); }
+
+.green {
+  background: #c7e5c2 url(images/green_message.gif) repeat-x;
+  border: 1px solid #a2d399;
+}
+
+.green .system_title { color: #386d19; }
+
+.green .ico { background-image: url(images/green_ico.png); }
+
+
+.yellow {
+  background: #eae1b1 url(images/yellow_message.gif) repeat-x;
+  border: 1px solid #e0d182;
+}
+
+.yellow .system_title { color: #675918; }
+
+.yellow .ico { background-image: url(images/yellow_ico.png); }
+
+/*************************************
+* End Common Styles
+*************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* FORM LAYOUT ELEMENTS   
+----------------------------------------------------------*/
+
+fieldset {
+  border: 1px solid #ddd;
+  margin: 0 0 1.5em 0;
+  /*padding: 0 1.4em 1.4em 1.4em;*/
+  padding: 1.4em;
+}
+
+legend {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+textarea { min-height: 75px;
+  /*min-height: 323px;*/ }
+
+input[type="text"], input[type="password"] {
+  border: 1px solid #ccc;
+  color: #444;
+  font-size: 1.2em;
+  padding: 2px;
+  width: 300px;
+}
+
+select {
+  border: 1px solid #ccc;
+  color: #444;
+  font-size: 1.2em;
+  padding: 2px;
+}
+
+input[type="submit"] {
+  font-size: 1.2em;
+  padding: 5px;
+}
+
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+
+.field-validation-error { color: #ff0000; }
+
+.field-validation-valid { display: none; }
+
+.input-validation-error {
+  background-color: #ffeeee;
+  border: 1px solid #ff0000;
+}
+
+.validation-summary-errors {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.validation-summary-valid { display: none; }
+
+/* Styles for editor and display helpers
+----------------------------------------------------------*/
+
+.display-label, .editor-label { margin: 1em 0 0 0; }
+
+.display-field, .editor-field { margin: 0.5em 0 0 0; }
+
+.text-box { width: 30em; }
+
+.text-box.multi-line { height: 6.5em; }
+
+.tri-state { width: 6em; }
+
+
+div.editor-label, div.display-label {
+  float: left;
+  width: 150px;
+}
+
+div.editor-field, div.display-field { /*clear: left;*/margin-bottom: 5px; }
+
+
+
+
+/*************************************************************
+* Begin Common Table Styles
+*************************************************************/
+
+.table_wrapper {
+  font-size: 14px;
+  margin: 0 auto;
+  width: 100%;  
+}
+
+.table_wrapper_inner {
+  border: solid #dbdbdb;
+  border-width: 0 0 0 1px;
+}
+
+.table_wrapper td, .table_wrapper th {
+  border: solid #dbdbdb;
+  border-width: 1px 1px 1px 0;
+}
+
+.table_wrapper th {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.table_wrapper th { border-width: 2px 1px 0 0; }
+
+.table_wrapper td, .table_wrapper th {
+  font-size: 16px;
+  line-height: 26px;
+  padding: 0 12px;
+  text-align: left;
+}
+
+.table_wrapper th { background: #fff; }
+
+.table_wrapper td { background: #fefefe url(images/td_bg1.gif) repeat-x; }
+
+.table_wrapper tr.second td { background: #f2f2f2 url(images/td_bg2.gif) repeat-x; }
+
+/*************************************************************
+* End Common Table Styles
+*************************************************************/
