@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 
-namespace Contrive.Data.Common
+namespace Contrive.Data.Common.Sql
 {
   public static class AddSqlParameterExtensions
   {

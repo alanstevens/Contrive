@@ -98,8 +98,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Verify.cs" />
-    <Compile Include="Web\ICache.cs" />
-    <Compile Include="Web\IWebConfigurationProvider.cs" />
+    <Compile Include="ICache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

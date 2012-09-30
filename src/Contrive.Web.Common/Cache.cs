@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Caching;
-using Contrive.Common.Web;
+using Contrive.Common;
 
 namespace Contrive.Web.Common
 {

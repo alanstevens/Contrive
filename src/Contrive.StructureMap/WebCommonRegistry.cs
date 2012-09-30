@@ -1,4 +1,4 @@
-using Contrive.Common.Web;
+using Contrive.Common;
 using Contrive.Web.Common;
 using StructureMap.Configuration.DSL;
 

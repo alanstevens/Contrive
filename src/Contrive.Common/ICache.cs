@@ -1,4 +1,4 @@
-﻿namespace Contrive.Common.Web
+﻿namespace Contrive.Common
 {
   public interface ICache
   {

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Contrive.Common;
 
-namespace Contrive.Common.Web
+namespace Contrive.Web.Common
 {
   public interface IWebConfigurationProvider: IConfigurationProvider
   {

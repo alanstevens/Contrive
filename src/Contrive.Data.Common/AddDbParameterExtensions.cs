@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using Contrive.Common.Extensions;
 
 namespace Contrive.Data.Common
@@ -8,6 +7,9 @@ namespace Contrive.Data.Common
   public static class AddDbParameterExtensions
   {
     const int VAR_CHAR_MAX = 4000;
+
+    public static Func<string, DbType, ParameterDirection, object, int, byte, byte, IDataParameter> CreateParameter =
+      (name, type, direction, value, size, precision, scale) => null;
 
     public static void AddParameter(this IDbCommand command, string name, DbType type)
     {
@@ -40,7 +42,7 @@ namespace Contrive.Data.Common
 
       command.Parameters.Add(parameter);
     }
-
+    
     static IDataParameter NewParameter(string name,
                                        DbType type,
                                        ParameterDirection direction,
@@ -53,16 +55,7 @@ namespace Contrive.Data.Common
 
       if (type == DbType.AnsiString && size == 0) size = VAR_CHAR_MAX;
 
-      return new SqlParameter
-             {
-               ParameterName = name,
-               DbType = type,
-               Direction = direction,
-               Value = value,
-               Size = size,
-               Precision = precision,
-               Scale = scale
-             };
+      return CreateParameter(name, type, direction, value, size, precision, scale);
     }
   }
 }

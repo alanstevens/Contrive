@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache.cs" />
+    <Compile Include="IWebConfigurationProvider.cs" />
     <Compile Include="Modules\ErrorHandlingModule.cs" />
     <Compile Include="HttpErrorHandler.cs" />
     <Compile Include="Mvc\RemoteRequireHttpsAttribute.cs" />
