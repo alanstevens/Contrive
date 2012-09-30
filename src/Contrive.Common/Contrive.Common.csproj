@@ -92,13 +92,11 @@
     <Compile Include="IRepository.cs" />
     <Compile Include="IStartupTask.cs" />
     <Compile Include="IUnitOfWork.cs" />
-    <Compile Include="ListenerConvention.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Extensions\LoggingExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="SubscriptionInterceptor.cs" />
     <Compile Include="Verify.cs" />
     <Compile Include="Web\ICache.cs" />
     <Compile Include="Web\IWebConfigurationProvider.cs" />

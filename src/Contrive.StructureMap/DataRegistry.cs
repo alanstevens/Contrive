@@ -1,8 +1,9 @@
-﻿using Contrive.Common;
+using Contrive.Common;
+using Contrive.Data.Common;
 using StructureMap.Configuration.DSL;
 using StructureMap.Pipeline;
 
-namespace Contrive.Data.Common
+namespace Contrive.StructureMap
 {
   public class DataRegistry: Registry
   {

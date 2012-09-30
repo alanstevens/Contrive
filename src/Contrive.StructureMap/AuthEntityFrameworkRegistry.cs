@@ -2,7 +2,6 @@
 using Contrive.Auth;
 using Contrive.Auth.EntityFramework;
 using Contrive.Common;
-using Contrive.EntityFramework;
 using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap

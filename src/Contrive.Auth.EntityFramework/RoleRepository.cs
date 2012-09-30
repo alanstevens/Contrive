@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Contrive.Common.Extensions;
-using Contrive.EntityFramework;
 
 namespace Contrive.Auth.EntityFramework
 {

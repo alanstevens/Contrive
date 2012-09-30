@@ -1,9 +1,10 @@
 using System;
+using Contrive.Common;
 using StructureMap;
 using StructureMap.Interceptors;
 using StructureMap.TypeRules;
 
-namespace Contrive.Common
+namespace Contrive.StructureMap
 {
   /// <summary>
   ///   Insures that when types implementing IHandle<E> are instantiated, they are subscribed to the appropriate event type with the event aggregator

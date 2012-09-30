@@ -80,7 +80,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
       {
         // Attempt to register the user
         MembershipCreateStatus createStatus;
-        System.Web.Security.Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, out createStatus);
+        Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, out createStatus);
 
         if (createStatus == MembershipCreateStatus.Success)
         {
@@ -223,7 +223,9 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
         default:
           return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
       }
- /// <summary>
+    }
+
+    /// <summary>
     ///   This provides simple feedback to the modelstate in the case of errors.
     /// </summary>
     /// <param name="filterContext"> </param>
@@ -249,6 +251,6 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
         foreach (var item in modelState) if (!ModelState.ContainsKey(item.Key)) ModelState.Add(item);
       }
       base.OnActionExecuted(filterContext);
-       }
+    }
   }
 }

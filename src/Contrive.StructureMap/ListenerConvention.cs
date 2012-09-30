@@ -1,9 +1,10 @@
-﻿using System;
+using System;
+using Contrive.Common;
 using Contrive.Common.Extensions;
 using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
 
-namespace Contrive.Common
+namespace Contrive.StructureMap
 {
   /// <summary>
   ///   Insures that types implementing IListener are registered with the container as singletons.

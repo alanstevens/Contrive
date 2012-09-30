@@ -69,7 +69,6 @@
   <ItemGroup>
     <Compile Include="AddDbParameterExtensions.cs" />
     <Compile Include="AddSqlParameterExtensions.cs" />
-    <Compile Include="DataRegistry.cs" />
     <Compile Include="CommandExtensions.cs" />
     <Compile Include="CommandProvider.cs" />
     <Compile Include="ConnectionProvider.cs" />
