@@ -13,13 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Tests", "Contrive.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.EntityFramework", "Contrive.EntityFramework\Contrive.EntityFramework.csproj", "{776207CC-CC74-49BA-8FCD-B1E7A0784257}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{602BDDEF-3151-4AC2-A89C-A2BA2EE23E8C}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Auth.EntityFramework", "Contrive.Auth.EntityFramework\Contrive.Auth.EntityFramework.csproj", "{4D901CB3-DE1C-4A70-801E-1BE06C5C2E4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Common", "Contrive.Common\Contrive.Common.csproj", "{00B479B8-86CD-4EDB-B6B0-F0C574B1F00B}"

@@ -8,7 +8,7 @@ using StructureMap.ServiceLocatorAdapter;
 
 namespace Contrive.StructureMap
 {
-  public static class ContainerConfigurator
+  public static class StructureMapContainerConfigurator
   {
     public static bool Configured { get; private set; }
 
@@ -27,6 +27,7 @@ namespace Contrive.StructureMap
 
       var serviceLocator = new StructureMapServiceLocator(container);
       ServiceLocator.SetLocatorProvider(() => serviceLocator);
+
       container.Configure(x =>
                           {
                             x.For<IContainer>().Use(container);
@@ -36,7 +37,7 @@ namespace Contrive.StructureMap
                                    {
                                      s.Assembly(Assembly.GetEntryAssembly());
                                      s.Assembly(Assembly.GetExecutingAssembly());
-                                     if (rootNamespace.IsNotNull())
+                                     if (assemblyDirectory.IsNotBlank() && rootNamespace.IsNotBlank())
                                        s.AssembliesFromPath(assemblyDirectory,
                                                             assembly => assembly.GetName().Name.StartsWith(rootNamespace));
                                      s.WithDefaultConventions();

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="Contrive.Auth.EmailFrom" value="change_this@your_domain.com" />
+    <add key="Contrive.Auth.EmailSubject" value="Password Reset Request." />
+    <add key="Contrive.Auth.EmailTemplatePath" value="~/Content/Contrive/ResetPassword.html" />
+  </appSettings>
+  <system.web>
+    <authentication mode="Forms">
+      <forms loginUrl="~/Account/LogOn" timeout="2880" />
+    </authentication>
+  </system.web>
+  <system.net>
+    <mailSettings>
+      <smtp deliveryMethod="Network">
+        <network host="[your SMTP mail server]" userName="[your email address]" password="[your email password]" port="25"/>
+      </smtp>
+    </mailSettings>
+  </system.net>  
+</configuration>

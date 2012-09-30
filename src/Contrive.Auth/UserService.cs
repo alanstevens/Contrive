@@ -293,13 +293,9 @@ namespace Contrive.Auth
 
     string GetAuthDigest(string userName, string password)
     {
-      // a)
-      // A1 = unq(username-value) ":" unq(realm-value) ":" passwd
-      var a1 = String.Format("{0}:{1}:{2}", userName, Settings.Realm, password);
+      var format = "{0}:{1}:{2}".FormatWith(userName, Settings.Realm, password);
 
-      // b)
-      // HA1 = MD5(A1)
-      return _cryptographer.ComputeMd5HashAsHex(a1);
+      return format.CalculateMd5Hash().Base64ToHex();
     }
 
     string EncodePassword(string password, string passwordSalt)

@@ -1,7 +1,8 @@
 using System.Web;
+using Contrive.Web.Common.Modules;
 using StructureMap;
 
-namespace Contrive.Web.Common.Modules
+namespace Contrive.StructureMap
 {
   public class RequestScopeModule : BaseHttpModule
   {

@@ -10,7 +10,7 @@ namespace Contrive.Auth
   {
     public UserServiceSettings(NameValueCollection settings)
     {
-      Verify.NotNull(settings, "config");
+      Verify.NotNull(settings, "settings");
 
       ApplicationName = GetConfigValue(settings["applicationName"], "/"); //,HostingEnvironment.ApplicationVirtualPath);
 
@@ -34,11 +34,11 @@ namespace Contrive.Auth
 
       Realm = GetConfigValue(settings["HTTP.Realm"], "Application");
 
-      ContriveEmailFrom = GetConfigValue(settings["ContriveEmailFrom"], "Application");
+      ContriveEmailFrom = GetConfigValue(settings["Contrive.Auth.EmailFrom"], "Application");
 
-      ContriveEmailSubject = GetConfigValue(settings["ContriveEmailSubject"], "Password Reset Request");
+      ContriveEmailSubject = GetConfigValue(settings["Contrive.Auth.EmailSubject"], "Password Reset Request");
 
-      ContriveEmailTemplatePath = GetConfigValue(settings["ContriveEmailTemplatePath"], "~/Content/Contrive/ResetPassword.html");
+      ContriveEmailTemplatePath = GetConfigValue(settings["Contrive.Auth.EmailTemplatePath"], "~/Content/Contrive/ResetPassword.html");
 
       var format = settings["passwordFormat"] ?? "Hashed";
 
@@ -90,7 +90,7 @@ namespace Contrive.Auth
 
     public int MinPasswordLength { get { return MinRequiredPasswordLength; } }
 
-    string GetConfigValue(string configValue, string defaultValue)
+    static string GetConfigValue(string configValue, string defaultValue)
     {
       return configValue.IsEmpty() ? defaultValue : configValue;
     }

@@ -6,9 +6,16 @@ using Microsoft.Practices.ServiceLocation;
 
 namespace Contrive.Common
 {
+  // Called like so:
+  // Bootstrapper.Configurator = ContriveStructureMapConfigurator.Configure;
+  // Bootstrapper.Run("Contrive");
   public static class Bootstrapper
   {
-    static string BinDirectory
+    public static Action<string, string> Configurator = (assemblyDirectory, rootNamespace) => { };
+    public static Action BeforeStartup = () => { };
+    public static Action AfterStartup = () => { };
+
+    static string AssemblyDirectory
     {
       get
       {
@@ -19,17 +26,19 @@ namespace Contrive.Common
       }
     }
 
-    public static void Run(Action<string, string> configurator = null, string rootNamespace = null)
+    public static void Run(string rootNamespace)
     {
-      if (configurator.IsNull()) return;
+      Configurator.Invoke(AssemblyDirectory, rootNamespace);
 
-      configurator.Invoke(BinDirectory, rootNamespace);
+      BeforeStartup();
 
       // run the startup tasks
       ServiceLocator.Current.GetAllInstances<IStartupTask>().Each(x => x.OnStartup());
 
       // Listeners are singletons scoped to the application lifespan
       ServiceLocator.Current.GetAllInstances<IListener>();
+
+      AfterStartup();
     }
   }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
-using System.Globalization;
 using System.Web.Configuration;
 using Contrive.Common;
 
@@ -52,8 +51,6 @@ namespace Contrive.Auth.Web
     {
       var decryptionKey = GetMachineKeySection().DecryptionKey;
 
-      //if (decryptionKey.Contains("AutoGenerate")) throw new ConfigurationErrorsException("Explicit Algorithm Required");
-
       var bytes = HexStringToByteArray(decryptionKey);
 
       return Convert.ToBase64String(bytes);
@@ -68,22 +65,32 @@ namespace Contrive.Auth.Web
       }
       catch (Exception ex)
       {
-        throw new ConfigurationErrorsException("Decryption key not found", ex);
+        throw new ConfigurationErrorsException("Encryption configuration not found", ex);
       }
       return machineKeySection;
     }
 
-    static byte[] HexStringToByteArray(string hexString)
+    //static byte[] HexStringToByteArray(string hexString)
+    //{
+    //  Verify.NotEmpty(hexString, "hexString");
+
+    //  if (hexString.Length%2 == 1) hexString = '0' + hexString;
+
+    //  var buffer = new byte[hexString.Length/2];
+
+    //  for (var i = 0; i < buffer.Length; ++i) buffer[i] = byte.Parse(hexString.Substring(i*2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+
+    //  return buffer;
+    //}
+
+    static byte[] HexStringToByteArray(String hex)
     {
-      Verify.NotEmpty(hexString, "hexString");
-
-      if (hexString.Length%2 == 1) hexString = '0' + hexString;
-
-      var buffer = new byte[hexString.Length/2];
-
-      for (var i = 0; i < buffer.Length; ++i) buffer[i] = byte.Parse(hexString.Substring(i*2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-
-      return buffer;
+      Verify.NotEmpty(hex, "hex");
+      var numberChars = hex.Length;
+      if (numberChars%2 == 1) hex = '0' + hex;
+      var bytes = new byte[numberChars/2];
+      for (var i = 0; i < numberChars; i += 2) bytes[i/2] = Convert.ToByte(hex.Substring(i, 2), 16);
+      return bytes;
     }
   }
 }

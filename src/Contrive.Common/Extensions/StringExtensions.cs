@@ -37,7 +37,7 @@ namespace Contrive.Common.Extensions
     }
 
     [DebuggerStepThrough]
-    public static string CalculateHash(this string value)
+    public static string CalculateSha512Hash(this string value)
     {
       Verify.NotEmpty(value, "value");
 
@@ -48,6 +48,34 @@ namespace Contrive.Common.Extensions
 
         return Convert.ToBase64String(hash);
       }
+    }
+
+    [DebuggerStepThrough]
+    public static string CalculateMd5Hash(this string value)
+    {
+      Verify.NotEmpty(value, "value");
+
+      using(var md5 = MD5.Create())
+      {
+        var data = Encoding.UTF8.GetBytes(value);
+        var hash = md5.ComputeHash(data);
+
+        return Convert.ToBase64String(hash);
+      }
+    }
+
+    [DebuggerStepThrough]
+    public static string Base64ToHex(this string base64)
+    {
+      var hashBytes = Convert.FromBase64String(base64);
+
+      //BitConverter.ToString(hashBytes);
+      var hex = new StringBuilder();
+
+      foreach (var value in hashBytes)
+         hex.AppendFormat("{0:x02}", value);
+
+      return hex.ToString();
     }
 
     [DebuggerStepThrough]

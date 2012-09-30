@@ -2,7 +2,6 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 using Contrive.Common.Extensions;
 
 namespace Contrive.Common
@@ -54,37 +53,17 @@ namespace Contrive.Common
 
     public string GenerateSalt()
     {
-      return GetBufferAsBase64(SALT_SIZE);
+      return GetRandomBufferAsBase64(SALT_SIZE);
     }
 
     public string GenerateToken()
     {
-      return GetBufferAsBase64(TOKEN_SIZE);
+      return GetRandomBufferAsBase64(TOKEN_SIZE);
     }
 
     public string CalculatePasswordHash(string password, string salt)
     {
-      return "{0}{1}".FormatWith(password, salt).CalculateHash();
-    }
-
-    public string ComputeSha512HashAsBase64(string valueToHash)
-    {
-      HashAlgorithm algorithm = SHA512.Create();
-      var hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(valueToHash));
-
-      return Convert.ToBase64String(hash);
-    }
-
-    public string ComputeMd5HashAsHex(string valueToHash)
-    {
-      Encoding enc = new ASCIIEncoding();
-      MD5 md5 = new MD5CryptoServiceProvider();
-      var bToConvert = md5.ComputeHash(enc.GetBytes(valueToHash));
-      var md5Hash = "";
-
-      for (var i = 0; i < 16; i++) md5Hash += String.Format("{0:x02}", bToConvert[i]);
-
-      return md5Hash;
+      return "{0}{1}".FormatWith(password, salt).CalculateSha512Hash();
     }
 
     public string Encrypt(string plainText)
@@ -158,7 +137,7 @@ namespace Contrive.Common
       return Convert.ToBase64String(outputBuffer);
     }
 
-    static string GetBufferAsBase64(int bufferSize)
+    static string GetRandomBufferAsBase64(int bufferSize)
     {
       var buffer = new byte[bufferSize];
 

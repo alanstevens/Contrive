@@ -122,7 +122,7 @@ namespace Contrive.Auth.Web.Modules
 
       // d)
       // HA2 = MD5(A2)
-      var ha2 = _cryptographer.ComputeMd5HashAsHex(a2);
+      var ha2 = _cryptographer.Base64ToHex(a2.CalculateMd5Hash());
 
       // e)
       // GENRESPONSE = 
@@ -134,7 +134,7 @@ namespace Contrive.Auth.Web.Modules
       if (authHeaderContents["qop"] != null) genresponse = String.Format("{0}:{1}:{2}:{3}:{4}:{5}", ha1, nonce, authHeaderContents["nc"], authHeaderContents["cnonce"], authHeaderContents["qop"], ha2);
       else genresponse = String.Format("{0}:{1}:{2}", ha1, nonce, ha2);
 
-      return _cryptographer.ComputeMd5HashAsHex(genresponse);
+      return _cryptographer.Base64ToHex(genresponse.CalculateMd5Hash());
     }
 
     static string GetDigestFor(string userName)
