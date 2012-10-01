@@ -8,28 +8,28 @@ using Contrive.Common.Extensions;
 
 namespace Contrive.Data.Common
 {
-  public class UnitOfWork: DisposableBase, IUnitOfWork, IStartupTask
+  public class UnitOfWork : DisposableBase, IUnitOfWork, IStartupTask
   {
     public UnitOfWork()
     {
-      CurrentThread = Thread.CurrentThread;
-      if (_units.ContainsKey(CurrentThread)) throw new Exception("Duplicate UnitOfWork instances for the current thread.");
+      CurrentThreadId = Thread.CurrentThread.ManagedThreadId;
+      if (_units.ContainsKey(CurrentThreadId)) throw new Exception("Duplicate UnitOfWork instances for the current thread.");
 
       var success = false;
       while (!success)
       {
-        success = _units.TryAdd(CurrentThread, this);
+        success = _units.TryAdd(CurrentThreadId, this);
         if (!success) Thread.Sleep(1);
       }
     }
 
-    Thread CurrentThread { get; set; }
-
     static Func<IUnitOfWork> _current = () => new UnitOfWork();
 
-    static readonly ConcurrentDictionary<Thread, UnitOfWork> _units = new ConcurrentDictionary<Thread, UnitOfWork>();
-    
+    static readonly ConcurrentDictionary<int, UnitOfWork> _units = new ConcurrentDictionary<int, UnitOfWork>();
+
     readonly List<IDbCommand> _commands = new List<IDbCommand>();
+
+    int CurrentThreadId { get; set; }
 
     public static IUnitOfWork Current { get { return _current.Invoke(); } }
 
@@ -37,7 +37,8 @@ namespace Contrive.Data.Common
     {
       _current = () =>
                  {
-                   var unit = _units[Thread.CurrentThread];
+                   var threadId = Thread.CurrentThread.ManagedThreadId;
+                   var unit = _units[threadId];
 
                    if (unit.IsNull()) throw new Exception("No UnitOfWork found for the current thread.");
 
@@ -59,19 +60,19 @@ namespace Contrive.Data.Common
 
       foreach (var command in _commands) command.Dispose();
 
-      RemoveCurrent(CurrentThread);
+      RemoveCurrent(CurrentThreadId);
     }
 
-    static void RemoveCurrent(Thread currentThread)
+    static void RemoveCurrent(int currentThreadId)
     {
-      if (!_units.ContainsKey(currentThread)) return;
+      if (!_units.ContainsKey(currentThreadId)) return;
 
       var success = false;
 
       while (!success)
       {
         UnitOfWork current;
-        success = _units.TryRemove(currentThread, out current);
+        success = _units.TryRemove(currentThreadId, out current);
         if (!success) Thread.Sleep(1);
       }
     }

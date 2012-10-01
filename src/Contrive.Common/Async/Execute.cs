@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Contrive.Common.Extensions;
 
 namespace Contrive.Common.Async
@@ -8,14 +9,11 @@ namespace Contrive.Common.Async
   {
     readonly SynchronizationContext _sc;
     public static Action<Action> Executor = action => action();
-
-    public Execute(SynchronizationContext sc)
-    {
-      _sc = sc;
-    }
+    TaskScheduler _taskScheduler;
 
     public void OnStartup()
     {
+      _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
       Executor = action =>
                  {
                    if (_sc.IsNull())

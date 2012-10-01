@@ -71,10 +71,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Async\ActionExtensions.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="ConfigurationProvider.cs" />
     <Compile Include="Cryptographer.cs" />
-    <Compile Include="Extensions\ActionExtensions.cs" />
     <Compile Include="Async\DataActionExtensions.cs" />
     <Compile Include="Async\ITasks.cs" />
     <Compile Include="Async\TaskQueue.cs" />

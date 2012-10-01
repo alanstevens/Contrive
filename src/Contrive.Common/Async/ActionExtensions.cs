@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Contrive.Common.Extensions;
 
-namespace Contrive.Common.Extensions
+namespace Contrive.Common.Async
 {
   public static class ActionExtensions
   {
@@ -24,11 +26,13 @@ namespace Contrive.Common.Extensions
   {
     public void OnStartup()
     {
+      var taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
       ActionExtensions.Executor = (action, uponCompletion) =>
                                   {
                                     var worker = new BackgroundWorker();
-                                    worker.DoWork += (sender, e) => action();
-                                    worker.RunWorkerCompleted += (sender, e) => uponCompletion();
+                                    worker.DoWork += (s, e) => action();
+                                    worker.RunWorkerCompleted += (s, e) => uponCompletion();
                                     worker.WorkerReportsProgress = false;
                                     worker.WorkerSupportsCancellation = false;
                                     worker.RunWorkerAsync();
