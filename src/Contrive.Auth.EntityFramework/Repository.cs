@@ -19,32 +19,32 @@ namespace Contrive.Auth.EntityFramework
     readonly DbContext _context;
     readonly DbSet<T> _dbSet;
 
-    public IQueryable<T> GetQuery()
+    public virtual IQueryable<T> GetQuery()
     {
       return _dbSet;
     }
 
-    public IEnumerable<T> GetAll()
+    public virtual IEnumerable<T> GetAll()
     {
       return _dbSet.AsEnumerable();
     }
 
-    public IEnumerable<T> Where(Func<T, bool> where)
+    public virtual IEnumerable<T> Where(Func<T, bool> where)
     {
       return _dbSet.Where(where);
     }
 
-    public T Single(Func<T, bool> where)
+    public virtual T Single(Func<T, bool> where)
     {
       return _dbSet.Single(where);
     }
 
-    public T First(Func<T, bool> where)
+    public virtual T First(Func<T, bool> where)
     {
       return _dbSet.First(where);
     }
 
-    public T FirstOrDefault(Func<T, bool> where)
+    public virtual T FirstOrDefault(Func<T, bool> where)
     {
       return _dbSet.FirstOrDefault(where);
     }
@@ -60,24 +60,24 @@ namespace Contrive.Auth.EntityFramework
       Delete(entity);
     }
 
-    public void Delete(T entity)
+    public virtual void Delete(T entity)
     {
       AttachIfNeeded(entity);
       _dbSet.Remove(entity);
     }
 
-    public void Insert(T entity)
+    public virtual void Insert(T entity)
     {
       _dbSet.Add(entity);
     }
 
-    public void Update(T entity)
+    public virtual void Update(T entity)
     {
       _dbSet.Attach(entity);
       _context.Entry(entity).State = EntityState.Modified;
     }
 
-    public void SaveChanges()
+    public virtual void SaveChanges()
     {
       _context.SaveChanges();
     }

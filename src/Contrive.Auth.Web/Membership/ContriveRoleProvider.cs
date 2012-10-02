@@ -27,7 +27,7 @@ namespace Contrive.Auth.Web.Membership
       if (string.IsNullOrEmpty(config["description"]))
       {
         config.Remove("description");
-        config.Add("description", "Entity Role Provider");
+        config.Add("description", "Contrive Role Provider");
       }
 
       base.Initialize(name, config);

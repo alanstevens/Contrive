@@ -80,6 +80,7 @@ namespace Contrive.Auth.Web.Membership
       _minRequiredNonAlphanumericCharacters = settings.MinRequiredNonAlphanumericCharacters;
       _minRequiredPasswordLength = settings.MinRequiredPasswordLength;
       _passwordStrengthRegularExpression = settings.PasswordStrengthRegularExpression;
+      // TODO: HAS 10/01/2012 Use AutoMapper instead of a cast here.
       _passwordFormat = (MembershipPasswordFormat) settings.PasswordFormat;
     }
 

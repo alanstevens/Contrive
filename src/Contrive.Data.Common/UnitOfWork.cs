@@ -68,12 +68,15 @@ namespace Contrive.Data.Common
       if (!_units.ContainsKey(currentThreadId)) return;
 
       var success = false;
+      var count = 0;
 
       while (!success)
       {
+        count++;
         UnitOfWork current;
         success = _units.TryRemove(currentThreadId, out current);
-        if (!success) Thread.Sleep(1);
+        if (!success && count < 5) Thread.Sleep(1);
+        else success = true; // Well, bugger!
       }
     }
   }

@@ -41,7 +41,6 @@ namespace Contrive.Data.Common
       if (!_commandReference.IsAlive) return;
 
       var command = _commandReference.Target.As<IDbCommand>();
-      command.Connection.Dispose();
       command.Dispose();
     }
   }
