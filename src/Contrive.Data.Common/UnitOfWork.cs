@@ -12,24 +12,24 @@ namespace Contrive.Data.Common
   {
     public UnitOfWork()
     {
-      CurrentThreadId = Thread.CurrentThread.ManagedThreadId;
-      if (_units.ContainsKey(CurrentThreadId)) throw new Exception("Duplicate UnitOfWork instances for the current thread.");
+      _syncContext = SynchronizationContext.Current;
+      if (_units.ContainsKey(_syncContext)) throw new Exception("Duplicate UnitOfWork instances for the current SynchronizationContext.");
 
       var success = false;
       while (!success)
       {
-        success = _units.TryAdd(CurrentThreadId, this);
+        success = _units.TryAdd(_syncContext, this);
         if (!success) Thread.Sleep(1);
       }
     }
 
     static Func<IUnitOfWork> _current = () => new UnitOfWork();
 
-    static readonly ConcurrentDictionary<int, UnitOfWork> _units = new ConcurrentDictionary<int, UnitOfWork>();
+    static readonly ConcurrentDictionary<SynchronizationContext, UnitOfWork> _units =
+      new ConcurrentDictionary<SynchronizationContext, UnitOfWork>();
 
     readonly List<IDbCommand> _commands = new List<IDbCommand>();
-
-    int CurrentThreadId { get; set; }
+    readonly SynchronizationContext _syncContext;
 
     public static IUnitOfWork Current { get { return _current.Invoke(); } }
 
@@ -37,10 +37,9 @@ namespace Contrive.Data.Common
     {
       _current = () =>
                  {
-                   var threadId = Thread.CurrentThread.ManagedThreadId;
-                   var unit = _units[threadId];
+                   var unit = _units[SynchronizationContext.Current];
 
-                   if (unit.IsNull()) throw new Exception("No UnitOfWork found for the current thread.");
+                   if (unit.IsNull()) throw new Exception("No UnitOfWork found for the current SynchronizationContext.");
 
                    return unit;
                  };
@@ -60,12 +59,12 @@ namespace Contrive.Data.Common
 
       foreach (var command in _commands) command.Dispose();
 
-      RemoveCurrent(CurrentThreadId);
+      RemoveCurrent();
     }
 
-    static void RemoveCurrent(int currentThreadId)
+    void RemoveCurrent()
     {
-      if (!_units.ContainsKey(currentThreadId)) return;
+      if (!_units.ContainsKey(_syncContext)) return;
 
       var success = false;
       var count = 0;
@@ -74,9 +73,13 @@ namespace Contrive.Data.Common
       {
         count++;
         UnitOfWork current;
-        success = _units.TryRemove(currentThreadId, out current);
+        success = _units.TryRemove(_syncContext, out current);
         if (!success && count < 5) Thread.Sleep(1);
-        else success = true; // Well, bugger!
+        else
+        {
+          success = true; // Well, bugger!
+          this.LogInfo("Failed to remove synch context.");
+        }
       }
     }
   }
