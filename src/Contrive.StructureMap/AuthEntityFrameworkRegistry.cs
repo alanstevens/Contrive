@@ -10,7 +10,7 @@ namespace Contrive.StructureMap
   {
     public AuthEntityFrameworkRegistry()
     {
-      For<DbContext>().HybridHttpOrThreadLocalScoped().Use<CointriveContext>();
+      For<DbContext>().HybridHttpOrThreadLocalScoped().Use<ContriveContext>();
       For(typeof (IRepository<>)).HybridHttpOrThreadLocalScoped().Use(typeof (Repository<>));
       For<IUserRepository>().Singleton().Use<UserRepository>();
       For<IRoleRepository>().Singleton().Use<RoleRepository>();

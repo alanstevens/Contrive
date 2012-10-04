@@ -5,9 +5,9 @@ using Microsoft.Practices.ServiceLocation;
 
 namespace Contrive.Auth.EntityFramework
 {
-  public class ContriveContextInitializer : DropCreateDatabaseAlways<CointriveContext>
+  public class ContriveContextInitializer : DropCreateDatabaseAlways<ContriveContext>
   {
-    ContriveContextInitializer() { }
+    ContriveContextInitializer() {}
 
     public static void Initialize()
     {
@@ -18,20 +18,22 @@ namespace Contrive.Auth.EntityFramework
 
     static void EnsureDbCreated()
     {
-      using (var db = new CointriveContext())
+      using (var db = new ContriveContext())
       {
         // This will create the database
+#pragma warning disable 168
         var test = db.Users.FirstOrDefault(usr => usr.UserName == "test");
+#pragma warning restore 168
       }
     }
 
-    protected override void Seed(CointriveContext context)
+    protected override void Seed(ContriveContext context)
     {
       var userService = ServiceLocator.Current.GetInstance<IUserService>();
       var roleService = ServiceLocator.Current.GetInstance<IRoleService>();
       var seedRoles = new[] {"Admin", "ProjectManager", "Developer",};
 
-      seedRoles.Each<string>(roleService.CreateRole);
+      seedRoles.Each(roleService.CreateRole);
 
       var seedUsers = new[] {new {Username = "test", Password = "test", Email = "test@test.com",}};
 

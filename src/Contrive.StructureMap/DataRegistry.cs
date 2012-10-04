@@ -5,7 +5,7 @@ using StructureMap.Pipeline;
 
 namespace Contrive.StructureMap
 {
-  public class DataRegistry: Registry
+  public class DataRegistry : Registry
   {
     public DataRegistry()
     {

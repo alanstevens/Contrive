@@ -4,7 +4,7 @@ using System.Data.Objects;
 
 namespace Contrive.Auth.EntityFramework
 {
-  public class CointriveContext : DbContext
+  public class ContriveContext : DbContext
   {
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }

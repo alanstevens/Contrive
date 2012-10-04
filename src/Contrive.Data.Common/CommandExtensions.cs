@@ -22,7 +22,7 @@ namespace Contrive.Data.Common
     {
       command.CommandType = CommandType.StoredProcedure;
 
-      SetCommandText(command, procedureName);
+      command.SetCommandText(procedureName);
       return command;
     }
 
