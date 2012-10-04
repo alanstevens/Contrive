@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Contrive.Common.Extensions;
@@ -8,17 +7,20 @@ namespace Contrive.Common.Async
 {
   public static class ActionExtensions
   {
-    public static Action<Action, Action> Executor = (action, uponCompletion) =>
+    public static Func<Action, Action, Task> Executor = (action, continueWith) =>
                                                     {
                                                       action();
-                                                      uponCompletion();
+                                                      continueWith();
+                                                      var task = new Task(continueWith);
+                                                      task.RunSynchronously();
+                                                      return task;
                                                     };
 
     [DebuggerStepThrough]
-    public static void RunAsync(this Action action, Action uponCompletion = null)
+    public static Task RunAsync(this Action action, Action continueWith = null)
     {
-      if (uponCompletion.IsNull()) uponCompletion = () => { };
-      Executor.Invoke(action, uponCompletion);
+      if (continueWith.IsNull()) continueWith = () => { };
+      return Executor.Invoke(action, continueWith);
     }
   }
 
@@ -27,16 +29,7 @@ namespace Contrive.Common.Async
     public void OnStartup()
     {
       var taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-
-      ActionExtensions.Executor = (action, uponCompletion) =>
-                                  {
-                                    var worker = new BackgroundWorker();
-                                    worker.DoWork += (s, e) => action();
-                                    worker.RunWorkerCompleted += (s, e) => uponCompletion();
-                                    worker.WorkerReportsProgress = false;
-                                    worker.WorkerSupportsCancellation = false;
-                                    worker.RunWorkerAsync();
-                                  };
+      ActionExtensions.Executor = (action, continueWith) => Task.Factory.StartNew(action).ContinueWith(t => continueWith, taskScheduler);
     }
   }
 }

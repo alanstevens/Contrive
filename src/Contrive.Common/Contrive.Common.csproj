@@ -76,12 +76,9 @@
     <Compile Include="ConfigurationProvider.cs" />
     <Compile Include="Cryptographer.cs" />
     <Compile Include="Async\DataActionExtensions.cs" />
-    <Compile Include="Async\ITasks.cs" />
-    <Compile Include="Async\TaskQueue.cs" />
     <Compile Include="DisposableBase.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="EventAggregator.cs" />
-    <Compile Include="Async\Execute.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="IAuthenticationService.cs" />
