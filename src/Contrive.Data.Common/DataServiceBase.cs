@@ -11,9 +11,7 @@ namespace Contrive.Data.Common
 
     protected IDbCommand GetCommandFor(string procedureName)
     {
-      var command = GetCommand();
-      command.SetProcedureName(procedureName);
-      return command;
+      return GetCommand().SetProcedureName(procedureName);
     }
 
     IDbCommand GetCommand()

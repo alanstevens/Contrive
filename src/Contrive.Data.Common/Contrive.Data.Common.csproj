@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddDbParameterExtensions.cs" />
+    <Compile Include="DataRowExtensions.cs" />
     <Compile Include="Sql\AddSqlParameterExtensions.cs" />
     <Compile Include="CommandExtensions.cs" />
     <Compile Include="CommandProvider.cs" />

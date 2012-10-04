@@ -40,6 +40,8 @@ namespace Contrive.Common.Extensions
     {
       var result = default(T);
 
+      if (value.IsNull()) return result;
+
       if (value is String && value.ToString().Blank()) return result;
 
       try
