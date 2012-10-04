@@ -1,38 +1,25 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
-using Contrive.Common.Extensions;
 
 namespace Contrive.Common.Async
 {
   public class Execute : IStartupTask
   {
-    readonly SynchronizationContext _sc;
-    public static Action<Action> Executor = action => action();
-    TaskScheduler _taskScheduler;
+    public static Action<Action, SynchronizationContext> Executor = (action, synchronizationContext) => action();
 
     public void OnStartup()
     {
-      _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-      Executor = action =>
-                 {
-                   if (_sc.IsNull())
-                   {
-                     action();
-                     return;
-                   }
-
-                   _sc.Send(state =>
-                           {
-                             action();
-                             _sc.OperationCompleted();
-                           }, null);
-                 };
+      Executor = (action, synchronizationContext) =>
+                 synchronizationContext.Post(state =>
+                                             {
+                                               action();
+                                               synchronizationContext.OperationCompleted();
+                                             }, null);
     }
 
-    public static void OnMainThread(Action action)
+    public static void OnMainThread(Action action, SynchronizationContext synchronizationContext)
     {
-      Executor.Invoke(action);
+      Executor.Invoke(action, synchronizationContext);
     }
   }
 }
