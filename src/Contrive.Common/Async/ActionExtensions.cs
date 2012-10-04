@@ -10,7 +10,6 @@ namespace Contrive.Common.Async
     public static Func<Action, Action, Task> Executor = (action, continueWith) =>
                                                     {
                                                       action();
-                                                      continueWith();
                                                       var task = new Task(continueWith);
                                                       task.RunSynchronously();
                                                       return task;
