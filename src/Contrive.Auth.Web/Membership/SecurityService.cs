@@ -43,7 +43,7 @@ namespace Contrive.Auth.Web.Membership
 
     public void Logout()
     {
-      FormsAuthentication.SignOut();
+      _authenticationService.LogOff();
     }
 
     public bool ChangePassword(string userName, string currentPassword, string newPassword)

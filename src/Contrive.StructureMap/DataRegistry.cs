@@ -1,7 +1,6 @@
 using Contrive.Common;
 using Contrive.Data.Common;
 using StructureMap.Configuration.DSL;
-using StructureMap.Pipeline;
 
 namespace Contrive.StructureMap
 {
@@ -9,7 +8,7 @@ namespace Contrive.StructureMap
   {
     public DataRegistry()
     {
-      For<IUnitOfWork>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use<UnitOfWork>();
+      For<IUnitOfWork>().HybridHttpOrThreadLocalScoped().Use<UnitOfWork>();
     }
   }
 }
