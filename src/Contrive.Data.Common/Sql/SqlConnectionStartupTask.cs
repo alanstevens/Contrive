@@ -6,7 +6,7 @@ using Contrive.Common.Extensions;
 
 namespace Contrive.Data.Common.Sql
 {
-  class SqlConnectionStartupTask : IStartupTask
+  internal class SqlConnectionStartupTask : IStartupTask
   {
     public void OnStartup()
     {
@@ -21,7 +21,7 @@ namespace Contrive.Data.Common.Sql
                                            }
                                            catch (Exception ex)
                                            {
-                                             typeof(ConnectionProvider).LogException(ex);
+                                             typeof (ConnectionProvider).LogException(ex);
 #if DEBUG
                                              Debugger.Break();
 #endif
@@ -29,7 +29,6 @@ namespace Contrive.Data.Common.Sql
                                            }
                                            return connection;
                                          };
-
     }
   }
 }

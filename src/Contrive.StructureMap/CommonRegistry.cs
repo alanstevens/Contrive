@@ -4,7 +4,7 @@ using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap
 {
-  public class CommonRegistry: Registry
+  public class CommonRegistry : Registry
   {
     public CommonRegistry()
     {

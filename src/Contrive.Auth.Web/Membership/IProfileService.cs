@@ -14,13 +14,29 @@ namespace Contrive.Auth.Web.Membership
 
     int DeleteProfiles(ProfileInfoCollection profiles);
 
-    ProfileInfoCollection FindInactiveProfilesByUserName(ProfileAuthenticationOption authenticationOption, string usernameToMatch, DateTime userInactiveSinceDate, int pageIndex, int pageSize, out int totalRecords);
+    ProfileInfoCollection FindInactiveProfilesByUserName(ProfileAuthenticationOption authenticationOption,
+                                                         string usernameToMatch,
+                                                         DateTime userInactiveSinceDate,
+                                                         int pageIndex,
+                                                         int pageSize,
+                                                         out int totalRecords);
 
-    ProfileInfoCollection FindProfilesByUserName(ProfileAuthenticationOption authenticationOption, string usernameToMatch, int pageIndex, int pageSize, out int totalRecords);
+    ProfileInfoCollection FindProfilesByUserName(ProfileAuthenticationOption authenticationOption,
+                                                 string usernameToMatch,
+                                                 int pageIndex,
+                                                 int pageSize,
+                                                 out int totalRecords);
 
-    ProfileInfoCollection GetAllInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate, int pageIndex, int pageSize, out int totalRecords);
+    ProfileInfoCollection GetAllInactiveProfiles(ProfileAuthenticationOption authenticationOption,
+                                                 DateTime userInactiveSinceDate,
+                                                 int pageIndex,
+                                                 int pageSize,
+                                                 out int totalRecords);
 
-    ProfileInfoCollection GetAllProfiles(ProfileAuthenticationOption authenticationOption, int pageIndex, int pageSize, out int totalRecords);
+    ProfileInfoCollection GetAllProfiles(ProfileAuthenticationOption authenticationOption,
+                                         int pageIndex,
+                                         int pageSize,
+                                         out int totalRecords);
 
     int GetNumberOfInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate);
 

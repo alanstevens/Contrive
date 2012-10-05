@@ -14,16 +14,10 @@ namespace Contrive.Web.Common.Modules
       application.EndRequest += (s, e) => OnEndRequest(context);
     }
 
-    public virtual void OnBeginRequest(HttpContextBase context)
-    {
-    }
+    public virtual void OnBeginRequest(HttpContextBase context) {}
 
-    public virtual void OnError(HttpContextBase context)
-    {
-    }
+    public virtual void OnError(HttpContextBase context) {}
 
-    public virtual void OnEndRequest(HttpContextBase context)
-    {
-    }
+    public virtual void OnEndRequest(HttpContextBase context) {}
   }
 }

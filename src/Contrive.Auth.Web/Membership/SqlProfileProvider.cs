@@ -34,7 +34,8 @@ namespace Contrive.Auth.Web.Membership
       }
     }
 
-    public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext sc, SettingsPropertyCollection properties)
+    public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext sc,
+                                                                      SettingsPropertyCollection properties)
     {
       var svc = new SettingsPropertyValueCollection();
 
@@ -110,7 +111,11 @@ namespace Contrive.Auth.Web.Membership
     {
       if (profiles == null) throw new ArgumentNullException("profiles");
 
-      if (profiles.Count < 1) throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_collection_empty, "profiles"), "profiles");
+      if (profiles.Count < 1)
+      {
+        throw new ArgumentException(
+          String_Resources.GetString(String_Resources.Parameter_collection_empty, "profiles"), "profiles");
+      }
 
       var usernames = new string[profiles.Count];
 
@@ -205,7 +210,8 @@ namespace Contrive.Auth.Web.Membership
       return numProfilesDeleted;
     }
 
-    public override int DeleteInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate)
+    public override int DeleteInactiveProfiles(ProfileAuthenticationOption authenticationOption,
+                                               DateTime userInactiveSinceDate)
     {
       //try
       //{
@@ -244,7 +250,8 @@ namespace Contrive.Auth.Web.Membership
       return 0;
     }
 
-    public override int GetNumberOfInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate)
+    public override int GetNumberOfInactiveProfiles(ProfileAuthenticationOption authenticationOption,
+                                                    DateTime userInactiveSinceDate)
     {
       //try
       //{
@@ -283,19 +290,30 @@ namespace Contrive.Auth.Web.Membership
       return 0;
     }
 
-    public override ProfileInfoCollection GetAllProfiles(ProfileAuthenticationOption authenticationOption, int pageIndex, int pageSize, out int totalRecords)
+    public override ProfileInfoCollection GetAllProfiles(ProfileAuthenticationOption authenticationOption,
+                                                         int pageIndex,
+                                                         int pageSize,
+                                                         out int totalRecords)
     {
       return GetProfilesForQuery(new SqlParameter[0], authenticationOption, pageIndex, pageSize, out totalRecords);
     }
 
-    public override ProfileInfoCollection GetAllInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate, int pageIndex, int pageSize, out int totalRecords)
+    public override ProfileInfoCollection GetAllInactiveProfiles(ProfileAuthenticationOption authenticationOption,
+                                                                 DateTime userInactiveSinceDate,
+                                                                 int pageIndex,
+                                                                 int pageSize,
+                                                                 out int totalRecords)
     {
       var args = new SqlParameter[1];
       args[0] = CreateInputParam("@InactiveSinceDate", SqlDbType.DateTime, userInactiveSinceDate.ToUniversalTime());
       return GetProfilesForQuery(args, authenticationOption, pageIndex, pageSize, out totalRecords);
     }
 
-    public override ProfileInfoCollection FindProfilesByUserName(ProfileAuthenticationOption authenticationOption, string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
+    public override ProfileInfoCollection FindProfilesByUserName(ProfileAuthenticationOption authenticationOption,
+                                                                 string usernameToMatch,
+                                                                 int pageIndex,
+                                                                 int pageSize,
+                                                                 out int totalRecords)
     {
       CheckParameter(ref usernameToMatch);
       var args = new SqlParameter[1];
@@ -303,7 +321,13 @@ namespace Contrive.Auth.Web.Membership
       return GetProfilesForQuery(args, authenticationOption, pageIndex, pageSize, out totalRecords);
     }
 
-    public override ProfileInfoCollection FindInactiveProfilesByUserName(ProfileAuthenticationOption authenticationOption, string usernameToMatch, DateTime userInactiveSinceDate, int pageIndex, int pageSize, out int totalRecords)
+    public override ProfileInfoCollection FindInactiveProfilesByUserName(
+      ProfileAuthenticationOption authenticationOption,
+      string usernameToMatch,
+      DateTime userInactiveSinceDate,
+      int pageIndex,
+      int pageSize,
+      out int totalRecords)
     {
       CheckParameter(ref usernameToMatch);
       var args = new SqlParameter[2];
@@ -344,7 +368,11 @@ namespace Contrive.Auth.Web.Membership
       if (config.Count > 0)
       {
         var attribUnrecognized = config.GetKey(0);
-        if (!String.IsNullOrEmpty(attribUnrecognized)) throw new ProviderException(String_Resources.GetString(String_Resources.Provider_unrecognized_attribute, attribUnrecognized));
+        if (!String.IsNullOrEmpty(attribUnrecognized))
+        {
+          throw new ProviderException(String_Resources.GetString(String_Resources.Provider_unrecognized_attribute,
+                                                                 attribUnrecognized));
+        }
       }
     }
 
@@ -357,16 +385,31 @@ namespace Contrive.Auth.Web.Membership
       int iValue;
       if (!Int32.TryParse(sValue, out iValue))
       {
-        if (true) throw new ProviderException(String_Resources.GetString(String_Resources.Value_must_be_non_negative_integer, "commandTimeout"));
+        if (true)
+        {
+          throw new ProviderException(String_Resources.GetString(String_Resources.Value_must_be_non_negative_integer,
+                                                                 "commandTimeout"));
+        }
 
-        throw new ProviderException(String_Resources.GetString(String_Resources.Value_must_be_positive_integer, "commandTimeout"));
+        throw new ProviderException(String_Resources.GetString(String_Resources.Value_must_be_positive_integer,
+                                                               "commandTimeout"));
       }
 
-      if (true && iValue < 0) throw new ProviderException(String_Resources.GetString(String_Resources.Value_must_be_non_negative_integer, "commandTimeout"));
+      if (true && iValue < 0)
+      {
+        throw new ProviderException(String_Resources.GetString(String_Resources.Value_must_be_non_negative_integer,
+                                                               "commandTimeout"));
+      }
 
-      if (!true && iValue <= 0) throw new ProviderException(String_Resources.GetString(String_Resources.Value_must_be_positive_integer, "commandTimeout"));
+      if (!true && iValue <= 0)
+        throw new ProviderException(String_Resources.GetString(String_Resources.Value_must_be_positive_integer,
+                                                               "commandTimeout"));
 
-      if (0 > 0 && iValue > 0) throw new ProviderException(String_Resources.GetString(String_Resources.Value_too_big, "commandTimeout", 0.ToString(CultureInfo.InvariantCulture)));
+      if (0 > 0 && iValue > 0)
+      {
+        throw new ProviderException(String_Resources.GetString(String_Resources.Value_too_big, "commandTimeout",
+                                                               0.ToString(CultureInfo.InvariantCulture)));
+      }
 
       return iValue;
     }
@@ -404,12 +447,20 @@ namespace Contrive.Auth.Web.Membership
 
       if (version == null) throw new ArgumentNullException("version");
 
-      if (_SchemaVersionCheck == -1) throw new ProviderException(String_Resources.GetString(String_Resources.Provider_Schema_Version_Not_Match, ToString(), version));
+      if (_SchemaVersionCheck == -1)
+      {
+        throw new ProviderException(String_Resources.GetString(String_Resources.Provider_Schema_Version_Not_Match,
+                                                               ToString(), version));
+      }
       else if (_SchemaVersionCheck == 0)
       {
         lock ((ProviderBase) this)
         {
-          if (_SchemaVersionCheck == -1) throw new ProviderException(String_Resources.GetString(String_Resources.Provider_Schema_Version_Not_Match, ToString(), version));
+          if (_SchemaVersionCheck == -1)
+          {
+            throw new ProviderException(String_Resources.GetString(String_Resources.Provider_Schema_Version_Not_Match,
+                                                                   ToString(), version));
+          }
           else if (_SchemaVersionCheck == 0)
           {
             var iStatus = 0;
@@ -439,7 +490,8 @@ namespace Contrive.Auth.Web.Membership
               {
                 _SchemaVersionCheck = -1;
 
-                throw new ProviderException(String_Resources.GetString(String_Resources.Provider_Schema_Version_Not_Match, ToString(), version));
+                throw new ProviderException(
+                  String_Resources.GetString(String_Resources.Provider_Schema_Version_Not_Match, ToString(), version));
               }
             }
 
@@ -521,13 +573,19 @@ namespace Contrive.Auth.Web.Membership
     {
       if (usernames == null) throw new ArgumentNullException("usernames");
 
-      if (usernames.Length < 1) throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_array_empty, "usernames"), "usernames");
+      if (usernames.Length < 1)
+        throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_array_empty, "usernames"),
+                                    "usernames");
 
       var values = new Hashtable(usernames.Length);
       for (var i = usernames.Length - 1; i >= 0; i--)
       {
         CheckUsernameParameter(ref usernames[i], "usernames" + "[ " + i.ToString(CultureInfo.InvariantCulture) + " ]");
-        if (values.Contains(usernames[i])) throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_duplicate_array_element, "usernames"), "usernames");
+        if (values.Contains(usernames[i]))
+        {
+          throw new ArgumentException(
+            String_Resources.GetString(String_Resources.Parameter_duplicate_array_element, "usernames"), "usernames");
+        }
         else values.Add(usernames[i], usernames[i]);
       }
     }
@@ -542,11 +600,24 @@ namespace Contrive.Auth.Web.Membership
       }
 
       username = username.Trim();
-      if (true && username.Length < 1) throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_can_not_be_empty, paramName), paramName);
+      if (true && username.Length < 1)
+      {
+        throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_can_not_be_empty, paramName),
+                                    paramName);
+      }
 
-      if (256 > 0 && username.Length > 256) throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_too_long, paramName, 256.ToString(CultureInfo.InvariantCulture)), paramName);
+      if (256 > 0 && username.Length > 256)
+      {
+        throw new ArgumentException(
+          String_Resources.GetString(String_Resources.Parameter_too_long, paramName,
+                                     256.ToString(CultureInfo.InvariantCulture)), paramName);
+      }
 
-      if (true && username.Contains(",")) throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_can_not_contain_comma, paramName), paramName);
+      if (true && username.Contains(","))
+      {
+        throw new ArgumentException(
+          String_Resources.GetString(String_Resources.Parameter_can_not_contain_comma, paramName), paramName);
+      }
     }
 
     static void CheckParameter(ref string usernameToMatch)
@@ -559,11 +630,24 @@ namespace Contrive.Auth.Web.Membership
       }
 
       usernameToMatch = usernameToMatch.Trim();
-      if (true && usernameToMatch.Length < 1) throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_can_not_be_empty, "username"), "username");
+      if (true && usernameToMatch.Length < 1)
+      {
+        throw new ArgumentException(
+          String_Resources.GetString(String_Resources.Parameter_can_not_be_empty, "username"), "username");
+      }
 
-      if (256 > 0 && usernameToMatch.Length > 256) throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_too_long, "username", 256.ToString(CultureInfo.InvariantCulture)), "username");
+      if (256 > 0 && usernameToMatch.Length > 256)
+      {
+        throw new ArgumentException(
+          String_Resources.GetString(String_Resources.Parameter_too_long, "username",
+                                     256.ToString(CultureInfo.InvariantCulture)), "username");
+      }
 
-      if (false && usernameToMatch.Contains(",")) throw new ArgumentException(String_Resources.GetString(String_Resources.Parameter_can_not_contain_comma, "username"), "username");
+      if (false && usernameToMatch.Contains(","))
+      {
+        throw new ArgumentException(
+          String_Resources.GetString(String_Resources.Parameter_can_not_contain_comma, "username"), "username");
+      }
     }
 
     static void ParseDataFromDB(string[] names, string values, byte[] buf, SettingsPropertyValueCollection properties)
@@ -605,7 +689,12 @@ namespace Contrive.Auth.Web.Membership
       }
     }
 
-    static void PrepareDataForSaving(ref string allNames, ref string allValues, ref byte[] buf, bool binarySupported, SettingsPropertyValueCollection properties, bool userIsAuthenticated)
+    static void PrepareDataForSaving(ref string allNames,
+                                     ref string allValues,
+                                     ref byte[] buf,
+                                     bool binarySupported,
+                                     SettingsPropertyValueCollection properties,
+                                     bool userIsAuthenticated)
     {
       var names = new StringBuilder();
       var values = new StringBuilder();
@@ -675,7 +764,9 @@ namespace Contrive.Auth.Web.Membership
               }
             }
 
-            names.Append(pp.Name + ":" + ((propValue != null) ? "S" : "B") + ":" + startPos.ToString(CultureInfo.InvariantCulture) + ":" + len.ToString(CultureInfo.InvariantCulture) + ":");
+            names.Append(pp.Name + ":" + ((propValue != null) ? "S" : "B") + ":" +
+                         startPos.ToString(CultureInfo.InvariantCulture) + ":" +
+                         len.ToString(CultureInfo.InvariantCulture) + ":");
             if (propValue != null) values.Append(propValue);
           }
 
@@ -694,13 +785,21 @@ namespace Contrive.Auth.Web.Membership
       allValues = values.ToString();
     }
 
-    ProfileInfoCollection GetProfilesForQuery(SqlParameter[] args, ProfileAuthenticationOption authenticationOption, int pageIndex, int pageSize, out int totalRecords)
+    ProfileInfoCollection GetProfilesForQuery(SqlParameter[] args,
+                                              ProfileAuthenticationOption authenticationOption,
+                                              int pageIndex,
+                                              int pageSize,
+                                              out int totalRecords)
     {
       if (pageIndex < 0) throw new ArgumentException(String_Resources.GetString(String_Resources.PageIndex_bad), "pageIndex");
       if (pageSize < 1) throw new ArgumentException(String_Resources.GetString(String_Resources.PageSize_bad), "pageSize");
 
       var upperBound = (long) pageIndex*pageSize + pageSize - 1;
-      if (upperBound > Int32.MaxValue) throw new ArgumentException(String_Resources.GetString(String_Resources.PageIndex_PageSize_bad), "pageIndex and pageSize");
+      if (upperBound > Int32.MaxValue)
+      {
+        throw new ArgumentException(String_Resources.GetString(String_Resources.PageIndex_PageSize_bad),
+                                    "pageIndex and pageSize");
+      }
 
       //try
       //{

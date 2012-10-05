@@ -54,7 +54,10 @@ namespace Contrive.Auth.Web.Membership
     {
       string[] usersInRole = null;
 
-      ThrowProviderExceptionOnError(() => usersInRole = GetRoleManagementService().GetUsersInRole(roleName).Select(u => u.UserName).ToArray());
+      ThrowProviderExceptionOnError(
+                                    () =>
+                                    usersInRole =
+                                    GetRoleManagementService().GetUsersInRole(roleName).Select(u => u.UserName).ToArray());
 
       return usersInRole;
     }
@@ -63,7 +66,14 @@ namespace Contrive.Auth.Web.Membership
     {
       string[] usersInRole = null;
 
-      ThrowProviderExceptionOnError(() => usersInRole = GetRoleManagementService().FindUsersInRole(roleName, usernameToMatch).Select(u => u.UserName).ToArray());
+      ThrowProviderExceptionOnError(
+                                    () =>
+                                    usersInRole =
+                                    GetRoleManagementService().FindUsersInRole(roleName, usernameToMatch).Select(
+                                                                                                                 u =>
+                                                                                                                 u.
+                                                                                                                   UserName)
+                                      .ToArray());
 
       return usersInRole;
     }
@@ -72,7 +82,9 @@ namespace Contrive.Auth.Web.Membership
     {
       var success = false;
 
-      ThrowProviderExceptionOnError(() => success = GetRoleManagementService().DeleteRole(roleName, throwOnPopulatedRole));
+      ThrowProviderExceptionOnError(
+                                    () =>
+                                    success = GetRoleManagementService().DeleteRole(roleName, throwOnPopulatedRole));
 
       return success;
     }
@@ -81,7 +93,10 @@ namespace Contrive.Auth.Web.Membership
     {
       string[] rolesForUser = null;
 
-      ThrowProviderExceptionOnError(() => rolesForUser = GetRoleManagementService().GetRolesForUser(userName).Select(r => r.Name).ToArray());
+      ThrowProviderExceptionOnError(
+                                    () =>
+                                    rolesForUser =
+                                    GetRoleManagementService().GetRolesForUser(userName).Select(r => r.Name).ToArray());
 
       return rolesForUser;
     }

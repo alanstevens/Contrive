@@ -41,7 +41,7 @@ namespace Contrive.Common.Extensions
     {
       Verify.NotEmpty(value, "value");
 
-      using(var sha512 = SHA512.Create())
+      using (var sha512 = SHA512.Create())
       {
         var data = Encoding.UTF8.GetBytes(value);
         var hash = sha512.ComputeHash(data);
@@ -55,7 +55,7 @@ namespace Contrive.Common.Extensions
     {
       Verify.NotEmpty(value, "value");
 
-      using(var md5 = MD5.Create())
+      using (var md5 = MD5.Create())
       {
         var data = Encoding.UTF8.GetBytes(value);
         var hash = md5.ComputeHash(data);
@@ -72,8 +72,7 @@ namespace Contrive.Common.Extensions
       //BitConverter.ToString(hashBytes);
       var hex = new StringBuilder();
 
-      foreach (var value in hashBytes)
-         hex.AppendFormat("{0:x02}", value);
+      foreach (var value in hashBytes) hex.AppendFormat("{0:x02}", value);
 
       return hex.ToString();
     }
@@ -87,9 +86,9 @@ namespace Contrive.Common.Extensions
       {
         try
         {
-          convertedValue = (T)Enum.Parse(typeof(T), value.Trim(), true);
+          convertedValue = (T) Enum.Parse(typeof (T), value.Trim(), true);
         }
-        catch (ArgumentException) { }
+        catch (ArgumentException) {}
       }
 
       return convertedValue;

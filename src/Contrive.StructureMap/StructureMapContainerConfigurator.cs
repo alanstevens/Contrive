@@ -39,7 +39,8 @@ namespace Contrive.StructureMap
                                      s.Assembly(Assembly.GetExecutingAssembly());
                                      if (assemblyDirectory.IsNotBlank() && rootNamespace.IsNotBlank())
                                        s.AssembliesFromPath(assemblyDirectory,
-                                                            assembly => assembly.GetName().Name.StartsWith(rootNamespace));
+                                                            assembly =>
+                                                            assembly.GetName().Name.StartsWith(rootNamespace));
                                      s.WithDefaultConventions();
                                      s.LookForRegistries();
                                      customScanner(s);

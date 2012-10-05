@@ -33,7 +33,7 @@ namespace Contrive.Auth.EntityFramework
 
     public IEnumerable<IRole> GetRolesForRoleNames(IEnumerable<string> roleNames)
     {
-      return Enumerable.ToArray<Role>(_repository.Where(r => roleNames.Contains(r.Name)));
+      return _repository.Where(r => roleNames.Contains(r.Name)).ToArray();
     }
 
     public void Insert(IRole role)

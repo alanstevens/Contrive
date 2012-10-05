@@ -5,7 +5,7 @@ using Contrive.Common.Extensions;
 
 namespace Contrive.Data.Common
 {
-  public class DataServiceBase: DisposableBase
+  public class DataServiceBase : DisposableBase
   {
     WeakReference _commandReference;
 
@@ -25,10 +25,7 @@ namespace Contrive.Data.Common
         command = UnitOfWork.Current.GetCommand();
         _commandReference = new WeakReference(command);
       }
-      else
-      {
-        command.Clear();
-      }
+      else command.Clear();
       return command;
     }
 

@@ -58,7 +58,8 @@ namespace Contrive.Web.Common
 
       var errorController = new FakeErrorController();
       var controllerContext = new ControllerContext(context.Request.RequestContext, errorController);
-      var jsonResult = new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { error_message = errorMessage } };
+      var jsonResult = new JsonResult
+      {JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new {error_message = errorMessage}};
       jsonResult.ExecuteResult(controllerContext);
     }
 
@@ -72,9 +73,8 @@ namespace Contrive.Web.Common
       catch (Exception exception)
       {
         var errorMessage =
-                        "An error occurred while trying to render the custom error for this HttpStatusCode. RedirectPath: {0}; Message: {1}"
-                        .FormatWith(redirectPath.Blank() ? "--no redirect path was provided!! --" : redirectPath,
-                        exception.Message);
+          "An error occurred while trying to render the custom error for this HttpStatusCode. RedirectPath: {0}; Message: {1}"
+            .FormatWith(redirectPath.Blank() ? "--no redirect path was provided!! --" : redirectPath, exception.Message);
 
         RenderFallBackErrorView(context, new InvalidOperationException(errorMessage, currentError));
       }
@@ -131,5 +131,5 @@ namespace Contrive.Web.Common
     public Exception Exception { get; set; }
   }
 
-  internal class FakeErrorController : Controller { }
+  internal class FakeErrorController : Controller {}
 }

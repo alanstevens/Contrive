@@ -11,8 +11,7 @@ namespace Contrive.Data.Common
       var result = default(T);
       var value = row[columnName];
       value = value.IsDBNull() ? null : value;
-      if (value.IsNotNull())
-        result = value.As<T>();
+      if (value.IsNotNull()) result = value.As<T>();
       return result;
     }
 

@@ -131,7 +131,11 @@ namespace Contrive.Auth.Web.Modules
 
       var nonce = authHeaderContents["nonce"];
 
-      if (authHeaderContents["qop"] != null) genresponse = String.Format("{0}:{1}:{2}:{3}:{4}:{5}", ha1, nonce, authHeaderContents["nc"], authHeaderContents["cnonce"], authHeaderContents["qop"], ha2);
+      if (authHeaderContents["qop"] != null)
+      {
+        genresponse = String.Format("{0}:{1}:{2}:{3}:{4}:{5}", ha1, nonce, authHeaderContents["nc"],
+                                    authHeaderContents["cnonce"], authHeaderContents["qop"], ha2);
+      }
       else genresponse = String.Format("{0}:{1}:{2}", ha1, nonce, ha2);
 
       return genresponse.CalculateMd5Hash().Base64ToHex();

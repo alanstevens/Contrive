@@ -88,7 +88,10 @@ namespace Contrive.Auth
       return UserCreateStatus.Success;
     }
 
-    public string CreateAccount(string userName, string password, string emailAddress, bool requireConfirmationToken = false)
+    public string CreateAccount(string userName,
+                                string password,
+                                string emailAddress,
+                                bool requireConfirmationToken = false)
     {
       string token = null;
 

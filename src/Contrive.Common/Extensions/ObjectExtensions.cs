@@ -82,19 +82,19 @@ namespace Contrive.Common.Extensions
       {
         LogException(ex);
       }
-      catch(FormatException ex)
+      catch (FormatException ex)
       {
         LogException(ex);
       }
-      catch(ArgumentNullException ex)
+      catch (ArgumentNullException ex)
       {
         LogException(ex);
       }
-      catch(OverflowException ex)
+      catch (OverflowException ex)
       {
         LogException(ex);
       }
-      
+
       return result;
     }
 

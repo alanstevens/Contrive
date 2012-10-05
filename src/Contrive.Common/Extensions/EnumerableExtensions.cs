@@ -91,8 +91,8 @@ namespace Contrive.Common.Extensions
     [DebuggerStepThrough]
     static int FindIndex<T>(this IEnumerable<T> items, Func<T, bool> predicate)
     {
-      Verify.NotNull(items,"items");
-      Verify.NotNull(predicate,"predicate");
+      Verify.NotNull(items, "items");
+      Verify.NotNull(predicate, "predicate");
 
       var result = 0;
       foreach (var item in items)

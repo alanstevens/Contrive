@@ -3,7 +3,7 @@ using Contrive.Common;
 
 namespace Contrive.Web.Common
 {
-  public interface IWebConfigurationProvider: IConfigurationProvider
+  public interface IWebConfigurationProvider : IConfigurationProvider
   {
     string DefaultRedirect { get; }
 

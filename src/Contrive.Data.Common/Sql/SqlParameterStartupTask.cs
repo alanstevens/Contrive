@@ -8,7 +8,8 @@ namespace Contrive.Data.Common.Sql
     public void OnStartup()
     {
       AddDbParameterExtensions.CreateParameter =
-        (name, type, direction, value, size, precision, scale) => new SqlParameter
+        (name, type, direction, value, size, precision, scale) =>
+        new SqlParameter
         {
           ParameterName = name,
           DbType = type,

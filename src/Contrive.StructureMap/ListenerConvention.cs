@@ -9,7 +9,7 @@ namespace Contrive.StructureMap
   /// <summary>
   ///   Insures that types implementing IListener are registered with the container as singletons.
   /// </summary>
-  public class ListenerConvention: IRegistrationConvention
+  public class ListenerConvention : IRegistrationConvention
   {
     public void Process(Type type, Registry registry)
     {

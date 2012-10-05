@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Contrive.Common
 {
-  public abstract class DisposableBase: IDisposable
+  public abstract class DisposableBase : IDisposable
   {
     bool _isDisposed;
 

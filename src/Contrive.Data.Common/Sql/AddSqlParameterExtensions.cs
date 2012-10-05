@@ -7,7 +7,7 @@ namespace Contrive.Data.Common.Sql
   {
     static DbType SqlDbType2DbType(SqlDbType type)
     {
-      return new SqlParameter { SqlDbType = type }.DbType;
+      return new SqlParameter {SqlDbType = type}.DbType;
     }
 
     public static IDbCommand AddParameter(this IDbCommand command, string name, SqlDbType type)

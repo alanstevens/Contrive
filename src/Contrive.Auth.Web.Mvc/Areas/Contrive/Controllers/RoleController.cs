@@ -20,7 +20,8 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
 
     public virtual ActionResult Index()
     {
-      var model = new ManageRolesViewModel {Roles = new SelectList(_roleService.GetAllRoles()), RoleList = _roleService.GetAllRoles()};
+      var model = new ManageRolesViewModel
+      {Roles = new SelectList(_roleService.GetAllRoles()), RoleList = _roleService.GetAllRoles()};
 
       return View(model);
     }
@@ -124,7 +125,8 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
         {
           _roleService.DeleteRole(role, throwOnPopulatedRole);
 
-          item = new ResponseItem {Success = true, Message = "Deleted this role successfully - " + role, CssClass = "green"};
+          item = new ResponseItem
+          {Success = true, Message = "Deleted this role successfully - " + role, CssClass = "green"};
           response.Messages.Add(item);
 
           //sb.AppendLine("Deleted this role successfully - " + role + "<br />");

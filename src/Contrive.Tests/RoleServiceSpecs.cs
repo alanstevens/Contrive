@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Contrive.Auth;
-using Contrive.Common;
 using Contrive.Tests.SubSpec;
 using FluentAssertions;
 using Microsoft.Practices.ServiceLocation;
@@ -33,7 +31,10 @@ namespace Contrive.Tests
     [Specification]
     public void Get_all_should_not_be_empty()
     {
-      "Given a new RoleService".Context(() => _roleRepository.Setup(r => r.GetAll()).Returns(new List<IRole> {new Mock<IRole>().Object}));
+      "Given a new RoleService".Context(
+                                        () =>
+                                        _roleRepository.Setup(r => r.GetAll()).Returns(new List<IRole>
+                                        {new Mock<IRole>().Object}));
       "Get all should not be empty".Assert(() => _roleService.GetAllRoles().Should().NotBeEmpty());
     }
 
@@ -86,10 +87,8 @@ namespace Contrive.Tests
       SetupUser();
       SetupRole();
       IEnumerable<IUser> usersInRole = null;
-      "Given ".Context(() =>
-                       {
-                         _roleRepository.Setup(rr => rr.GetRoleByName(It.IsAny<string>())).Returns(roleMock.Object);
-                       });
+      "Given ".Context(
+                       () => { _roleRepository.Setup(rr => rr.GetRoleByName(It.IsAny<string>())).Returns(roleMock.Object); });
       "When ".Do(() => usersInRole = _roleService.FindUsersInRole(roleName, userName.Substring(0, 4)));
       "It should ".Assert(() => usersInRole.Contains(userMock.Object));
       "It should ".Assert(() => usersInRole.Count().Should().Be(1));
@@ -110,7 +109,9 @@ namespace Contrive.Tests
     {
       SetupUser();
       IEnumerable<IRole> roles = null;
-      "Given ".Context(() => _userRepository.Setup(ur => ur.GetUserByUserName(It.IsAny<string>())).Returns(userMock.Object));
+      "Given ".Context(
+                       () =>
+                       _userRepository.Setup(ur => ur.GetUserByUserName(It.IsAny<string>())).Returns(userMock.Object));
       "When ".Do(() => roles = _roleService.GetRolesForUser(userName));
       "It should ".Assert(() => roles.Should().Contain(roleMock.Object));
       "It should ".Assert(() => roles.Count().Should().Be(1));
@@ -134,7 +135,10 @@ namespace Contrive.Tests
     public void When_adding_users_to_roles()
     {
       "Given ".Context(() => SetupEmptyLists());
-      "When ".Do(() => _roleService.AddUsersToRoles(new[] {userMock.Object, _userMock2.Object}, new[] {roleMock.Object, _roleMock2.Object}));
+      "When ".Do(
+                 () =>
+                 _roleService.AddUsersToRoles(new[] {userMock.Object, _userMock2.Object},
+                                              new[] {roleMock.Object, _roleMock2.Object}));
       "It should ".Assert(() =>
                           {
                             roleMock.Object.Users.Should().Contain(userMock.Object);
@@ -159,7 +163,10 @@ namespace Contrive.Tests
                          roleMock.Object.Users = new List<IUser> {userMock.Object, _userMock2.Object};
                          _roleMock2.Object.Users = new List<IUser> {userMock.Object, _userMock2.Object};
                        });
-      "When ".Do(() => _roleService.RemoveUsersFromRoles(new[] {userMock.Object, _userMock2.Object}, new[] {roleMock.Object, _roleMock2.Object}));
+      "When ".Do(
+                 () =>
+                 _roleService.RemoveUsersFromRoles(new[] {userMock.Object, _userMock2.Object},
+                                                   new[] {roleMock.Object, _roleMock2.Object}));
       "It should ".Assert(() =>
                           {
                             roleMock.Object.Users.Should().BeEmpty();

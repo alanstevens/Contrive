@@ -13,10 +13,7 @@ namespace Contrive.Auth
 
     public bool LogOn(string userName, string password, bool rememberMe = false)
     {
-      if (_userService.ValidateUser(userName, password))
-      {
-        return _platformAuthenticationService.SignIn(userName, password, rememberMe);
-      }
+      if (_userService.ValidateUser(userName, password)) return _platformAuthenticationService.SignIn(userName, password, rememberMe);
       return false;
     }
 

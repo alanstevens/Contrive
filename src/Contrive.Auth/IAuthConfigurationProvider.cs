@@ -3,7 +3,7 @@ using Contrive.Common;
 
 namespace Contrive.Auth
 {
-  public interface IAuthConfigurationProvider: IConfigurationProvider
+  public interface IAuthConfigurationProvider : IConfigurationProvider
   {
     NameValueCollection RoleServiceConfiguration { get; }
 

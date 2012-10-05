@@ -6,7 +6,7 @@ using log4net.Config;
 
 namespace Contrive.Common
 {
-  public class Logger: IStartupTask
+  public class Logger : IStartupTask
   {
     public const string CONFIG_FILE_NAME = "Log4Net.config";
 
@@ -37,7 +37,7 @@ namespace Contrive.Common
     static Type GetSourceType(object source)
     {
       var sourceType = source.GetType();
-      if (sourceType == typeof(Type)) return source as Type;
+      if (sourceType == typeof (Type)) return source as Type;
       return sourceType;
     }
 

@@ -55,21 +55,24 @@ namespace Contrive.Common.Async
                                                       };
 
                                         Action continueWith = () =>
-                                                          {
-                                                            try
-                                                            {
-                                                              if (uponCompletion.IsNotNull()) uponCompletion();
-                                                            }
-                                                            catch (Exception ex)
-                                                            {
-                                                              this.LogException(ex);
-                                                              throw;
-                                                            }
-                                                            finally
-                                                            {
-                                                              if (indicateBusy) _eventAggregator.Publish(new DataActionCompleteEvent());
-                                                            }
-                                                          };
+                                                              {
+                                                                try
+                                                                {
+                                                                  if (uponCompletion.IsNotNull()) uponCompletion();
+                                                                }
+                                                                catch (Exception ex)
+                                                                {
+                                                                  this.LogException(ex);
+                                                                  throw;
+                                                                }
+                                                                finally
+                                                                {
+                                                                  if (indicateBusy)
+                                                                    _eventAggregator.Publish(
+                                                                                             new DataActionCompleteEvent
+                                                                                               ());
+                                                                }
+                                                              };
 
                                         if (indicateBusy) _eventAggregator.Publish(new DataActionBusyEvent());
 

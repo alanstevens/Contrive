@@ -100,7 +100,9 @@ namespace Contrive.Auth.Web.Membership
       if (user == null) return null;
 
       var providerName = System.Web.Security.Membership.Provider.Name;
-      return new MembershipUser(providerName, userName, user.Id, user.Email, null, null, true, false, user.DateCreated.GetValueOrDefault(), DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue);
+      return new MembershipUser(providerName, userName, user.Id, user.Email, null, null, true, false,
+                                user.DateCreated.GetValueOrDefault(), DateTime.MinValue, DateTime.MinValue,
+                                DateTime.MinValue, DateTime.MinValue);
     }
 
     public override bool ValidateUser(string userName, string password)
@@ -108,7 +110,14 @@ namespace Contrive.Auth.Web.Membership
       return GetUserService().ValidateUser(userName, password);
     }
 
-    public override MembershipUser CreateUser(string userName, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
+    public override MembershipUser CreateUser(string userName,
+                                              string password,
+                                              string email,
+                                              string passwordQuestion,
+                                              string passwordAnswer,
+                                              bool isApproved,
+                                              object providerUserKey,
+                                              out MembershipCreateStatus status)
     {
       status = new MembershipCreateStatus();
       var userCreateStatus = GetUserService().CreateUser(userName, password, email, isApproved);
@@ -147,17 +156,26 @@ namespace Contrive.Auth.Web.Membership
       }
     }
 
-    public override bool ChangePasswordQuestionAndAnswer(string userName, string password, string newPasswordQuestion, string newPasswordAnswer)
+    public override bool ChangePasswordQuestionAndAnswer(string userName,
+                                                         string password,
+                                                         string newPasswordQuestion,
+                                                         string newPasswordAnswer)
     {
       throw new NotSupportedException();
     }
 
-    public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
+    public override MembershipUserCollection FindUsersByEmail(string emailToMatch,
+                                                              int pageIndex,
+                                                              int pageSize,
+                                                              out int totalRecords)
     {
       throw new NotSupportedException();
     }
 
-    public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
+    public override MembershipUserCollection FindUsersByName(string usernameToMatch,
+                                                             int pageIndex,
+                                                             int pageSize,
+                                                             out int totalRecords)
     {
       throw new NotSupportedException();
     }

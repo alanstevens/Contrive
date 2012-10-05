@@ -22,7 +22,16 @@ namespace Contrive.Tests.SubSpec
           commands.AddRange(Core.SpecificationContext.SafelyEnumerateTestCommands(method, m =>
                                                                                           {
                                                                                             // Create a new test class instance
-                                                                                            var obj = item.ShouldCreateInstance ? Activator.CreateInstance(method.MethodInfo.ReflectedType) : null;
+                                                                                            var obj =
+                                                                                              item.ShouldCreateInstance
+                                                                                                ? Activator.
+                                                                                                    CreateInstance(
+                                                                                                                   method
+                                                                                                                     .
+                                                                                                                     MethodInfo
+                                                                                                                     .
+                                                                                                                     ReflectedType)
+                                                                                                : null;
 
                                                                                             // create method
                                                                                             item.Execute(obj);

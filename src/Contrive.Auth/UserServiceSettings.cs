@@ -26,7 +26,8 @@ namespace Contrive.Auth
 
       RequiresUniqueEmail = Convert.ToBoolean(GetConfigValue(settings["requiresUniqueEmail"], "true"));
 
-      MinRequiredNonAlphanumericCharacters = Convert.ToInt32(GetConfigValue(settings["minRequiredNonAlphanumericCharacters"], "0"));
+      MinRequiredNonAlphanumericCharacters =
+        Convert.ToInt32(GetConfigValue(settings["minRequiredNonAlphanumericCharacters"], "0"));
 
       MinRequiredPasswordLength = Convert.ToInt32(GetConfigValue(settings["minRequiredPasswordLength"], "6"));
 
@@ -38,7 +39,8 @@ namespace Contrive.Auth
 
       ContriveEmailSubject = GetConfigValue(settings["Contrive.Auth.EmailSubject"], "Password Reset Request");
 
-      ContriveEmailTemplatePath = GetConfigValue(settings["Contrive.Auth.EmailTemplatePath"], "~/Content/Contrive/ResetPassword.html");
+      ContriveEmailTemplatePath = GetConfigValue(settings["Contrive.Auth.EmailTemplatePath"],
+                                                 "~/Content/Contrive/ResetPassword.html");
 
       var format = settings["passwordFormat"] ?? "Hashed";
 

@@ -16,7 +16,7 @@ namespace Contrive.Common.Extensions
 
     public static T Create<T>(this Type type)
     {
-      return (T)type.Create();
+      return (T) type.Create();
     }
 
     public static object Create(this Type type)

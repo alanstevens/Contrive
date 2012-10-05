@@ -2,7 +2,7 @@ using System;
 
 namespace Contrive.Common
 {
-  public interface IUnitOfWork: IDisposable
+  public interface IUnitOfWork : IDisposable
   {
     object GetCommandObject();
   }

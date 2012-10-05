@@ -6,13 +6,13 @@ namespace Contrive.StructureMap
 {
   public class RequestScopeModule : BaseHttpModule
   {
-    public override void OnBeginRequest(HttpContextBase context) { }
+    public override void OnBeginRequest(HttpContextBase context) {}
 
     public override void OnEndRequest(HttpContextBase context)
     {
       ObjectFactory.ReleaseAndDisposeAllHttpScopedObjects();
     }
 
-    protected override void OnDisposing(bool disposing) { }
+    protected override void OnDisposing(bool disposing) {}
   }
 }

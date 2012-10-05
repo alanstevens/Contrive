@@ -46,7 +46,8 @@ namespace Contrive.Tests.SubSpec
   {
     class ActionTestCommand : TestCommand, ITestCommand
     {
-      public ActionTestCommand(IMethodInfo method, string name, int timeout, Action action) : base(method, name, timeout)
+      public ActionTestCommand(IMethodInfo method, string name, int timeout, Action action)
+        : base(method, name, timeout)
       {
         _action = action;
       }
@@ -69,7 +70,9 @@ namespace Contrive.Tests.SubSpec
 
     class AssertExecutor
     {
-      public AssertExecutor(SpecificationPrimitive<ContextDelegate> context, SpecificationPrimitive<Action> @do, List<SpecificationPrimitive<Action>> asserts)
+      public AssertExecutor(SpecificationPrimitive<ContextDelegate> context,
+                            SpecificationPrimitive<Action> @do,
+                            List<SpecificationPrimitive<Action>> asserts)
       {
         _asserts = asserts;
         _context = context;
@@ -109,19 +112,22 @@ namespace Contrive.Tests.SubSpec
     /// </summary>
     class ContextSetupFailedException : Exception
     {
-      public ContextSetupFailedException(string message) : base(message) { }
+      public ContextSetupFailedException(string message) : base(message) {}
     }
 
     class ExceptionTestCommand : ActionTestCommand
     {
-      public ExceptionTestCommand(IMethodInfo method, Assert.ThrowsDelegate action) : base(method, null, 0, () => action()) { }
+      public ExceptionTestCommand(IMethodInfo method, Assert.ThrowsDelegate action)
+        : base(method, null, 0, () => action()) {}
 
       public override bool ShouldCreateInstance { get { return false; } }
     }
 
     class ObservationExecutor
     {
-      public ObservationExecutor(SpecificationPrimitive<ContextDelegate> context, SpecificationPrimitive<Action> @do, IEnumerable<SpecificationPrimitive<Action>> observations)
+      public ObservationExecutor(SpecificationPrimitive<ContextDelegate> context,
+                                 SpecificationPrimitive<Action> @do,
+                                 IEnumerable<SpecificationPrimitive<Action>> observations)
       {
         _observations = observations;
         _context = context;
@@ -175,7 +181,9 @@ namespace Contrive.Tests.SubSpec
                                 {
                                   if (systemUnderTest != null) systemUnderTest.Dispose();
 
-                                  if (setupExceptionOccurred) throw new ContextSetupFailedException("Setting up Context failed, but Fixtures were disposed.");
+                                  if (setupExceptionOccurred)
+                                    throw new ContextSetupFailedException(
+                                      "Setting up Context failed, but Fixtures were disposed.");
                                 };
 
         yield return new ActionTestCommand(method, "} " + name, 0, tearDownAction);
@@ -215,7 +223,15 @@ namespace Contrive.Tests.SubSpec
         EnsureThreadStaticInitialized();
 
         if (_context == null) _context = new SpecificationPrimitive<ContextDelegate>(message, arrange);
-        else _exceptions.Add(() => { throw new InvalidOperationException("Cannot have more than one Context statement in a specification"); });
+        else
+        {
+          _exceptions.Add(
+                          () =>
+                          {
+                            throw new InvalidOperationException(
+                              "Cannot have more than one Context statement in a specification");
+                          });
+        }
 
         return _context;
       }
@@ -225,7 +241,15 @@ namespace Contrive.Tests.SubSpec
         EnsureThreadStaticInitialized();
 
         if (_do == null) _do = new SpecificationPrimitive<Action>(message, doAction);
-        else _exceptions.Add(() => { throw new InvalidOperationException("Cannot have more than one Do statement in a specification"); });
+        else
+        {
+          _exceptions.Add(
+                          () =>
+                          {
+                            throw new InvalidOperationException(
+                              "Cannot have more than one Do statement in a specification");
+                          });
+        }
 
         return _do;
       }
@@ -268,7 +292,8 @@ namespace Contrive.Tests.SubSpec
         return name;
       }
 
-      public static IEnumerable<ITestCommand> SafelyEnumerateTestCommands(IMethodInfo method, Action<IMethodInfo> registerPrimitives)
+      public static IEnumerable<ITestCommand> SafelyEnumerateTestCommands(IMethodInfo method,
+                                                                          Action<IMethodInfo> registerPrimitives)
       {
         try
         {
@@ -280,7 +305,17 @@ namespace Contrive.Tests.SubSpec
         }
         catch (Exception ex)
         {
-          return new ITestCommand[] {new ExceptionTestCommand(method, () => { throw new InvalidOperationException(string.Format("An exception was thrown while building tests from Specification {0}.{1}:\r\n" + ex, method.TypeName, method.Name)); })};
+          return new ITestCommand[]
+          {
+            new ExceptionTestCommand(method,
+                                     () =>
+                                     {
+                                       throw new InvalidOperationException(
+                                         string.Format(
+                                                       "An exception was thrown while building tests from Specification {0}.{1}:\r\n" +
+                                                       ex, method.TypeName, method.Name));
+                                     })
+          };
         }
       }
 
@@ -320,7 +355,16 @@ namespace Contrive.Tests.SubSpec
             testsReturned++;
           }
 
-          if (testsReturned == 0) yield return new ExceptionTestCommand(method, () => { throw new InvalidOperationException("Must have at least one Assert or Observation in each specification"); });
+          if (testsReturned == 0)
+          {
+            yield return
+              new ExceptionTestCommand(method,
+                                       () =>
+                                       {
+                                         throw new InvalidOperationException(
+                                           "Must have at least one Assert or Observation in each specification");
+                                       });
+          }
         }
         finally
         {
@@ -344,7 +388,9 @@ namespace Contrive.Tests.SubSpec
 
       static IEnumerable<ITestCommand> SkipCommands(string name, IMethodInfo method)
       {
-        foreach (var kvp in _skips) yield return new SkipCommand(method, name + ", " + kvp.Message, "Action is Todo (instead of Observation or Assert)");
+        foreach (var kvp in _skips)
+          yield return
+            new SkipCommand(method, name + ", " + kvp.Message, "Action is Todo (instead of Observation or Assert)");
       }
     }
 
@@ -466,7 +512,8 @@ namespace Contrive.Tests.SubSpec
   /// </summary>
   public static class SpecificationExtensions
   {
-    const string IDisposableHintMessaage = "Your context implements IDisposable. Use ContextFixture() to have its lifecycle managed by SubSpec.";
+    const string IDisposableHintMessaage =
+      "Your context implements IDisposable. Use ContextFixture() to have its lifecycle managed by SubSpec.";
 
     /// <summary>
     ///   Records a context setup for this specification.

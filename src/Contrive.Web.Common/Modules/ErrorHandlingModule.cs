@@ -28,11 +28,8 @@ namespace Contrive.Web.Common.Modules
                              context.Items.Add(errorHandledKey, true);
                            };
 
-      application.EndRequest += (s, e) =>
-                                {
-                                  if (!context.Items.Contains(errorHandledKey) && IsAnErrorResponse(context.Response)) 
-                                    _httpErrorHandler.HandleError(context, context.Response.StatusCode);
-                                };
+      application.EndRequest +=
+        (s, e) => { if (!context.Items.Contains(errorHandledKey) && IsAnErrorResponse(context.Response)) _httpErrorHandler.HandleError(context, context.Response.StatusCode); };
     }
 
     static bool IsAnErrorResponse(HttpResponseBase httpResponse)

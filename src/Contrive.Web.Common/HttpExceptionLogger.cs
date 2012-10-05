@@ -22,7 +22,7 @@ namespace Contrive.Web.Common
 
         // Rely on ELMAH configuration to filter messages from Log4Net
         if (IsFiltered(ex)) return;
-        
+
         source = Type.GetType(ex.GetBaseException().Source, false) ?? Type.GetType(ex.Source, false) ?? source;
         Logger.Error(source, ex.Serialize());
       }

@@ -73,7 +73,8 @@ namespace Contrive.Tests.SubSpec
       public override string ToString()
       {
         var splitter = Environment.NewLine + "\t";
-        return "AggregateException:" + splitter + string.Join(splitter, InnerExceptions.Select(_ => _.ToString()).ToArray());
+        return "AggregateException:" + splitter +
+               string.Join(splitter, InnerExceptions.Select(_ => _.ToString()).ToArray());
       }
     }
   }

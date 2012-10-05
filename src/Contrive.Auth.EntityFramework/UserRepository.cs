@@ -51,7 +51,12 @@ namespace Contrive.Auth.EntityFramework
 
     public IUser GetUserByPasswordVerificationToken(string token)
     {
-      return _repository.FirstOrDefault(user => String.Equals(user.PasswordVerificationToken, token, StringComparison.OrdinalIgnoreCase) && user.PasswordVerificationTokenExpirationDate > DateTime.UtcNow);
+      return
+        _repository.FirstOrDefault(
+                                   user =>
+                                   String.Equals(user.PasswordVerificationToken, token,
+                                                 StringComparison.OrdinalIgnoreCase) &&
+                                   user.PasswordVerificationTokenExpirationDate > DateTime.UtcNow);
     }
 
     public void Insert(IUser user)

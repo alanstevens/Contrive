@@ -8,12 +8,12 @@ namespace Contrive.Common.Async
   public static class ActionExtensions
   {
     public static Func<Action, Action, Task> Executor = (action, continueWith) =>
-                                                    {
-                                                      action();
-                                                      var task = new Task(continueWith);
-                                                      task.RunSynchronously();
-                                                      return task;
-                                                    };
+                                                        {
+                                                          action();
+                                                          var task = new Task(continueWith);
+                                                          task.RunSynchronously();
+                                                          return task;
+                                                        };
 
     [DebuggerStepThrough]
     public static Task RunAsync(this Action action, Action continueWith = null)
@@ -23,7 +23,7 @@ namespace Contrive.Common.Async
     }
   }
 
-  public class ActionExtensionsStartupTask: IStartupTask
+  public class ActionExtensionsStartupTask : IStartupTask
   {
     public void OnStartup()
     {
@@ -33,7 +33,6 @@ namespace Contrive.Common.Async
                                       var taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
                                       return Task.Factory.StartNew(action).ContinueWith(t => continueWith, taskScheduler);
                                     };
-
       }
     }
   }

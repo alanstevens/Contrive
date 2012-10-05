@@ -33,7 +33,7 @@ namespace Contrive.Auth.Web.Modules
       application.EndRequest += ApplicationEndRequest;
     }
 
-    public virtual void Dispose() { }
+    public virtual void Dispose() {}
 
     protected static void AccessDenied(HttpApplication app)
     {
