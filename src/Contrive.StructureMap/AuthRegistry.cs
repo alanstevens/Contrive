@@ -14,6 +14,7 @@ namespace Contrive.StructureMap
       Forward<UserService, IUserService>();
       Forward<UserService, IUserServiceExtended>();
       For<IRoleService>().Singleton().Use<RoleService>();
+      For<ISecurityService>().Singleton().Use<SecurityService>();
       For<ICryptographer>().Singleton().Use(c =>
                                             {
                                               var authConfigurationProvider = c.GetInstance<IAuthConfigurationProvider>();

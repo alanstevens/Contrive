@@ -1,38 +1,37 @@
 using System;
 using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Security;
 using Contrive.Common.Extensions;
 
-namespace Contrive.Auth.Web.Membership
+namespace Contrive.Auth
 {
   /// <summary>
   ///   Duplicates the functionality of the WebSecurity class from ASP.NET WebPages.
   /// </summary>
   public class SecurityService : ISecurityService
   {
-    public SecurityService(IUserServiceExtended userService, IAuthenticationService authenticationService)
+    public SecurityService(IUserServiceExtended userService,
+                           IAuthenticationService authenticationService,
+                           IPlatformAuthenticationService platformAuthenticationService,
+                           IRoleService roleService)
     {
       _userService = userService;
       _authenticationService = authenticationService;
+      _platformAuthenticationService = platformAuthenticationService;
+      _roleService = roleService;
     }
 
     readonly IAuthenticationService _authenticationService;
+    readonly IPlatformAuthenticationService _platformAuthenticationService;
+    readonly IRoleService _roleService;
     readonly IUserServiceExtended _userService;
-    HttpContextBase Context { get { return new HttpContextWrapper(HttpContext.Current); } }
-
-    HttpRequestBase Request { get { return Context.Request; } }
-
-    HttpResponseBase Response { get { return Context.Response; } }
 
     public Guid CurrentUserId { get { return GetUserId(CurrentUserName); } }
 
-    public string CurrentUserName { get { return Context.User.Identity.Name; } }
+    public string CurrentUserName { get { return _platformAuthenticationService.CurrentPrincipal.Identity.Name; } }
 
     public bool HasUserId { get { return !(CurrentUserId == Guid.Empty); } }
 
-    public bool IsAuthenticated { get { return Request.IsAuthenticated; } }
+    public bool IsAuthenticated { get { return _platformAuthenticationService.UserIsAuthenticated; } }
 
     public bool Login(string userNameOrEmail, string password, bool rememberMe = false)
     {
@@ -53,7 +52,7 @@ namespace Contrive.Auth.Web.Membership
       {
         success = _userService.ChangePassword(userName, currentPassword, newPassword);
       }
-      catch (ArgumentException) { }
+      catch (ArgumentException) {}
       return success;
     }
 
@@ -100,27 +99,27 @@ namespace Contrive.Auth.Web.Membership
 
     public void RequireAuthenticatedUser()
     {
-      var user = Context.User;
-      if (user == null || !user.Identity.IsAuthenticated) Response.SetStatus(HttpStatusCode.Unauthorized);
+      var currentPrincipal = _platformAuthenticationService.CurrentPrincipal;
+      if (currentPrincipal == null || !currentPrincipal.Identity.IsAuthenticated) _platformAuthenticationService.Unauthorize();
     }
 
     public void RequireUser(Guid userId)
     {
-      if (!IsUserLoggedOn(userId)) Response.SetStatus(HttpStatusCode.Unauthorized);
+      if (!IsUserLoggedOn(userId)) _platformAuthenticationService.Unauthorize();
     }
 
     public void RequireUser(string userName)
     {
-      if (!string.Equals(CurrentUserName, userName, StringComparison.OrdinalIgnoreCase)) Response.SetStatus(HttpStatusCode.Unauthorized);
+      if (!string.Equals(CurrentUserName, userName, StringComparison.OrdinalIgnoreCase)) _platformAuthenticationService.Unauthorize();
     }
 
     public void RequireRoles(params string[] arrayOfRoles)
     {
-      var isMissingRoles = arrayOfRoles.Any(role => !Roles.IsUserInRole(CurrentUserName, role));
+      var isMissingRoles = arrayOfRoles.Any(role => !_roleService.IsUserInRole(CurrentUserName, role));
 
       if (!isMissingRoles) return;
 
-      Response.SetStatus(HttpStatusCode.Unauthorized);
+      _platformAuthenticationService.Unauthorize();
     }
 
     public bool ResetPassword(string passwordResetToken, string newPassword)
@@ -137,7 +136,9 @@ namespace Contrive.Auth.Web.Membership
     {
       var userManagementService = _userService;
 
-      return (userManagementService.GetUserByUserName(userName) != null && userManagementService.GetPasswordFailuresSinceLastSuccess(userName) > allowedPasswordAttempts && userManagementService.GetLastPasswordFailureDate(userName).Add(interval) > DateTime.UtcNow);
+      return (userManagementService.GetUserByUserName(userName) != null &&
+              userManagementService.GetPasswordFailuresSinceLastSuccess(userName) > allowedPasswordAttempts &&
+              userManagementService.GetLastPasswordFailureDate(userName).Add(interval) > DateTime.UtcNow);
     }
 
     public int GetPasswordFailuresSinceLastSuccess(string userName)
@@ -163,20 +164,6 @@ namespace Contrive.Auth.Web.Membership
     bool IsUserLoggedOn(Guid userId)
     {
       return CurrentUserId == userId;
-    }
-  }
-
-  public static class HttpContextBaseExtensions
-  {
-    public static void SetStatus(this HttpResponseBase response, HttpStatusCode httpStatusCode)
-    {
-      SetStatus(response, (int) httpStatusCode);
-    }
-
-    public static void SetStatus(this HttpResponseBase response, int httpStatusCode)
-    {
-      response.StatusCode = httpStatusCode;
-      response.End();
     }
   }
 }

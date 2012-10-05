@@ -79,7 +79,6 @@
     <Compile Include="Membership\ContriveRoleProvider.cs" />
     <Compile Include="Membership\IProfileService.cs" />
     <Compile Include="Membership\SqlProfileProvider.cs" />
-    <Compile Include="Membership\SecurityService.cs" />
     <Compile Include="Membership\String_Resources.cs" />
     <Compile Include="Modules\AuthenticationModuleBase.cs" />
     <Compile Include="Modules\BasicAuthenticationModule.cs" />
@@ -95,6 +94,10 @@
     <ProjectReference Include="..\Contrive.Common\Contrive.Common.csproj">
       <Project>{00B479B8-86CD-4EDB-B6B0-F0C574B1F00B}</Project>
       <Name>Contrive.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contrive.Web.Common\Contrive.Web.Common.csproj">
+      <Project>{EDE4D614-2999-416D-8FA0-63D4A3A9175F}</Project>
+      <Name>Contrive.Web.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
