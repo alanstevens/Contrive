@@ -27,8 +27,14 @@ namespace Contrive.Common.Async
   {
     public void OnStartup()
     {
-      var taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-      ActionExtensions.Executor = (action, continueWith) => Task.Factory.StartNew(action).ContinueWith(t => continueWith, taskScheduler);
+      {
+        ActionExtensions.Executor = (action, continueWith) =>
+                                    {
+                                      var taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+                                      return Task.Factory.StartNew(action).ContinueWith(t => continueWith, taskScheduler);
+                                    };
+
+      }
     }
   }
 }
