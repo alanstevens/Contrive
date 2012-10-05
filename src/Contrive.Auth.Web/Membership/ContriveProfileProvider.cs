@@ -15,7 +15,7 @@ using System.Web.Profile;
 
 namespace Contrive.Auth.Web.Membership
 {
-  public class SqlProfileProvider : ProfileProvider
+  public class ContriveProfileProvider : ProfileProvider
   {
     string _AppName;
     int _CommandTimeout;
@@ -210,7 +210,7 @@ namespace Contrive.Auth.Web.Membership
       return numProfilesDeleted;
     }
 
-    public override int DeleteInactiveProfiles(ProfileAuthenticationOption authenticationOption,
+    public override int DeleteInactiveProfiles(ProfileAuthenticationOption authenticationType,
                                                DateTime userInactiveSinceDate)
     {
       //try
@@ -250,7 +250,7 @@ namespace Contrive.Auth.Web.Membership
       return 0;
     }
 
-    public override int GetNumberOfInactiveProfiles(ProfileAuthenticationOption authenticationOption,
+    public override int GetNumberOfInactiveProfiles(ProfileAuthenticationOption authenticationType,
                                                     DateTime userInactiveSinceDate)
     {
       //try
@@ -290,15 +290,15 @@ namespace Contrive.Auth.Web.Membership
       return 0;
     }
 
-    public override ProfileInfoCollection GetAllProfiles(ProfileAuthenticationOption authenticationOption,
+    public override ProfileInfoCollection GetAllProfiles(ProfileAuthenticationOption authenticationType,
                                                          int pageIndex,
                                                          int pageSize,
                                                          out int totalRecords)
     {
-      return GetProfilesForQuery(new SqlParameter[0], authenticationOption, pageIndex, pageSize, out totalRecords);
+      return GetProfilesForQuery(new SqlParameter[0], authenticationType, pageIndex, pageSize, out totalRecords);
     }
 
-    public override ProfileInfoCollection GetAllInactiveProfiles(ProfileAuthenticationOption authenticationOption,
+    public override ProfileInfoCollection GetAllInactiveProfiles(ProfileAuthenticationOption authenticationType,
                                                                  DateTime userInactiveSinceDate,
                                                                  int pageIndex,
                                                                  int pageSize,
@@ -306,10 +306,10 @@ namespace Contrive.Auth.Web.Membership
     {
       var args = new SqlParameter[1];
       args[0] = CreateInputParam("@InactiveSinceDate", SqlDbType.DateTime, userInactiveSinceDate.ToUniversalTime());
-      return GetProfilesForQuery(args, authenticationOption, pageIndex, pageSize, out totalRecords);
+      return GetProfilesForQuery(args, authenticationType, pageIndex, pageSize, out totalRecords);
     }
 
-    public override ProfileInfoCollection FindProfilesByUserName(ProfileAuthenticationOption authenticationOption,
+    public override ProfileInfoCollection FindProfilesByUserName(ProfileAuthenticationOption authenticationType,
                                                                  string usernameToMatch,
                                                                  int pageIndex,
                                                                  int pageSize,
@@ -318,11 +318,11 @@ namespace Contrive.Auth.Web.Membership
       CheckParameter(ref usernameToMatch);
       var args = new SqlParameter[1];
       args[0] = CreateInputParam("@UserNameToMatch", SqlDbType.NVarChar, usernameToMatch);
-      return GetProfilesForQuery(args, authenticationOption, pageIndex, pageSize, out totalRecords);
+      return GetProfilesForQuery(args, authenticationType, pageIndex, pageSize, out totalRecords);
     }
 
     public override ProfileInfoCollection FindInactiveProfilesByUserName(
-      ProfileAuthenticationOption authenticationOption,
+      ProfileAuthenticationOption authenticationType,
       string usernameToMatch,
       DateTime userInactiveSinceDate,
       int pageIndex,
@@ -333,7 +333,7 @@ namespace Contrive.Auth.Web.Membership
       var args = new SqlParameter[2];
       args[0] = CreateInputParam("@UserNameToMatch", SqlDbType.NVarChar, usernameToMatch);
       args[1] = CreateInputParam("@InactiveSinceDate", SqlDbType.DateTime, userInactiveSinceDate.ToUniversalTime());
-      return GetProfilesForQuery(args, authenticationOption, pageIndex, pageSize, out totalRecords);
+      return GetProfilesForQuery(args, authenticationType, pageIndex, pageSize, out totalRecords);
     }
 
     public override void Initialize(string name, NameValueCollection config)
@@ -786,7 +786,7 @@ namespace Contrive.Auth.Web.Membership
     }
 
     ProfileInfoCollection GetProfilesForQuery(SqlParameter[] args,
-                                              ProfileAuthenticationOption authenticationOption,
+                                              ProfileAuthenticationOption authenticationType,
                                               int pageIndex,
                                               int pageSize,
                                               out int totalRecords)

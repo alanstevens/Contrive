@@ -69,6 +69,8 @@
     <Compile Include="IAuthConfigurationProvider.cs" />
     <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IPlatformAuthenticationService.cs" />
+    <Compile Include="IProfile.cs" />
+    <Compile Include="IProfileService.cs" />
     <Compile Include="IRole.cs" />
     <Compile Include="IRoleService.cs" />
     <Compile Include="IRoleRepository.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="IUserServiceExtended.cs" />
     <Compile Include="IUserRepository.cs" />
     <Compile Include="IUserServiceSettings.cs" />
+    <Compile Include="ProfileAuthenticationType.cs" />
     <Compile Include="Properties\ApplicationServicesStrings.Designer.cs">
       <DependentUpon>ApplicationServicesStrings.resx</DependentUpon>
       <AutoGen>True</AutoGen>

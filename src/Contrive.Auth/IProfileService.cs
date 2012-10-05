@@ -1,44 +1,44 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Web.Profile;
 
-namespace Contrive.Auth.Web.Membership
+namespace Contrive.Auth
 {
   public interface IProfileService
   {
     string ApplicationName { get; set; }
 
-    int DeleteInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate);
+    int DeleteInactiveProfiles(ProfileAuthenticationType authenticationType, DateTime userInactiveSinceDate);
 
     int DeleteProfiles(string[] usernames);
 
-    int DeleteProfiles(ProfileInfoCollection profiles);
+    int DeleteProfiles(IEnumerable<IProfile> profiles);
 
-    ProfileInfoCollection FindInactiveProfilesByUserName(ProfileAuthenticationOption authenticationOption,
+    IEnumerable<IProfile> FindInactiveProfilesByUserName(ProfileAuthenticationType authenticationType,
                                                          string usernameToMatch,
                                                          DateTime userInactiveSinceDate,
                                                          int pageIndex,
                                                          int pageSize,
                                                          out int totalRecords);
 
-    ProfileInfoCollection FindProfilesByUserName(ProfileAuthenticationOption authenticationOption,
+    IEnumerable<IProfile> FindProfilesByUserName(ProfileAuthenticationType authenticationType,
                                                  string usernameToMatch,
                                                  int pageIndex,
                                                  int pageSize,
                                                  out int totalRecords);
 
-    ProfileInfoCollection GetAllInactiveProfiles(ProfileAuthenticationOption authenticationOption,
+    IEnumerable<IProfile> GetAllInactiveProfiles(ProfileAuthenticationType authenticationType,
                                                  DateTime userInactiveSinceDate,
                                                  int pageIndex,
                                                  int pageSize,
                                                  out int totalRecords);
 
-    ProfileInfoCollection GetAllProfiles(ProfileAuthenticationOption authenticationOption,
+    IEnumerable<IProfile> GetAllProfiles(ProfileAuthenticationType authenticationType,
                                          int pageIndex,
                                          int pageSize,
                                          out int totalRecords);
 
-    int GetNumberOfInactiveProfiles(ProfileAuthenticationOption authenticationOption, DateTime userInactiveSinceDate);
+    int GetNumberOfInactiveProfiles(ProfileAuthenticationType authenticationType, DateTime userInactiveSinceDate);
 
     SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection);
 

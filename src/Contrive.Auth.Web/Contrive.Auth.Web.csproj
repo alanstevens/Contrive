@@ -72,13 +72,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapperStartupTask.cs" />
+    <Compile Include="Membership\Profile.cs" />
+    <Compile Include="Membership\ProfileService.cs" />
     <Compile Include="WebAuthConfigurationProvider.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="PlatformAuthenticationService.cs" />
     <Compile Include="Membership\ContriveMembershipProvider.cs" />
     <Compile Include="Membership\ContriveRoleProvider.cs" />
-    <Compile Include="Membership\IProfileService.cs" />
-    <Compile Include="Membership\SqlProfileProvider.cs" />
+    <Compile Include="Membership\ContriveProfileProvider.cs" />
     <Compile Include="Membership\String_Resources.cs" />
     <Compile Include="Modules\AuthenticationModuleBase.cs" />
     <Compile Include="Modules\BasicAuthenticationModule.cs" />
