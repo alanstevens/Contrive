@@ -17,10 +17,8 @@ namespace Contrive.StructureMap
       For<ISecurityService>().Singleton().Use<SecurityService>();
       For<ICryptographer>().Singleton().Use(c =>
                                             {
-                                              var authConfigurationProvider =
-                                                c.GetInstance<IAuthConfigurationProvider>();
-                                              return new Cryptographer(authConfigurationProvider.DecryptionKey,
-                                                                       authConfigurationProvider.DecryptionAlgorithm);
+                                              var config = c.GetInstance<IAuthConfigurationProvider>();
+                                              return new Cryptographer(config.DecryptionKey, config.DecryptionAlgorithm);
                                             });
       For<IUserServiceSettings>().Singleton().Use(
                                                   c =>

@@ -6,7 +6,7 @@ namespace Contrive.Auth
   /// <summary>
   ///   Duplicates the functionality of the WebSecurity class from ASP.NET WebPages.
   /// </summary>
-  public static class Security
+  public static class WebSecurity
   {
     public static Guid CurrentUserId { get { return GetUserId(CurrentUserName); } }
 

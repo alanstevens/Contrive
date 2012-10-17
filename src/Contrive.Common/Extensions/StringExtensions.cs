@@ -46,7 +46,7 @@ namespace Contrive.Common.Extensions
         var data = Encoding.UTF8.GetBytes(value);
         var hash = sha512.ComputeHash(data);
 
-        return Convert.ToBase64String(hash);
+        return hash.ToBase64();
       }
     }
 
@@ -60,7 +60,7 @@ namespace Contrive.Common.Extensions
         var data = Encoding.UTF8.GetBytes(value);
         var hash = md5.ComputeHash(data);
 
-        return Convert.ToBase64String(hash);
+        return hash.ToBase64();
       }
     }
 
@@ -69,12 +69,23 @@ namespace Contrive.Common.Extensions
     {
       var hashBytes = Convert.FromBase64String(base64);
 
-      //BitConverter.ToString(hashBytes);
+      return hashBytes.ToHex();
+    }
+
+    [DebuggerStepThrough]
+    public static string ToHex(this byte[] input)
+    {
       var hex = new StringBuilder();
 
-      foreach (var value in hashBytes) hex.AppendFormat("{0:x02}", value);
+      foreach (var value in input) hex.AppendFormat("{0:X2}", value);
 
       return hex.ToString();
+    }
+
+    [DebuggerStepThrough]
+    public static string ToBase64(this byte[] input)
+    {
+      return Convert.ToBase64String(input);
     }
 
     [DebuggerStepThrough]

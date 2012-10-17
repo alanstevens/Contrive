@@ -14,13 +14,15 @@ namespace Contrive.Common
       Verify.NotEmpty(algorithmName, "algorithmName");
       Verify.AreNotEqual("Auto", algorithmName, "algorithmName");
 
-      _key = Convert.FromBase64String(decryptionKey);
+      _key = HexStringToByteArray(decryptionKey);
 
       _algorithmName = algorithmName;
     }
 
     const int TOKEN_SIZE = 16;
     const int SALT_SIZE = 64;
+    const int VALIDATION_KEY_SIZE = 64;
+    const int DECRYPTION_KEY_SIZE = 32;
 
     readonly string _algorithmName;
     readonly byte[] _key;
@@ -53,12 +55,22 @@ namespace Contrive.Common
 
     public string GenerateSalt()
     {
-      return GetRandomBufferAsBase64(SALT_SIZE);
+      return GetRandomBuffer(SALT_SIZE).ToBase64();
     }
 
     public string GenerateToken()
     {
-      return GetRandomBufferAsBase64(TOKEN_SIZE);
+      return GetRandomBuffer(TOKEN_SIZE).ToBase64();
+    }
+
+    public string GenerateValidationKey()
+    {
+      return GetRandomBuffer(VALIDATION_KEY_SIZE).ToHex();
+    }
+
+    public string GenerateDecryptionKey()
+    {
+      return GetRandomBuffer(DECRYPTION_KEY_SIZE).ToHex();
     }
 
     public string CalculatePasswordHash(string password, string salt)
@@ -137,7 +149,7 @@ namespace Contrive.Common
       return Convert.ToBase64String(outputBuffer);
     }
 
-    static string GetRandomBufferAsBase64(int bufferSize)
+    static byte[] GetRandomBuffer(int bufferSize)
     {
       var buffer = new byte[bufferSize];
 
@@ -145,7 +157,17 @@ namespace Contrive.Common
       {
         rng.GetBytes(buffer);
       }
-      return Convert.ToBase64String(buffer);
+      return buffer;
+    }
+
+    static byte[] HexStringToByteArray(String hex)
+    {
+      Verify.NotEmpty(hex, "hex");
+      var numberChars = hex.Length;
+      if (numberChars%2 == 1) hex = '0' + hex;
+      var bytes = new byte[numberChars/2];
+      for (var i = 0; i < numberChars; i += 2) bytes[i/2] = Convert.ToByte(hex.Substring(i, 2), 16);
+      return bytes;
     }
   }
 }

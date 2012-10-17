@@ -27,7 +27,7 @@ namespace Contrive.Auth.Web
 
     public string DecryptionKey
     {
-      [DebuggerStepThrough] get { return GetMachineKey(); }
+      [DebuggerStepThrough] get { return GetMachineKeySection().DecryptionKey; }
     }
 
     public string DecryptionAlgorithm
@@ -47,15 +47,6 @@ namespace Contrive.Auth.Web
       return settings;
     }
 
-    string GetMachineKey()
-    {
-      var decryptionKey = GetMachineKeySection().DecryptionKey;
-
-      var bytes = HexStringToByteArray(decryptionKey);
-
-      return Convert.ToBase64String(bytes);
-    }
-
     MachineKeySection GetMachineKeySection()
     {
       MachineKeySection machineKeySection;
@@ -68,29 +59,6 @@ namespace Contrive.Auth.Web
         throw new ConfigurationErrorsException("Encryption configuration not found", ex);
       }
       return machineKeySection;
-    }
-
-    //static byte[] HexStringToByteArray(string hexString)
-    //{
-    //  Verify.NotEmpty(hexString, "hexString");
-
-    //  if (hexString.Length%2 == 1) hexString = '0' + hexString;
-
-    //  var buffer = new byte[hexString.Length/2];
-
-    //  for (var i = 0; i < buffer.Length; ++i) buffer[i] = byte.Parse(hexString.Substring(i*2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-
-    //  return buffer;
-    //}
-
-    static byte[] HexStringToByteArray(String hex)
-    {
-      Verify.NotEmpty(hex, "hex");
-      var numberChars = hex.Length;
-      if (numberChars%2 == 1) hex = '0' + hex;
-      var bytes = new byte[numberChars/2];
-      for (var i = 0; i < numberChars; i += 2) bytes[i/2] = Convert.ToByte(hex.Substring(i, 2), 16);
-      return bytes;
     }
   }
 }
