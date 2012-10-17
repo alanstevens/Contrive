@@ -14,7 +14,7 @@ namespace Contrive.Common
       Verify.NotEmpty(algorithmName, "algorithmName");
       Verify.AreNotEqual("Auto", algorithmName, "algorithmName");
 
-      _key = HexStringToByteArray(decryptionKey);
+      _key = decryptionKey.HexToBinary();
 
       _algorithmName = algorithmName;
     }
@@ -75,7 +75,7 @@ namespace Contrive.Common
 
     public string CalculatePasswordHash(string password, string salt)
     {
-      return "{0}{1}".FormatWith(password, salt).CalculateSha512Hash();
+      return "{0}{1}".FormatWith(password, salt).CalculateHash();
     }
 
     public string Encrypt(string plainText)
@@ -158,16 +158,6 @@ namespace Contrive.Common
         rng.GetBytes(buffer);
       }
       return buffer;
-    }
-
-    static byte[] HexStringToByteArray(String hex)
-    {
-      Verify.NotEmpty(hex, "hex");
-      var numberChars = hex.Length;
-      if (numberChars%2 == 1) hex = '0' + hex;
-      var bytes = new byte[numberChars/2];
-      for (var i = 0; i < numberChars; i += 2) bytes[i/2] = Convert.ToByte(hex.Substring(i, 2), 16);
-      return bytes;
     }
   }
 }

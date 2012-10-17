@@ -72,7 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapperStartupTask.cs" />
-    <Compile Include="MachineKeyUtility.cs" />
     <Compile Include="Membership\Profile.cs" />
     <Compile Include="Membership\ProfileService.cs" />
     <Compile Include="WebAuthConfigurationProvider.cs" />

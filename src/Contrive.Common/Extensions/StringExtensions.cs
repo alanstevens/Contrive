@@ -37,16 +37,29 @@ namespace Contrive.Common.Extensions
     }
 
     [DebuggerStepThrough]
-    public static string CalculateSha512Hash(this string value)
+    public static string CalculateHash(this string value)
     {
       Verify.NotEmpty(value, "value");
 
-      using (var sha512 = SHA512.Create())
+      using (var hashAlgorithm = HMACSHA256.Create())
       {
         var data = Encoding.UTF8.GetBytes(value);
-        var hash = sha512.ComputeHash(data);
+        var hash = data.CalculateHash();
 
         return hash.ToBase64();
+      }
+    }
+
+    [DebuggerStepThrough]
+    public static byte[] CalculateHash(this byte[] value)
+    {
+      Verify.NotEmpty(value, "value");
+
+      using (var hashAlgorithm = HMACSHA256.Create())
+      {
+        var hash = hashAlgorithm.ComputeHash(value);
+
+        return hash;
       }
     }
 
@@ -73,13 +86,19 @@ namespace Contrive.Common.Extensions
     }
 
     [DebuggerStepThrough]
+    public static Byte[] HexToBinary(this string hex)
+    {
+      var numberChars = hex.Length;
+      if (numberChars%2 == 1) hex = '0' + hex;
+      var bytes = new byte[numberChars/2];
+      for (var i = 0; i < numberChars; i += 2) bytes[i/2] = Convert.ToByte(hex.Substring(i, 2), 16);
+      return bytes;
+    }
+
+    [DebuggerStepThrough]
     public static string ToHex(this byte[] input)
     {
-      var hex = new StringBuilder();
-
-      foreach (var value in input) hex.AppendFormat("{0:X2}", value);
-
-      return hex.ToString();
+      return BitConverter.ToString(input).Replace("-", string.Empty);
     }
 
     [DebuggerStepThrough]

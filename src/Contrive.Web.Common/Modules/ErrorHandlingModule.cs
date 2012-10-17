@@ -19,7 +19,7 @@ namespace Contrive.Web.Common.Modules
     public void Init(HttpApplication application)
     {
       var context = new HttpContextWrapper(application.Context);
-      var errorHandledKey = DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture).CalculateSha512Hash();
+      var errorHandledKey = DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture).CalculateHash();
 
       application.Error += (s, e) =>
                            {
