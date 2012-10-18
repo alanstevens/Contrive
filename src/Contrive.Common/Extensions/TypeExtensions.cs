@@ -14,11 +14,13 @@ namespace Contrive.Common.Extensions
       return interfaceType != null;
     }
 
-    public static T Create<T>(this Type type)
+    [DebuggerStepThrough]
+    public static T Create<T>(this Type type) where T : class
     {
-      return (T) type.Create();
+      return type.Create() as T;
     }
 
+    [DebuggerStepThrough]
     public static object Create(this Type type)
     {
       return Activator.CreateInstance(type);

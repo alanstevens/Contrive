@@ -8,15 +8,12 @@ namespace Contrive.Common
 {
   public class Cryptographer : ICryptographer
   {
-    public Cryptographer(string decryptionKey, string algorithmName)
+    public Cryptographer(byte[] decryptionKey, Type algorithmType)
     {
       Verify.NotEmpty(decryptionKey, "decryptionKey");
-      Verify.NotEmpty(algorithmName, "algorithmName");
-      Verify.AreNotEqual("Auto", algorithmName, "algorithmName");
 
-      _key = decryptionKey.HexToBinary();
-
-      _algorithmName = algorithmName;
+      _key = decryptionKey;
+      _algorithmType = algorithmType;
     }
 
     const int TOKEN_SIZE = 16;
@@ -24,34 +21,8 @@ namespace Contrive.Common
     const int VALIDATION_KEY_SIZE = 64;
     const int DECRYPTION_KEY_SIZE = 32;
 
-    readonly string _algorithmName;
     readonly byte[] _key;
-
-    Type EncryptionAlgorithmType
-    {
-      get
-      {
-        Type algorithm;
-
-        switch (_algorithmName)
-        {
-          case "AES":
-            algorithm = typeof (AesCryptoServiceProvider);
-            break;
-          case "3DES":
-            algorithm = typeof (TripleDESCryptoServiceProvider);
-            break;
-          case "DES":
-            algorithm = typeof (DESCryptoServiceProvider);
-            break;
-          default:
-            var message = "Unrecognized Algorithm Name: {0}".FormatWith(_algorithmName);
-            throw new ConfigurationErrorsException(message);
-        }
-
-        return algorithm;
-      }
-    }
+    readonly Type _algorithmType;
 
     public string GenerateSalt()
     {
@@ -84,7 +55,7 @@ namespace Contrive.Common
 
       byte[] outputBuffer;
 
-      using (var algorithm = EncryptionAlgorithmType.Create<SymmetricAlgorithm>())
+      using (var algorithm = _algorithmType.Create<SymmetricAlgorithm>())
       {
         using (var ms = new MemoryStream())
         {
@@ -115,7 +86,7 @@ namespace Contrive.Common
 
       byte[] outputBuffer;
 
-      using (var algorithm = EncryptionAlgorithmType.Create<SymmetricAlgorithm>())
+      using (var algorithm = _algorithmType.Create<SymmetricAlgorithm>())
       {
         try
         {

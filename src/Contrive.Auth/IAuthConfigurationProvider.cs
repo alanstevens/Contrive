@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 using Contrive.Common;
 
@@ -9,8 +10,12 @@ namespace Contrive.Auth
 
     NameValueCollection UserServiceConfiguration { get; }
 
-    string DecryptionKey { get; }
+    Type DecryptionAlgorithm { get; }
 
-    string DecryptionAlgorithm { get; }
+    byte[] DecryptionKey { get; }
+
+    Type ValidationAlgorithm { get; }
+
+    byte[] ValidationKey { get; }
   }
 }

@@ -41,13 +41,10 @@ namespace Contrive.Common.Extensions
     {
       Verify.NotEmpty(value, "value");
 
-      using (var hashAlgorithm = HMACSHA256.Create())
-      {
-        var data = Encoding.UTF8.GetBytes(value);
-        var hash = data.CalculateHash();
+      var data = Encoding.UTF8.GetBytes(value);
+      var hash = data.CalculateHash();
 
-        return hash.ToBase64();
-      }
+      return hash.ToBase64();
     }
 
     [DebuggerStepThrough]
@@ -89,9 +86,9 @@ namespace Contrive.Common.Extensions
     public static Byte[] HexToBinary(this string hex)
     {
       var numberChars = hex.Length;
-      if (numberChars%2 == 1) hex = '0' + hex;
-      var bytes = new byte[numberChars/2];
-      for (var i = 0; i < numberChars; i += 2) bytes[i/2] = Convert.ToByte(hex.Substring(i, 2), 16);
+      if (numberChars % 2 == 1) hex = '0' + hex;
+      var bytes = new byte[numberChars / 2];
+      for (var i = 0; i < numberChars; i += 2) bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
       return bytes;
     }
 
@@ -116,9 +113,9 @@ namespace Contrive.Common.Extensions
       {
         try
         {
-          convertedValue = (T) Enum.Parse(typeof (T), value.Trim(), true);
+          convertedValue = (T)Enum.Parse(typeof(T), value.Trim(), true);
         }
-        catch (ArgumentException) {}
+        catch (ArgumentException) { }
       }
 
       return convertedValue;
