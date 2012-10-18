@@ -8,8 +8,16 @@ namespace Contrive.Common
 
     string CalculatePasswordHash(string password, string salt);
 
-    string Encrypt(string plainText);
+    string Encrypt(string dataToEncrypt);
 
-    string Decrypt(string encryptedText);
+    string Decrypt(string encryptedData);
+
+    string Hash(string dataToHash);
+
+    string ValidateHash(string hashedData);
+
+    string EncryptAndHash(string dataToEncrypt);
+
+    string DecryptHashed(string encryptedData);
   }
 }

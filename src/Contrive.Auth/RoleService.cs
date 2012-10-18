@@ -11,7 +11,7 @@ namespace Contrive.Auth
   {
     public RoleService(IRoleRepository roleRepository,
                        IUserRepository userRepository,
-                       IAuthConfigurationProvider configuration)
+                       IMembershipConfigurationProvider configuration)
     {
       _roleRepository = roleRepository;
       _userRepository = userRepository;

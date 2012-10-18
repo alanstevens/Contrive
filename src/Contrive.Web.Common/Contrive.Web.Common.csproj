@@ -66,7 +66,7 @@
     <Compile Include="Cache.cs" />
     <Compile Include="HttpContextBaseExtensions.cs" />
     <Compile Include="IWebConfigurationProvider.cs" />
-    <Compile Include="WebCryptoUtility.cs" />
+    <Compile Include="WebCryptographer.cs" />
     <Compile Include="Modules\ErrorHandlingModule.cs" />
     <Compile Include="HttpErrorHandler.cs" />
     <Compile Include="Mvc\RemoteRequireHttpsAttribute.cs" />

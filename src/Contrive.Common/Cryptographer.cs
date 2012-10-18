@@ -1,66 +1,112 @@
 using System;
-using System.Configuration;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 using Contrive.Common.Extensions;
 
 namespace Contrive.Common
 {
-  public class Cryptographer : ICryptographer
+  public class Cryptographer : CryptographerBase
   {
-    public Cryptographer(byte[] decryptionKey, Type algorithmType)
+    public Cryptographer(byte[] encryptionKey, Type encryptionAlgorithm, byte[] validationKey, Type validationAlgorithm)
     {
-      Verify.NotEmpty(decryptionKey, "decryptionKey");
-
-      _key = decryptionKey;
-      _algorithmType = algorithmType;
+      Verify.NotEmpty(encryptionKey, "decryptionKey");
+      _encryptionAlgorithm = encryptionAlgorithm;
+      _validationKey = validationKey;
+      _validationAlgorithm = validationAlgorithm;
+      _encryptionKey = encryptionKey;
     }
 
-    const int TOKEN_SIZE = 16;
-    const int SALT_SIZE = 64;
-    const int VALIDATION_KEY_SIZE = 64;
-    const int DECRYPTION_KEY_SIZE = 32;
+    readonly Type _encryptionAlgorithm;
+    readonly byte[] _encryptionKey;
+    readonly Type _validationAlgorithm;
+    readonly byte[] _validationKey;
+    int _hashSize;
 
-    readonly byte[] _key;
-    readonly Type _algorithmType;
-
-    public string GenerateSalt()
+    int HashSize
     {
-      return GetRandomBuffer(SALT_SIZE).ToBase64();
+      get
+      {
+        if (_hashSize == 0)
+        {
+          using (var hashAlgorithm = _validationAlgorithm.Create<HashAlgorithm>())
+          {
+            _hashSize = hashAlgorithm.HashSize;
+          }
+        }
+        return _hashSize;
+      }
     }
 
-    public string GenerateToken()
+    protected override string Encode(string input, Protection protectionOption)
     {
-      return GetRandomBuffer(TOKEN_SIZE).ToBase64();
+      var data = Encoding.Unicode.GetBytes(input);
+
+      if (data == null) throw new ArgumentNullException("data");
+      if (protectionOption == Protection.All || protectionOption == Protection.Validation)
+      {
+        var numArray1 = Hash(data);
+        var numArray2 = new byte[numArray1.Length + data.Length];
+        Buffer.BlockCopy(data, 0, numArray2, 0, data.Length);
+        Buffer.BlockCopy(numArray1, 0, numArray2, data.Length, numArray1.Length);
+        data = numArray2;
+      }
+      if (protectionOption == Protection.All || protectionOption == Protection.Encryption) data = Protect(data);
+      return data.ToHex();
     }
 
-    public string GenerateValidationKey()
+    protected override string Decode(string encodedData, Protection protectionOption)
     {
-      return GetRandomBuffer(VALIDATION_KEY_SIZE).ToHex();
+      if (encodedData == null) throw new ArgumentNullException("encodedData");
+      if (encodedData.Length%2 != 0) throw new ArgumentException(null, "encodedData");
+      byte[] buffer;
+
+      try
+      {
+        buffer = encodedData.HexToBinary();
+      }
+      catch
+      {
+        throw new ArgumentException(null, "encodedData");
+      }
+
+      if (buffer == null || buffer.Length < 1) throw new ArgumentException(null, "encodedData");
+
+      if (protectionOption == Protection.All || protectionOption == Protection.Encryption)
+      {
+        buffer = Unprotect(buffer);
+        if (buffer == null) return null;
+      }
+
+      if (protectionOption == Protection.All || protectionOption == Protection.Validation)
+      {
+        if (buffer.Length < HashSize) return null;
+        var bufferCopy = buffer;
+        buffer = new byte[bufferCopy.Length - HashSize];
+        Buffer.BlockCopy(bufferCopy, 0, buffer, 0, buffer.Length);
+
+        var hashValue = Hash(buffer);
+
+        if (hashValue == null || hashValue.Length != HashSize) return null;
+
+        for (var index = 0; index < hashValue.Length; ++index) if (hashValue[index] != bufferCopy[buffer.Length + index]) return null;
+      }
+
+      return Encoding.Unicode.GetString(buffer);
     }
 
-    public string GenerateDecryptionKey()
+    byte[] Protect(byte[] buffer)
     {
-      return GetRandomBuffer(DECRYPTION_KEY_SIZE).ToHex();
-    }
-
-    public string CalculatePasswordHash(string password, string salt)
-    {
-      return "{0}{1}".FormatWith(password, salt).CalculateHash();
-    }
-
-    public string Encrypt(string plainText)
-    {
-      Verify.NotEmpty(plainText, "plainText");
+      Verify.NotEmpty(buffer, "buffer");
 
       byte[] outputBuffer;
 
-      using (var algorithm = _algorithmType.Create<SymmetricAlgorithm>())
+      using (var algorithm = _encryptionAlgorithm.Create<SymmetricAlgorithm>())
       {
         using (var ms = new MemoryStream())
         {
           algorithm.GenerateIV();
-          algorithm.Key = _key;
+          algorithm.Key = _encryptionKey;
 
           ms.Write(algorithm.IV, 0, algorithm.IV.Length);
 
@@ -68,7 +114,6 @@ namespace Contrive.Common
 
           using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
           {
-            var buffer = Convert.FromBase64String(plainText);
             cs.Write(buffer, 0, buffer.Length);
             cs.FlushFinalBlock();
           }
@@ -77,27 +122,25 @@ namespace Contrive.Common
         }
       }
 
-      return Convert.ToBase64String(outputBuffer);
+      return outputBuffer;
     }
 
-    public string Decrypt(string encryptedText)
+    byte[] Unprotect(byte[] inputBuffer)
     {
-      Verify.NotEmpty(encryptedText, "encryptedText");
+      Verify.NotEmpty(inputBuffer, "inputBuffer");
 
       byte[] outputBuffer;
 
-      using (var algorithm = _algorithmType.Create<SymmetricAlgorithm>())
+      using (var algorithm = _encryptionAlgorithm.Create<SymmetricAlgorithm>())
       {
         try
         {
-          var inputBuffer = Convert.FromBase64String(encryptedText);
-
           var inputVectorBuffer = new byte[algorithm.IV.Length];
 
           Array.Copy(inputBuffer, inputVectorBuffer, inputVectorBuffer.Length);
 
           algorithm.IV = inputVectorBuffer;
-          algorithm.Key = _key;
+          algorithm.Key = _encryptionKey;
 
           using (var ms = new MemoryStream())
           {
@@ -117,18 +160,36 @@ namespace Contrive.Common
         }
       }
 
-      return Convert.ToBase64String(outputBuffer);
+      return outputBuffer;
     }
 
-    static byte[] GetRandomBuffer(int bufferSize)
+    byte[] Hash(byte[] buffer)
     {
-      var buffer = new byte[bufferSize];
+      KeyedHashAlgorithm keyedHashAlgorithm = null;
+      HashAlgorithm hashAlgorithm = null;
 
-      using (var rng = new RNGCryptoServiceProvider())
-      {
-        rng.GetBytes(buffer);
-      }
-      return buffer;
+      keyedHashAlgorithm = _validationAlgorithm.Create<KeyedHashAlgorithm>();
+
+      if (keyedHashAlgorithm.IsNull()) hashAlgorithm = _validationAlgorithm.Create<HashAlgorithm>();
+
+      if (hashAlgorithm.IsNull()) return HashKeyed(keyedHashAlgorithm, buffer, _validationKey);
+
+      return HashNonKeyed(hashAlgorithm, buffer, _validationKey);
+    }
+
+    static byte[] HashNonKeyed(HashAlgorithm algorithm, byte[] buffer, byte[] validationKey)
+    {
+      var length = buffer.Length + validationKey.Length;
+      var newBuffer = new byte[length];
+      Buffer.BlockCopy(buffer, 0, newBuffer, 0, buffer.Length);
+      Buffer.BlockCopy(validationKey, 0, newBuffer, buffer.Length, validationKey.Length);
+      return algorithm.ComputeHash(newBuffer);
+    }
+
+    static byte[] HashKeyed(KeyedHashAlgorithm algorithm, byte[] buffer, byte[] validationKey)
+    {
+      algorithm.Key = validationKey;
+      return algorithm.ComputeHash(buffer);
     }
   }
 }

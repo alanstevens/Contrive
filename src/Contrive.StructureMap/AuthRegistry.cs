@@ -9,7 +9,7 @@ namespace Contrive.StructureMap
   {
     public AuthRegistry()
     {
-      For<IAuthConfigurationProvider>().Singleton().Use<WebAuthConfigurationProvider>();
+      For<IMembershipConfigurationProvider>().Singleton().Use<MembershipConfigurationProvider>();
       For<UserService>().Singleton();
       Forward<UserService, IUserService>();
       Forward<UserService, IUserServiceExtended>();
@@ -17,13 +17,13 @@ namespace Contrive.StructureMap
       For<ISecurityService>().Singleton().Use<SecurityService>();
       For<ICryptographer>().Singleton().Use(c =>
                                             {
-                                              var config = c.GetInstance<IAuthConfigurationProvider>();
-                                              return new Cryptographer(config.DecryptionKey, config.DecryptionAlgorithm);
+                                              var config = c.GetInstance<ICryptoConfigurationProvider>();
+                                              return new Cryptographer(config.EncryptionKey, config.EncryptionAlgorithm, config.ValidationKey, config.ValidationAlgorithm);
                                             });
       For<IUserServiceSettings>().Singleton().Use(
                                                   c =>
                                                   new UserServiceSettings(
-                                                    c.GetInstance<IAuthConfigurationProvider>().UserServiceConfiguration));
+                                                    c.GetInstance<IMembershipConfigurationProvider>().UserServiceConfiguration));
     }
   }
 }

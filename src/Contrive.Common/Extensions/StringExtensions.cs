@@ -83,6 +83,14 @@ namespace Contrive.Common.Extensions
     }
 
     [DebuggerStepThrough]
+    public static string HexToBase64(this string hex)
+    {
+      var hashBytes = HexToBinary(hex);
+
+      return Convert.ToBase64String(hashBytes);
+    }
+
+    [DebuggerStepThrough]
     public static Byte[] HexToBinary(this string hex)
     {
       var numberChars = hex.Length;

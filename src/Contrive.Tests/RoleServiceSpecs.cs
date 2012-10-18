@@ -17,7 +17,7 @@ namespace Contrive.Tests
       _roleService = new RoleService(_roleRepository.Object, _userRepository.Object, _configuration.Object);
     }
 
-    readonly Mock<IAuthConfigurationProvider> _configuration = new Mock<IAuthConfigurationProvider>();
+    readonly Mock<IMembershipConfigurationProvider> _configuration = new Mock<IMembershipConfigurationProvider>();
     readonly Mock<IRole> _roleMock2 = new Mock<IRole>();
     readonly Mock<IRoleRepository> _roleRepository = new Mock<IRoleRepository>();
     readonly RoleService _roleService;

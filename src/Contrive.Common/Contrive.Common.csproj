@@ -70,9 +70,9 @@
     <Compile Include="Async\ActionExtensions.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="ConfigurationProvider.cs" />
-    <Compile Include="Cryptographer.cs" />
     <Compile Include="Async\DataActionExtensions.cs" />
-    <Compile Include="CryptoUtility.cs" />
+    <Compile Include="Cryptographer.cs" />
+    <Compile Include="CryptographerBase.cs" />
     <Compile Include="DisposableBase.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="EventAggregator.cs" />
@@ -80,8 +80,8 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IConfigurationProvider.cs" />
+    <Compile Include="ICryptoConfigurationProvider.cs" />
     <Compile Include="ICryptographer.cs" />
-    <Compile Include="ICryptoUtility.cs" />
     <Compile Include="IEmailService.cs" />
     <Compile Include="IListener.cs" />
     <Compile Include="IRepository.cs" />

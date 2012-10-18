@@ -74,7 +74,7 @@
     <Compile Include="AutoMapperStartupTask.cs" />
     <Compile Include="Membership\Profile.cs" />
     <Compile Include="Membership\ProfileService.cs" />
-    <Compile Include="WebAuthConfigurationProvider.cs" />
+    <Compile Include="MembershipConfigurationProvider.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="PlatformAuthenticationService.cs" />
     <Compile Include="Membership\ContriveMembershipProvider.cs" />
@@ -86,6 +86,7 @@
     <Compile Include="Modules\DigestAuthenticationModule.cs" />
     <Compile Include="Modules\DigestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebCryptoConfigurationProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Contrive.Auth\Contrive.Auth.csproj">
