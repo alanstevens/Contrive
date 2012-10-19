@@ -8,19 +8,21 @@ namespace Contrive.Common
 {
   public class Cryptographer : CryptographerBase
   {
-    public Cryptographer(byte[] encryptionKey, Type encryptionAlgorithm, byte[] validationKey, Type validationAlgorithm)
+    public Cryptographer(byte[] encryptionKey, Type encryptionAlgorithm, byte[] hmacKey, Type hashAlgorithm)
     {
-      Verify.NotEmpty(encryptionKey, "decryptionKey");
+      Verify.NotEmpty(encryptionKey, "encryptionKey");
+      Verify.NotNull(encryptionAlgorithm,"encryptionAlgorithm");
+      Verify.NotNull(hashAlgorithm, "hashAlgorithm");
       _encryptionAlgorithm = encryptionAlgorithm;
-      _validationKey = validationKey;
-      _validationAlgorithm = validationAlgorithm;
+      _hmacKey = hmacKey;
+      _hashAlgorithm = hashAlgorithm;
       _encryptionKey = encryptionKey;
     }
 
     readonly Type _encryptionAlgorithm;
     readonly byte[] _encryptionKey;
-    readonly Type _validationAlgorithm;
-    readonly byte[] _validationKey;
+    readonly Type _hashAlgorithm;
+    readonly byte[] _hmacKey;
     int _hashSize;
 
     int HashSize
@@ -29,7 +31,7 @@ namespace Contrive.Common
       {
         if (_hashSize == 0)
         {
-          using (var hashAlgorithm = _validationAlgorithm.Create<HashAlgorithm>())
+          using (var hashAlgorithm = _hashAlgorithm.Create<HashAlgorithm>())
           {
             _hashSize = hashAlgorithm.HashSize;
           }
@@ -42,14 +44,15 @@ namespace Contrive.Common
     {
       var data = Encoding.Unicode.GetBytes(input);
 
-      if (data == null) throw new ArgumentNullException("data");
+      Verify.NotNull(data, "data");
+
       if (protectionOption == Protection.All || protectionOption == Protection.Validation)
       {
-        var numArray1 = Hash(data);
-        var numArray2 = new byte[numArray1.Length + data.Length];
-        Buffer.BlockCopy(data, 0, numArray2, 0, data.Length);
-        Buffer.BlockCopy(numArray1, 0, numArray2, data.Length, numArray1.Length);
-        data = numArray2;
+        var hashData = Hash(data);
+        var validationData = new byte[hashData.Length + data.Length];
+        Buffer.BlockCopy(data, 0, validationData, 0, data.Length);
+        Buffer.BlockCopy(hashData, 0, validationData, data.Length, hashData.Length);
+        data = validationData;
       }
       if (protectionOption == Protection.All || protectionOption == Protection.Encryption) data = Protect(data);
       return data.ToHex();
@@ -57,7 +60,7 @@ namespace Contrive.Common
 
     protected override string Decode(string encodedData, Protection protectionOption)
     {
-      if (encodedData == null) throw new ArgumentNullException("encodedData");
+      Verify.NotNull(encodedData, "encodedData");
       if (encodedData.Length%2 != 0) throw new ArgumentException(null, "encodedData");
       byte[] buffer;
 
@@ -89,7 +92,9 @@ namespace Contrive.Common
 
         if (hashValue == null || hashValue.Length != HashSize) return null;
 
-        for (var index = 0; index < hashValue.Length; ++index) if (hashValue[index] != bufferCopy[buffer.Length + index]) return null;
+        for (var index = 0; index < hashValue.Length; ++index) 
+          if (hashValue[index] != bufferCopy[buffer.Length + index]) 
+            return null;
       }
 
       return Encoding.Unicode.GetString(buffer);
@@ -168,13 +173,13 @@ namespace Contrive.Common
       KeyedHashAlgorithm keyedHashAlgorithm = null;
       HashAlgorithm hashAlgorithm = null;
 
-      keyedHashAlgorithm = _validationAlgorithm.Create<KeyedHashAlgorithm>();
+      keyedHashAlgorithm = _hashAlgorithm.Create<KeyedHashAlgorithm>();
 
-      if (keyedHashAlgorithm.IsNull()) hashAlgorithm = _validationAlgorithm.Create<HashAlgorithm>();
+      if (keyedHashAlgorithm.IsNull()) hashAlgorithm = _hashAlgorithm.Create<HashAlgorithm>();
 
-      if (hashAlgorithm.IsNull()) return HashKeyed(keyedHashAlgorithm, buffer, _validationKey);
+      if (hashAlgorithm.IsNull()) return HashKeyed(keyedHashAlgorithm, buffer, _hmacKey);
 
-      return HashNonKeyed(hashAlgorithm, buffer, _validationKey);
+      return HashNonKeyed(hashAlgorithm, buffer, _hmacKey);
     }
 
     static byte[] HashNonKeyed(HashAlgorithm algorithm, byte[] buffer, byte[] validationKey)

@@ -18,7 +18,7 @@ namespace Contrive.StructureMap
       For<ICryptographer>().Singleton().Use(c =>
                                             {
                                               var config = c.GetInstance<ICryptoConfigurationProvider>();
-                                              return new Cryptographer(config.EncryptionKey, config.EncryptionAlgorithm, config.ValidationKey, config.ValidationAlgorithm);
+                                              return new Cryptographer(config.EncryptionKey, config.EncryptionAlgorithm, config.HmacKey, config.HashAlgorithm);
                                             });
       For<IUserServiceSettings>().Singleton().Use(
                                                   c =>

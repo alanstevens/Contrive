@@ -86,7 +86,6 @@
     <Compile Include="Modules\DigestAuthenticationModule.cs" />
     <Compile Include="Modules\DigestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebCryptoConfigurationProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Contrive.Auth\Contrive.Auth.csproj">

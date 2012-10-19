@@ -6,7 +6,7 @@ using System.Web.Configuration;
 using Contrive.Common;
 using Contrive.Common.Extensions;
 
-namespace Contrive.Auth.Web
+namespace Contrive.Web.Common
 {
   public class WebCryptoConfigurationProvider : ConfigurationProvider, ICryptoConfigurationProvider
   {
@@ -20,12 +20,12 @@ namespace Contrive.Auth.Web
       [DebuggerStepThrough] get { return GetEncryptionAlgorithmType(GetMachineKeySection().Decryption); }
     }
 
-    public byte[] ValidationKey
+    public byte[] HmacKey
     {
       [DebuggerStepThrough] get { return GetMachineKeySection().ValidationKey.HexToBinary(); }
     }
 
-    public Type ValidationAlgorithm
+    public Type HashAlgorithm
     {
       [DebuggerStepThrough] get { return GetValidationAlgorithmType(GetMachineKeySection().Validation); }
     }

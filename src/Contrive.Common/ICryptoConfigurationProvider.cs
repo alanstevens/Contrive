@@ -8,8 +8,8 @@ namespace Contrive.Common
 
     byte[] EncryptionKey { get; }
 
-    Type ValidationAlgorithm { get; }
+    Type HashAlgorithm { get; }
 
-    byte[] ValidationKey { get; }
+    byte[] HmacKey { get; }
   }
 }

@@ -68,9 +68,7 @@ namespace Contrive.Common.Async
                                                                 finally
                                                                 {
                                                                   if (indicateBusy)
-                                                                    _eventAggregator.Publish(
-                                                                                             new DataActionCompleteEvent
-                                                                                               ());
+                                                                    _eventAggregator.Publish(new DataActionCompleteEvent());
                                                                 }
                                                               };
 
