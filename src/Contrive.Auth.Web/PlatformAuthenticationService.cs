@@ -27,7 +27,7 @@ namespace Contrive.Auth.Web
 
     public void Unauthorize()
     {
-      HttpContext.Response.SetStatus(HttpStatusCode.Unauthorized);
+      HttpContext.Response.SetStatusAndReturn(HttpStatusCode.Unauthorized);
     }
   }
 }

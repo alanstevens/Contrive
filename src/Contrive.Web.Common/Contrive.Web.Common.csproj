@@ -64,18 +64,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache.cs" />
+    <Compile Include="Errors\ErrorViewBase.cs" />
+    <Compile Include="Errors\HttpErrorHandler.cs" />
+    <Compile Include="Errors\IErrorView.cs" />
+    <Compile Include="Errors\MvcErrorView.cs" />
     <Compile Include="HttpContextBaseExtensions.cs" />
     <Compile Include="IWebConfigurationProvider.cs" />
     <Compile Include="WebCryptoConfigurationProvider.cs" />
     <Compile Include="WebCryptographer.cs" />
     <Compile Include="Modules\ErrorHandlingModule.cs" />
-    <Compile Include="HttpErrorHandler.cs" />
     <Compile Include="Mvc\RemoteRequireHttpsAttribute.cs" />
     <Compile Include="Mvc\WebStartupTask.cs" />
     <Compile Include="WebConfigurationProvider.cs" />
     <Compile Include="HttpExceptionLogger.cs" />
     <Compile Include="LogErrorAttribute.cs" />
-    <Compile Include="Modules\BaseHttpModule.cs" />
+    <Compile Include="Modules\HttpModuleBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebForms\ControlViewBase.cs">
       <SubType>ASPXCodeBehind</SubType>

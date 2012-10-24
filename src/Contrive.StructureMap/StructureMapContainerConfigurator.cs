@@ -26,6 +26,7 @@ namespace Contrive.StructureMap
       var container = new Container();
 
       var serviceLocator = new StructureMapServiceLocator(container);
+
       ServiceLocator.SetLocatorProvider(() => serviceLocator);
 
       container.Configure(x =>

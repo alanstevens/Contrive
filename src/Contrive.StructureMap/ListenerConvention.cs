@@ -13,7 +13,7 @@ namespace Contrive.StructureMap
   {
     public void Process(Type type, Registry registry)
     {
-      Type interfaceType = null;
+      Type interfaceType;
 
       if (!type.TryGetInterface<IListener>(out interfaceType)) return;
 

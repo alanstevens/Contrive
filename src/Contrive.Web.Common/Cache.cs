@@ -15,12 +15,12 @@ namespace Contrive.Web.Common
       return HttpContext.Current.Cache.Get(key);
     }
 
-    public object Add(string key, object content)
+    public object Add(string key, object value)
     {
       var cache = HttpContext.Current.Cache;
       var absoluteExpiration = DateTime.Now.AddMinutes(_lifeSpan);
       var noSlidingExpiration = System.Web.Caching.Cache.NoSlidingExpiration;
-      return cache.Add(key, content, null, absoluteExpiration, noSlidingExpiration, CacheItemPriority.Normal, null);
+      return cache.Add(key, value, null, absoluteExpiration, noSlidingExpiration, CacheItemPriority.Normal, null);
     }
   }
 }

@@ -8,7 +8,9 @@ namespace Contrive.StructureMap
   {
     public StructureMapMvcStartupTask()
     {
-      DependencyResolver.SetResolver(new StructureMapDependencyResolver(ServiceLocator.Current.GetInstance<IContainer>()));
+        var container = ServiceLocator.Current.GetInstance<IContainer>();
+        var dependencyResolver = new StructureMapDependencyResolver(container);
+        DependencyResolver.SetResolver(dependencyResolver);
     }
   }
 }

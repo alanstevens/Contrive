@@ -1,42 +1,43 @@
-﻿using System;
-using System.Globalization;
-using System.Web;
-using Contrive.Common;
-using Contrive.Common.Extensions;
+﻿using Contrive.Common;
+using Contrive.Web.Common.Errors;
 using Microsoft.Practices.ServiceLocation;
 
 namespace Contrive.Web.Common.Modules
 {
-  public sealed class ErrorHandlingModule : DisposableBase, IHttpModule
+  public sealed class ErrorHandlingModule : HttpModuleBase
   {
     public ErrorHandlingModule()
     {
-      _httpErrorHandler = ServiceLocator.Current.GetInstance<HttpErrorHandler>();
+      var sl = ServiceLocator.Current;
+      var errorHandler = sl.GetInstance<HttpErrorHandler>();
+      var cryptographer = sl.GetInstance<ICryptographer>();
+      var errorToken = cryptographer.GenerateToken();
+      var request = _context.Request;
+      var response = _context.Response;
+      var currentError = _context.Error;
+      var isCustomErrorEnabled = _context.IsCustomErrorEnabled;
+      var contextItems = _context.Items;
+
+      OnError = () =>
+      {
+        errorHandler.HandleError(request, response, ERROR_STATUS_CODE, currentError, isCustomErrorEnabled);
+
+        contextItems.Add(errorToken, true);
+      };
+
+      OnEndRequest = () =>
+      {
+        if (!contextItems.Contains(errorToken) && response.StatusCode >= ERROR_STATUS_CODE)
+         errorHandler.HandleError(request, response, response.StatusCode, currentError, isCustomErrorEnabled);
+      };
     }
 
-    readonly HttpErrorHandler _httpErrorHandler;
+    const int ERROR_STATUS_CODE = 400;
 
-    public void Init(HttpApplication application)
+    protected override void OnDisposing(bool disposing)
     {
-      var context = new HttpContextWrapper(application.Context);
-      var errorHandledKey = DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture).CalculateHash();
-
-      application.Error += (s, e) =>
-                           {
-                             _httpErrorHandler.HandleError(context, 400);
-
-                             context.Items.Add(errorHandledKey, true);
-                           };
-
-      application.EndRequest +=
-        (s, e) => { if (!context.Items.Contains(errorHandledKey) && IsAnErrorResponse(context.Response)) _httpErrorHandler.HandleError(context, context.Response.StatusCode); };
+      OnError = null;
+      OnEndRequest = null;
     }
-
-    static bool IsAnErrorResponse(HttpResponseBase httpResponse)
-    {
-      return httpResponse.StatusCode >= 400;
-    }
-
-    protected override void OnDisposing(bool disposing) {}
   }
 }

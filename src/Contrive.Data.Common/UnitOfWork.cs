@@ -13,22 +13,23 @@ namespace Contrive.Data.Common
     public UnitOfWork()
     {
       _syncContext = SynchronizationContext.Current;
+
       if (_units.ContainsKey(_syncContext)) throw new Exception("Duplicate UnitOfWork instances for the current SynchronizationContext.");
 
       var success = false;
-      var count = 0;
 
-      while (!success)
+      for (int count = 0; count < 6; count++)
       {
-        count++;
         success = _units.TryAdd(_syncContext, this);
-        if (!success && count < 5) Thread.Sleep(1);
-        else
-        {
-          var exception = new Exception("UnitOfWork:  Failed to add synch context.");
-          this.LogException(exception);
-          throw exception;
-        }
+        if (success) break;
+        Thread.Sleep(1);
+      }
+
+      if (!success)
+      {
+        var exception = new Exception("UnitOfWork:  Failed to add synch context.");
+        this.LogException(exception);
+        throw exception;
       }
     }
 

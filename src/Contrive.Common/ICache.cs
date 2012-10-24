@@ -4,6 +4,6 @@
   {
     object Get(string key);
 
-    object Add(string key, object content);
+    object Add(string key, object value);
   }
 }

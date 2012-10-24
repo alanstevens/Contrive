@@ -4,7 +4,7 @@ using StructureMap;
 
 namespace Contrive.StructureMap
 {
-  public class RequestScopeModule : BaseHttpModule
+  public class RequestScopeModule : HttpModuleBase
   {
     public override void OnBeginRequest(HttpContextBase context) {}
 

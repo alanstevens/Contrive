@@ -8,7 +8,7 @@ namespace Contrive.StructureMap
   {
     public CommonRegistry()
     {
-      For<SynchronizationContext>().Singleton().Use(SynchronizationContext.Current);
+      For<SynchronizationContext>().Use(() => SynchronizationContext.Current);
       For<IEventAggregator>().Singleton().Use<EventAggregator>();
     }
   }

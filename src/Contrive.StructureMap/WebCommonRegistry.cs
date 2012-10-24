@@ -1,5 +1,6 @@
 using Contrive.Common;
 using Contrive.Web.Common;
+using Contrive.Web.Common.Errors;
 using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap
@@ -10,6 +11,7 @@ namespace Contrive.StructureMap
     {
       For<IWebConfigurationProvider>().Singleton().Use<WebConfigurationProvider>();
       For<ICache>().HttpContextScoped().Use<Cache>();
+      For<IErrorView>().Singleton().Use<MvcErrorView>();
     }
   }
 }
