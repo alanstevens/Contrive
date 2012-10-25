@@ -63,7 +63,6 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountValidation.cs" />
     <Compile Include="AuthenticationService.cs" />
     <Compile Include="CreateUserException.cs" />
     <Compile Include="IMembershipConfigurationProvider.cs" />

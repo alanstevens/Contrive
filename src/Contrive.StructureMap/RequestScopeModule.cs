@@ -1,4 +1,3 @@
-using System.Web;
 using Contrive.Web.Common.Modules;
 using StructureMap;
 
@@ -6,13 +5,11 @@ namespace Contrive.StructureMap
 {
   public class RequestScopeModule : HttpModuleBase
   {
-    public override void OnBeginRequest(HttpContextBase context) {}
-
-    public override void OnEndRequest(HttpContextBase context)
+    public RequestScopeModule()
     {
-      ObjectFactory.ReleaseAndDisposeAllHttpScopedObjects();
+      OnEndRequest = ObjectFactory.ReleaseAndDisposeAllHttpScopedObjects;
     }
 
-    protected override void OnDisposing(bool disposing) {}
+    protected override void OnDisposing(bool disposing) { }
   }
 }

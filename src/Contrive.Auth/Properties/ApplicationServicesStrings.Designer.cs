@@ -70,7 +70,7 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to A userName for that e-mail address already exists. Please enter a different e-mail address..
         /// </summary>
         internal static string UserManagement_DuplicateEmail {
             get {
@@ -79,7 +79,7 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator..
         /// </summary>
         internal static string UserManagement_DuplicateProviderUserKey {
             get {
@@ -88,7 +88,7 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Username already exists. Please enter a different user name..
         /// </summary>
         internal static string UserManagement_DuplicateUserName {
             get {
@@ -97,7 +97,7 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The password retrieval answer provided is invalid. Please check the value and try again..
         /// </summary>
         internal static string UserManagement_InvalidAnswer {
             get {
@@ -106,7 +106,7 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The e-mail address provided is invalid. Please check the value and try again..
         /// </summary>
         internal static string UserManagement_InvalidEmail {
             get {
@@ -115,7 +115,7 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The password provided is invalid. Please enter a valid password value..
         /// </summary>
         internal static string UserManagement_InvalidPassword {
             get {
@@ -124,7 +124,7 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator..
         /// </summary>
         internal static string UserManagement_InvalidProviderUserKey {
             get {
@@ -133,7 +133,7 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The password retrieval question provided is invalid. Please check the value and try again..
         /// </summary>
         internal static string UserManagement_InvalidQuestion {
             get {
@@ -142,7 +142,7 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The user name provided is invalid. Please check the value and try again..
         /// </summary>
         internal static string UserManagement_InvalidUserName {
             get {
@@ -160,7 +160,16 @@ namespace Contrive.Auth.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator..
+        /// </summary>
+        internal static string UserManagement_Service_Error {
+            get {
+                return ResourceManager.GetString("UserManagement_Service_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator..
         /// </summary>
         internal static string UserManagement_UserRejected {
             get {

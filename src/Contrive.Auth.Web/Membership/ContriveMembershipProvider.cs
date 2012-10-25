@@ -48,7 +48,7 @@ namespace Contrive.Auth.Web.Membership
 
     public override string PasswordStrengthRegularExpression { get { return _passwordStrengthRegularExpression; } }
 
-    IUserService GetUserService()
+    static IUserService GetUserService()
     {
       return ServiceLocator.Current.GetInstance<IUserService>();
     }

@@ -50,8 +50,8 @@ namespace Contrive.Auth.EntityFramework
     public DateTime? LastPasswordChangedDate { get; set; }
     public DateTime? LastActivityDate { get; set; }
 
-    //public bool IsLockedOut { get; set; }
-    //public DateTime? LastLockedOutDate { get; set; }
+    public bool IsLockedOut { get; set; }
+    public DateTime? LastLockedOutDate { get; set; }
 
     //Optional
     public string FirstName { get; set; }
@@ -60,7 +60,5 @@ namespace Contrive.Auth.EntityFramework
     public string Culture { get; set; }
 
     public string AuthDigest { get; set; }
-    public bool IsLockedOut { get; set; }
-    public DateTime LastLockedOutDate { get; set; }
   }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Security.Principal;
 using System.Web;
@@ -20,12 +21,22 @@ namespace Contrive.Auth.Web
       return true;
     }
 
-    public void SignOut()
+    public void SignOutCurrentUser()
     {
       FormsAuthentication.SignOut();
     }
 
-    public void Unauthorize()
+    public void SignOut(string userName)
+    {
+      FormsAuthentication.SignOut();
+    }
+
+    public void SignOut(Guid userId)
+    {
+      FormsAuthentication.SignOut();
+    }
+
+    public void Deauthorize()
     {
       HttpContext.Response.SetStatusAndReturn(HttpStatusCode.Unauthorized);
     }

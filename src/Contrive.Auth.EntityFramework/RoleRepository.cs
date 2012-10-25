@@ -25,7 +25,6 @@ namespace Contrive.Auth.EntityFramework
 
     public IEnumerable<IUser> FindUsersInRole(string roleName, string usernameToMatch)
     {
-      //var users = _repository.GetQuery().Select(r => r.Name == roleName).Where(r=>r.Users.Co)
       var usersInRole = GetRoleByName(roleName).Users;
 
       return usersInRole.Where(u => u.UserName.Contains(usernameToMatch));

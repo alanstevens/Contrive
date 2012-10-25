@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Contrive.Common.Extensions;
 
 namespace Contrive.Common
@@ -8,7 +9,6 @@ namespace Contrive.Common
   /// <summary>
   ///   Adapted from http://kigg.codeplex.com/
   /// </summary>
-  // TODO: HAS 10/14/2011 Localize string resources.
   [Serializable]
   public class Verify
   {
@@ -24,6 +24,18 @@ namespace Contrive.Common
     public static void NotEmpty(string argument, string argumentName)
     {
       if (string.IsNullOrEmpty((argument ?? string.Empty).Trim())) throw new ArgumentException(argumentName + " cannot be empty.", argumentName);
+    }
+
+    [DebuggerStepThrough]
+    public static void NotEmpty(int argument, string argumentName)
+    {
+      if (argument <= 0) throw new ArgumentException(argumentName + " cannot be empty.", argumentName);
+    }
+
+    [DebuggerStepThrough]
+    public static void NotEmpty(TimeSpan argument, string argumentName)
+    {
+      if (Math.Abs(argument.TotalMilliseconds - 0.0F) == 0) throw new ArgumentException(argumentName + " cannot be empty.", argumentName);
     }
 
     [DebuggerStepThrough]
@@ -128,11 +140,11 @@ namespace Contrive.Common
     }
 
     [DebuggerStepThrough]
-    public static void NotEmpty<T>(IList<T> argument, string argumentName)
+    public static void NotEmpty<T>(IEnumerable<T> argument, string argumentName)
     {
       NotNull(argument, argumentName);
 
-      if (argument.Count == 0) throw new ArgumentException("List cannot be empty.", argumentName);
+      if (!argument.Any()) throw new ArgumentException("Enumerable cannot be empty.", argumentName);
     }
 
     [DebuggerStepThrough]

@@ -49,12 +49,11 @@ namespace Contrive.Auth
         case "Hashed":
           PasswordFormat = UserPasswordFormat.Hashed;
           break;
-          //case "Encrypted":
-          //  _passwordFormat = UserPasswordFormat.Encrypted;
-          //  break;
-          //case "Clear":
-          //  _passwordFormat = UserPasswordFormat.Clear;
-          //  break;
+        case "Encrypted":
+          PasswordFormat = UserPasswordFormat.Encrypted;
+          break;
+        case "Clear":
+          throw new ArgumentException("Clear text password storage is not allowed.");
         default:
           throw new ProviderException("Password format not supported.");
       }

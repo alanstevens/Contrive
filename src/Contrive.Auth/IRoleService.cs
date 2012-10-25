@@ -24,6 +24,6 @@ namespace Contrive.Auth
 
     void AddUsersToRoles(string[] users, string[] roles);
 
-    void RemoveUsersFromRoles(string[] userNames, string[] roleNames);
+    void RemoveUsersFromRoles(string[] users, string[] roles);
   }
 }

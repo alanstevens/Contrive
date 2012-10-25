@@ -10,7 +10,7 @@ namespace Contrive.Web.Common.WebForms
 
     public override void Dispose()
     {
-      if ((_presenter != null)) _presenter.Dispose();
+      if (_presenter != null) _presenter.Dispose();
 
       base.Dispose();
     }

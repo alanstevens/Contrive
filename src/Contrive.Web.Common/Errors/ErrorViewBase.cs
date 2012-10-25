@@ -67,7 +67,7 @@ namespace Contrive.Web.Common.Errors
     {
       return request.ContentType.Contains("json")
                ? currentError.Message
-               : "An error occurred but we are unable to handle the request.ContentType [{0}]. Anyways, the error is: {1}"
+               : "An error occurred but we are unable to handle the request.ContentType [{0}]. The error is: {1}"
                   .FormatWith(request.ContentType, currentError.Message);
     }
 

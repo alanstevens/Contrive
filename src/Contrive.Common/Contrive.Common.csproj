@@ -78,7 +78,6 @@
     <Compile Include="EventAggregator.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
-    <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IConfigurationProvider.cs" />
     <Compile Include="ICryptoConfigurationProvider.cs" />
     <Compile Include="ICryptographer.cs" />

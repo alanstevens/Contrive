@@ -126,18 +126,27 @@ namespace Contrive.Auth
       _roleRepository.Insert(newRole);
     }
 
-    public void AddUsersToRoles(string[] userNames, string[] roleNames)
+    public void AddUsersToRoles(string[] users, string[] roles)
     {
-      AddUsersToRoles(GetUsersForUserNames(userNames), GetRolesForRoleNames(roleNames));
+      Verify.NotEmpty(users,"users");
+      Verify.NotEmpty(roles,"roles");
+
+      AddUsersToRoles(GetUsersForUserNames(users), GetRolesForRoleNames(roles));
     }
 
-    public void RemoveUsersFromRoles(string[] userNames, string[] roleNames)
+    public void RemoveUsersFromRoles(string[] users, string[] roles)
     {
-      RemoveUsersFromRoles(GetUsersForUserNames(userNames), GetRolesForRoleNames(roleNames));
+      Verify.NotEmpty(users,"users");
+      Verify.NotEmpty(roles,"roles");
+
+      RemoveUsersFromRoles(GetUsersForUserNames(users), GetRolesForRoleNames(roles));
     }
 
     public void AddUsersToRoles(IEnumerable<IUser> users, IEnumerable<IRole> roles)
     {
+      Verify.NotEmpty(users,"users");
+      Verify.NotEmpty(roles,"roles");
+
       foreach (var u in users)
       {
         var availableRoles = roles.Where(role => !u.Roles.Contains(role)).ToArray();
@@ -154,6 +163,9 @@ namespace Contrive.Auth
 
     public void RemoveUsersFromRoles(IEnumerable<IUser> users, IEnumerable<IRole> roles)
     {
+      Verify.NotEmpty(users,"users");
+      Verify.NotEmpty(roles,"roles");
+
       foreach (var u in users)
       {
         var availableRoles = roles.Where(role => u.Roles.Contains(role)).ToArray();
@@ -164,18 +176,19 @@ namespace Contrive.Auth
                               r.Users.Remove(u);
                               _roleRepository.Update(r);
                             });
+
         _userRepository.Update(u);
       }
     }
 
-    IEnumerable<IRole> GetRolesForRoleNames(IEnumerable<string> roleNames)
+    IEnumerable<IRole> GetRolesForRoleNames(IEnumerable<string> roles)
     {
-      return _roleRepository.GetRolesForRoleNames(roleNames).ToArray();
+      return _roleRepository.GetRolesForRoleNames(roles).ToArray();
     }
 
-    IEnumerable<IUser> GetUsersForUserNames(IEnumerable<string> userNames)
+    IEnumerable<IUser> GetUsersForUserNames(IEnumerable<string> users)
     {
-      return _userRepository.GetUsersForUserNames(userNames);
+      return _userRepository.GetUsersForUserNames(users);
     }
 
     IRole VerifyRole(string roleName)
