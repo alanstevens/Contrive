@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Configuration.Provider;
 using System.Text.RegularExpressions;
-using Contrive.Auth.Membership;
 using Contrive.Common;
 using Contrive.Common.Extensions;
-using Microsoft.Practices.ServiceLocation;
 
 namespace Contrive.Auth
 {
-    public class UserService:IUserService
+    public class UserService : IUserService
     {
         public UserService(IUserRepository userRepository,
                            ICryptographer cryptographer,
@@ -16,15 +14,14 @@ namespace Contrive.Auth
         {
             _userRepository = userRepository;
             _cryptographer = cryptographer;
-            Settings = settings;
+            _settings = settings;
         }
 
         const int MAX_HASHED_PASSWORD_LENGTH = 128;
 
         readonly ICryptographer _cryptographer;
+        readonly IUserServiceSettings _settings;
         readonly IUserRepository _userRepository;
-
-        public IUserServiceSettings Settings { get; private set; }
 
         public bool ChangePassword(string userName, string oldPassword, string newPassword)
         {
@@ -36,7 +33,7 @@ namespace Contrive.Auth
 
             var verificationSucceeded = VerifyPassword(user, oldPassword);
 
-            if (verificationSucceeded) SetPasswordFor(user, newPassword);
+            if (verificationSucceeded) {}
 
             return verificationSucceeded;
         }
@@ -54,55 +51,6 @@ namespace Contrive.Auth
             Verify.NotEmpty(password, "password");
 
             return VerifyUser(GetUserByUserName(userName), password);
-        }
-
-        public UserCreateStatus CreateUser(string userName,
-                                           string password,
-                                           string emailAddress,
-                                           bool isApproved = true)
-        {
-            Verify.NotEmpty(userName, "userName");
-            Verify.NotEmpty(password, "password");
-            Verify.NotEmpty(emailAddress, "emailAddress");
-
-            if (Settings.RequiresQuestionAndAnswer)
-            {
-                throw new NotSupportedException(
-                  "Contrive: RequiresQuestionAndAnswer not supported.");
-            }
-
-            if (!IsValidPassword(password)) return UserCreateStatus.InvalidPassword;
-
-            if (Settings.RequiresUniqueEmail)
-            {
-                var emailUser = GetUserByEmailAddress(emailAddress);
-                if (emailUser != null) return UserCreateStatus.DuplicateEmail;
-            }
-
-            var existingUser = GetUserByUserName(userName);
-
-            if (existingUser != null) return UserCreateStatus.DuplicateUserName;
-
-            var passwordSalt = _cryptographer.GenerateSalt();
-
-            var newUser = ServiceLocator.Current.GetInstance<IUserExtended>();
-
-            newUser.Id = Guid.NewGuid();
-            newUser.UserName = userName;
-            newUser.PasswordSalt = passwordSalt;
-            newUser.Email = emailAddress;
-            newUser.IsApproved = isApproved;
-            // TODO: HAS 10/23/2011 Read setting for require confirmation.
-            newUser.IsConfirmed = true;
-            newUser.DateCreated = DateTime.UtcNow;
-            newUser.IsLockedOut = false;
-            newUser.LastLockedOutDate = DateTime.MinValue;
-
-            SetPasswordFor(newUser, password);
-
-            _userRepository.Insert(newUser);
-
-            return UserCreateStatus.Success;
         }
 
         public bool DeleteAccount(string userName)
@@ -129,6 +77,55 @@ namespace Contrive.Auth
             _userRepository.Update(user);
         }
 
+        public UserCreateStatus CreateUser(string userName,
+                                           string password,
+                                           string emailAddress,
+                                           string firstName = null,
+                                           string lastName = null)
+        {
+            Verify.NotEmpty(userName, "userName");
+            Verify.NotEmpty(password, "password");
+            Verify.NotEmpty(emailAddress, "emailAddress");
+
+            if (!IsValidPassword(password)) return UserCreateStatus.InvalidPassword;
+
+            if (_settings.RequiresUniqueEmail)
+            {
+                var emailUser = GetUserByEmailAddress(emailAddress);
+                if (emailUser != null) return UserCreateStatus.DuplicateEmail;
+            }
+
+            var existingUser = GetUserByUserName(userName);
+
+            if (existingUser != null) return UserCreateStatus.DuplicateUserName;
+
+            var newUser = NewUser();
+            var passwordSalt = _cryptographer.GenerateSalt();
+
+            newUser.Id = Guid.NewGuid();
+            newUser.UserName = userName;
+            newUser.FirstName = firstName;
+            newUser.FirstName = lastName;
+            newUser.PasswordSalt = passwordSalt;
+            newUser.Email = emailAddress;
+            try
+            {
+                newUser.Password = EncodePassword(password, passwordSalt);
+            }
+            catch (ArgumentException e)
+            {
+        return UserCreateStatus.PasswordTooLong;
+            }
+            _userRepository.Insert(newUser);
+
+            return UserCreateStatus.Success;
+        }
+
+        protected virtual IUser NewUser()
+        {
+            return new User();
+        }
+
         IUser VerifyUserExists(string userName)
         {
             var user = GetUserByUserName(userName);
@@ -137,18 +134,6 @@ namespace Contrive.Auth
                 throw new InvalidOperationException(string.Format("User not found: {0}", userName));
 
             return user;
-        }
-
-        protected virtual void SetPasswordFor(IUser user, string password)
-        {
-            if (!IsValidPassword(password)) throw new ArgumentException("Password is invalid");
-
-            var newEncodedPassword = EncodePassword(password, user.PasswordSalt);
-
-            if (newEncodedPassword.Length > MAX_HASHED_PASSWORD_LENGTH)
-                throw new ArgumentException("Password too long");
-
-            user.Password = newEncodedPassword;
         }
 
         bool VerifyPassword(IUser user, string password)
@@ -170,22 +155,20 @@ namespace Contrive.Auth
 
             if (user == null) return false;
 
-            var userex = user.As<IUserExtended>();
+            var verified = VerifyPassword(user, password);
 
-            if (!userex.IsConfirmed) return false;
-
-            var verified = VerifyPassword(userex, password);
-
-            _userRepository.Update(userex);
+            _userRepository.Update(user);
 
             return verified;
         }
 
         string EncodePassword(string password, string passwordSalt)
         {
+            if (!IsValidPassword(password)) throw new ArgumentException("Password is invalid");
+
             string encodedPassword;
 
-            switch (Settings.PasswordFormat)
+            switch (_settings.PasswordFormat)
             {
                 case UserPasswordFormat.Clear:
                     throw new ArgumentException("Clear password storage is not allowed.");
@@ -198,6 +181,9 @@ namespace Contrive.Auth
                 default:
                     throw new ProviderException("Unsupported password format.");
             }
+        
+            if (encodedPassword.Length > MAX_HASHED_PASSWORD_LENGTH)
+                throw new ArgumentException("Password too long");
 
             return encodedPassword;
         }
@@ -205,18 +191,18 @@ namespace Contrive.Auth
         bool IsValidPassword(string password)
         {
             Verify.NotEmpty(password, "password");
-            if (password.Length < Settings.MinRequiredPasswordLength) return false;
+            if (password.Length < _settings.MinRequiredPasswordLength) return false;
 
-            if (Settings.MinRequiredNonAlphanumericCharacters > 0)
+            if (_settings.MinRequiredNonAlphanumericCharacters > 0)
             {
                 var nonAlpahNumericCharsCount = Regex.Matches(password, "[^a-zA-Z0-9]").Count;
-                if (nonAlpahNumericCharsCount < Settings.MinRequiredNonAlphanumericCharacters)
+                if (nonAlpahNumericCharsCount < _settings.MinRequiredNonAlphanumericCharacters)
                     return false;
             }
 
-            if (!Settings.PasswordStrengthRegularExpression.IsEmpty())
+            if (!_settings.PasswordStrengthRegularExpression.IsEmpty())
             {
-                if (!Regex.IsMatch(password, Settings.PasswordStrengthRegularExpression))
+                if (!Regex.IsMatch(password, _settings.PasswordStrengthRegularExpression))
                     return false;
             }
 

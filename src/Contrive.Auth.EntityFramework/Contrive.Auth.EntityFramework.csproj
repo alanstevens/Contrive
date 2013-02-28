@@ -74,7 +74,6 @@
     <Compile Include="Repository.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="RoleRepository.cs" />
-    <Compile Include="User.cs" />
     <Compile Include="UserExtendedRepository.cs" />
     <Compile Include="UserRepository.cs" />
   </ItemGroup>

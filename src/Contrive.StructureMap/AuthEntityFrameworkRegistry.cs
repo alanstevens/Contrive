@@ -15,7 +15,7 @@ namespace Contrive.StructureMap
       For<IUserExtendedRepository>().Singleton().Use<UserExtendedRepository>();
       For<IRoleRepository>().Singleton().Use<RoleRepository>();
       For<IRole>().Use<Role>();
-      For<IUserExtended>().Use<User>();
+      For<IUserExtended>().Use<UserExtended>();
     }
   }
 }

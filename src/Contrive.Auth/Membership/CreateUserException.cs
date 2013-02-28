@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Contrive.Auth.Properties;
 
-namespace Contrive.Auth
+namespace Contrive.Auth.Membership
 {
   [Serializable]
   public class CreateUserException : Exception

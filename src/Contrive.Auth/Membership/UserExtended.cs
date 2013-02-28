@@ -1,26 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Contrive.Auth.Membership;
 
-namespace Contrive.Auth.EntityFramework
+namespace Contrive.Auth.Membership
 {
-  public class User : IUserExtended
+  public class UserExtended : IUserExtended
   {
     [Key]
     public Guid Id { get; set; }
 
     [Required]
-    [MaxLength(100)]
     public string UserName { get; set; }
 
     [Required]
-    [MaxLength(256)]
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
 
     [Required]
-    [MaxLength(128)]
     [DataType(DataType.Password)]
     public string Password { get; set; }
 

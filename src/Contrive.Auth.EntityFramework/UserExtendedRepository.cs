@@ -63,19 +63,19 @@ namespace Contrive.Auth.EntityFramework
 
     public void Insert(IUserExtended user)
     {
-      _repository.Insert(user.As<User>());
+      _repository.Insert(user.As<UserExtended>());
       SaveChanges();
     }
 
     public void Update(IUserExtended user)
     {
-      _repository.Update(user.As<User>());
+      _repository.Update(user.As<UserExtended>());
       SaveChanges();
     }
 
     public void Delete(IUserExtended user)
     {
-      _repository.Delete(user.As<User>());
+      _repository.Delete(user.As<UserExtended>());
       SaveChanges();
     }
 

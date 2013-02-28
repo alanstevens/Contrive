@@ -1,22 +1,23 @@
-
 namespace Contrive.Auth
 {
-  public interface IUserService
-  {
-    IUserServiceSettings Settings { get; }
+    public interface IUserService
+    {
+        bool ChangePassword(string userName, string oldPassword, string newPassword);
 
-    bool ChangePassword(string userName, string oldPassword, string newPassword);
+        IUser GetUserByUserName(string userName);
 
-    IUser GetUserByUserName(string userName);
+        bool ValidateUser(string userName, string password);
 
-    bool ValidateUser(string userName, string password);
+        UserCreateStatus CreateUser(string userName,
+                                    string password,
+                                    string emailAddress,
+                                    string firstName = null,
+                                    string lastName = null);
 
-    UserCreateStatus CreateUser(string userName, string password, string emailAddress, bool isApproved = true);
+        bool DeleteAccount(string userName);
 
-    bool DeleteAccount(string userName);
+        IUser GetUserByEmailAddress(string emailAddress);
 
-    IUser GetUserByEmailAddress(string emailAddress);
-
-    void UpdateUser(IUser user);
-  }
+        void UpdateUser(IUser user);
+    }
 }
