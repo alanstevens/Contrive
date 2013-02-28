@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Contrive.Auth
+namespace Contrive.Auth.Membership
 {
   public interface IRoleService
   {
@@ -12,9 +12,9 @@ namespace Contrive.Auth
 
     IEnumerable<IRole> GetAllRoles();
 
-    IEnumerable<IUser> GetUsersInRole(string roleName);
+    IEnumerable<IUserExtended> GetUsersInRole(string roleName);
 
-    IEnumerable<IUser> FindUsersInRole(string roleName, string usernameToMatch);
+    IEnumerable<IUserExtended> FindUsersInRole(string roleName, string usernameToMatch);
 
     bool DeleteRole(string roleName, bool throwOnPopulatedRole = false);
 

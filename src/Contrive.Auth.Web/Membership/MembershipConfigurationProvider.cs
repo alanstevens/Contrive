@@ -1,9 +1,10 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Web.Configuration;
+using Contrive.Auth.Membership;
 using Contrive.Common;
 
-namespace Contrive.Auth.Web
+namespace Contrive.Auth.Web.Membership
 {
   public class MembershipConfigurationProvider : ConfigurationProvider, IMembershipConfigurationProvider
   {

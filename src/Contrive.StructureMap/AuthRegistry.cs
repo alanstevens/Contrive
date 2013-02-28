@@ -1,5 +1,7 @@
 ﻿using Contrive.Auth;
+using Contrive.Auth.Membership;
 using Contrive.Auth.Web;
+using Contrive.Auth.Web.Membership;
 using Contrive.Common;
 using Microsoft.Practices.ServiceLocation;
 using StructureMap.Configuration.DSL;
@@ -11,9 +13,9 @@ namespace Contrive.StructureMap
         public AuthRegistry()
         {
             For<IMembershipConfigurationProvider>().Singleton().Use<MembershipConfigurationProvider>();
-            For<UserService>().Singleton();
-            Forward<UserService, IUserService>();
-            Forward<UserService, IUserServiceExtended>();
+            For<UserServiceExtended>().Singleton();
+            Forward<UserServiceExtended, IUserService>();
+            Forward<UserServiceExtended, IUserServiceExtended>();
             For<IRoleService>().Singleton().Use<RoleService>();
             For<ISecurityService>().Singleton().Use<SecurityService>();
 

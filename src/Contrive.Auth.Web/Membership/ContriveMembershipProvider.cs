@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Configuration.Provider;
 using System.Web.Security;
 using AutoMapper;
+using Contrive.Auth.Membership;
 using Contrive.Common;
 using Contrive.Common.Extensions;
 using Microsoft.Practices.ServiceLocation;
@@ -48,9 +49,9 @@ namespace Contrive.Auth.Web.Membership
 
     public override string PasswordStrengthRegularExpression { get { return _passwordStrengthRegularExpression; } }
 
-    static IUserService GetUserService()
+    static IUserServiceExtended GetUserService()
     {
-      return ServiceLocator.Current.GetInstance<IUserService>();
+      return ServiceLocator.Current.GetInstance<IUserServiceExtended>();
     }
 
     public override void Initialize(string name, NameValueCollection config)

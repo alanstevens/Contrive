@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime;
+using Contrive.Auth.Membership;
 
 namespace Contrive.Auth.Web.Membership
 {

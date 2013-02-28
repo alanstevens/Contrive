@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 
 namespace Contrive.Auth
 {
@@ -17,16 +16,6 @@ namespace Contrive.Auth
     bool DeleteAccount(string userName);
 
     IUser GetUserByEmailAddress(string emailAddress);
-
-    string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow);
-
-    bool ResetPasswordWithToken(string token, string newPassword);
-
-    IUser GetUserFromPasswordResetToken(string token);
-
-    IEnumerable<IUser> FindUsersForUserName(string searchTerm);
-
-    IEnumerable<IUser> FindUsersForEmailAddress(string searchTerm);
 
     void UpdateUser(IUser user);
   }

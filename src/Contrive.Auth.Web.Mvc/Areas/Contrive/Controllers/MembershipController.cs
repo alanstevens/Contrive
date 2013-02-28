@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Contrive.Auth.Membership;
 using Contrive.Auth.Web.Mvc.Areas.Contrive.Models;
 using Contrive.Common;
 
@@ -10,14 +11,14 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
   [Authorize(Roles = "Admin")]
   public class MembershipController : Controller
   {
-    public MembershipController(IRoleService roleService, IUserService userService)
+    public MembershipController(IRoleService roleService, IUserServiceExtended userService)
     {
       _roleService = roleService;
       _userService = userService;
     }
 
     readonly IRoleService _roleService;
-    readonly IUserService _userService;
+    readonly IUserServiceExtended _userService;
 
     public virtual ActionResult Index(string searchterm, string filterby)
     {

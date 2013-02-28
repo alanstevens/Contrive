@@ -1,5 +1,6 @@
 using System.Data.Entity;
 using System.Linq;
+using Contrive.Auth.Membership;
 using Contrive.Common.Extensions;
 using Microsoft.Practices.ServiceLocation;
 

@@ -1,6 +1,6 @@
 using System;
 
-namespace Contrive.Auth
+namespace Contrive.Auth.Membership
 {
   public interface IProfile
   {

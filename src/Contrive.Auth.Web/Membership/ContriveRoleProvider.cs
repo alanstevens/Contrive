@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Configuration.Provider;
 using System.Linq;
 using System.Web.Security;
+using Contrive.Auth.Membership;
 using Contrive.Common;
 using Contrive.Common.Extensions;
 using Microsoft.Practices.ServiceLocation;

@@ -5,12 +5,12 @@ using Contrive.Common;
 using Contrive.Common.Extensions;
 using Microsoft.Practices.ServiceLocation;
 
-namespace Contrive.Auth
+namespace Contrive.Auth.Membership
 {
   public class RoleService : IRoleService
   {
     public RoleService(IRoleRepository roleRepository,
-                       IUserRepository userRepository,
+                       IUserExtendedRepository userRepository,
                        IMembershipConfigurationProvider configuration)
     {
       _roleRepository = roleRepository;
@@ -30,7 +30,7 @@ namespace Contrive.Auth
     }
 
     readonly IRoleRepository _roleRepository;
-    readonly IUserRepository _userRepository;
+    readonly IUserExtendedRepository _userRepository;
 
     public string ApplicationName { get; set; }
 
@@ -62,7 +62,7 @@ namespace Contrive.Auth
       return _roleRepository.GetAll();
     }
 
-    public IEnumerable<IUser> GetUsersInRole(string roleName)
+    public IEnumerable<IUserExtended> GetUsersInRole(string roleName)
     {
       Verify.NotEmpty(roleName, "roleName");
 
@@ -71,7 +71,7 @@ namespace Contrive.Auth
       return role.Users;
     }
 
-    public IEnumerable<IUser> FindUsersInRole(string roleName, string usernameToMatch)
+    public IEnumerable<IUserExtended> FindUsersInRole(string roleName, string usernameToMatch)
     {
       Verify.NotEmpty(roleName, "roleName");
       Verify.NotEmpty(usernameToMatch, "usernameToMatch");
@@ -142,7 +142,7 @@ namespace Contrive.Auth
       RemoveUsersFromRoles(GetUsersForUserNames(users), GetRolesForRoleNames(roles));
     }
 
-    public void AddUsersToRoles(IEnumerable<IUser> users, IEnumerable<IRole> roles)
+    public void AddUsersToRoles(IEnumerable<IUserExtended> users, IEnumerable<IRole> roles)
     {
       Verify.NotEmpty(users,"users");
       Verify.NotEmpty(roles,"roles");
@@ -161,7 +161,7 @@ namespace Contrive.Auth
       }
     }
 
-    public void RemoveUsersFromRoles(IEnumerable<IUser> users, IEnumerable<IRole> roles)
+    public void RemoveUsersFromRoles(IEnumerable<IUserExtended> users, IEnumerable<IRole> roles)
     {
       Verify.NotEmpty(users,"users");
       Verify.NotEmpty(roles,"roles");
@@ -186,7 +186,7 @@ namespace Contrive.Auth
       return _roleRepository.GetRolesForRoleNames(roles).ToArray();
     }
 
-    IEnumerable<IUser> GetUsersForUserNames(IEnumerable<string> users)
+    IEnumerable<IUserExtended> GetUsersForUserNames(IEnumerable<string> users)
     {
       return _userRepository.GetUsersForUserNames(users);
     }
@@ -199,7 +199,7 @@ namespace Contrive.Auth
       return role;
     }
 
-    IUser VerifyUser(string userName)
+    IUserExtended VerifyUser(string userName)
     {
       var user = _userRepository.GetUserByUserName(userName);
 

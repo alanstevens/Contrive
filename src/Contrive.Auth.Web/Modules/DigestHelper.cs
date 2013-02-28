@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Principal;
 using System.Text;
 using System.Web;
+using Contrive.Auth.Membership;
 using Contrive.Common;
 using Contrive.Common.Extensions;
 using Microsoft.Practices.ServiceLocation;
@@ -14,13 +15,13 @@ namespace Contrive.Auth.Web.Modules
     static DigestHelper()
     {
       _config = ServiceLocator.Current.GetInstance<IConfigurationProvider>();
-      _userService = ServiceLocator.Current.GetInstance<IUserService>();
+      _userService = ServiceLocator.Current.GetInstance<IUserServiceExtended>();
       _cryptographer = ServiceLocator.Current.GetInstance<ICryptographer>();
     }
 
     const string AUTHENTICATION_METHOD_NAME = "HTTPDigest.Components.AuthDigest";
     static readonly IConfigurationProvider _config;
-    static readonly IUserService _userService;
+    static readonly IUserServiceExtended _userService;
     static readonly ICryptographer _cryptographer;
 
     static string GenerateNonce()

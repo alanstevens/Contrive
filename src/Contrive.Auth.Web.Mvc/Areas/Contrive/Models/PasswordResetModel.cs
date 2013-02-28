@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using Contrive.Auth.Membership;
 
 namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Models
 {
   public class PasswordResetModel
   {
-    public IUser User { get; set; }
+    public IUserExtended User { get; set; }
 
     [Required]
     [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]

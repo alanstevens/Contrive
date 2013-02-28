@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Linq;
 using Contrive.Auth;
+using Contrive.Auth.Membership;
 using Contrive.Tests.SubSpec;
 using FluentAssertions;
 using Microsoft.Practices.ServiceLocation;
@@ -21,10 +22,10 @@ namespace Contrive.Tests
     readonly Mock<IRole> _roleMock2 = new Mock<IRole>();
     readonly Mock<IRoleRepository> _roleRepository = new Mock<IRoleRepository>();
     readonly RoleService _roleService;
-    readonly Mock<IUser> _userMock2 = new Mock<IUser>();
-    readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
+    readonly Mock<IUserExtended> _userMock2 = new Mock<IUserExtended>();
+    readonly Mock<IUserExtendedRepository> _userRepository = new Mock<IUserExtendedRepository>();
     readonly Mock<IRole> roleMock = new Mock<IRole>();
-    readonly Mock<IUser> userMock = new Mock<IUser>();
+    readonly Mock<IUserExtended> userMock = new Mock<IUserExtended>();
     string roleName = "admin";
     string userName = "someUser";
 
@@ -86,7 +87,7 @@ namespace Contrive.Tests
     {
       SetupUser();
       SetupRole();
-      IEnumerable<IUser> usersInRole = null;
+      IEnumerable<IUserExtended> usersInRole = null;
       "Given ".Context(
                        () => { _roleRepository.Setup(rr => rr.GetRoleByName(It.IsAny<string>())).Returns(roleMock.Object); });
       "When ".Do(() => usersInRole = _roleService.FindUsersInRole(roleName, userName.Substring(0, 4)));
@@ -160,8 +161,8 @@ namespace Contrive.Tests
                          SetupEmptyLists();
                          userMock.Object.Roles = new List<IRole> {roleMock.Object, _roleMock2.Object};
                          _userMock2.Object.Roles = new List<IRole> {roleMock.Object, _roleMock2.Object};
-                         roleMock.Object.Users = new List<IUser> {userMock.Object, _userMock2.Object};
-                         _roleMock2.Object.Users = new List<IUser> {userMock.Object, _userMock2.Object};
+                         roleMock.Object.Users = new List<IUserExtended> {userMock.Object, _userMock2.Object};
+                         _roleMock2.Object.Users = new List<IUserExtended> {userMock.Object, _userMock2.Object};
                        });
       "When ".Do(
                  () =>
@@ -180,10 +181,10 @@ namespace Contrive.Tests
     {
       roleMock.SetupAllProperties();
       roleMock.SetupGet(r => r.Name).Returns(roleName);
-      roleMock.SetupGet(r => r.Users).Returns(new List<IUser>());
+      roleMock.SetupGet(r => r.Users).Returns(new List<IUserExtended>());
       _roleMock2.SetupAllProperties();
       _roleMock2.SetupGet(r => r.Name).Returns("user");
-      _roleMock2.SetupGet(r => r.Users).Returns(new List<IUser>());
+      _roleMock2.SetupGet(r => r.Users).Returns(new List<IUserExtended>());
       userMock.SetupAllProperties();
       userMock.SetupGet(u => u.UserName).Returns(userName);
       userMock.SetupGet(u => u.Roles).Returns(new List<IRole>());
@@ -196,7 +197,7 @@ namespace Contrive.Tests
     {
       roleMock.SetupAllProperties();
       roleMock.SetupGet(r => r.Name).Returns(roleName);
-      roleMock.SetupGet(r => r.Users).Returns(new List<IUser> {userMock.Object});
+      roleMock.SetupGet(r => r.Users).Returns(new List<IUserExtended> {userMock.Object});
     }
 
     void SetupUser()

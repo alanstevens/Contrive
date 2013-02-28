@@ -1,4 +1,5 @@
 using System.Web.Mvc;
+using Contrive.Auth.Membership;
 using Contrive.Auth.Web.Mvc.Areas.Contrive.Models;
 
 namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers

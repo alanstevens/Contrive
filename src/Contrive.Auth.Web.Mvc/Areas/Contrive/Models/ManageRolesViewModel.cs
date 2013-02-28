@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using Contrive.Auth.Membership;
 
 namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Models
 {

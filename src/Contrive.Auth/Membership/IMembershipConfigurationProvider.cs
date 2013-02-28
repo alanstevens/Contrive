@@ -1,7 +1,7 @@
 using System.Collections.Specialized;
 using Contrive.Common;
 
-namespace Contrive.Auth
+namespace Contrive.Auth.Membership
 {
   public interface IMembershipConfigurationProvider : IConfigurationProvider
   {

@@ -1,6 +1,7 @@
 using System;
 using System.Web.Mvc;
 using System.Web.Security;
+using Contrive.Auth.Membership;
 using Contrive.Auth.Web.Mvc.Areas.Contrive.Models;
 using Contrive.Common;
 using Contrive.Common.Extensions;
@@ -9,7 +10,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
 {
   public class ContriveAccountController : Controller
   {
-    public ContriveAccountController(IUserService userService,
+    public ContriveAccountController(IUserServiceExtended userService,
                                      IAuthenticationService authenticationService,
                                      IEmailService emailService)
     {
@@ -21,7 +22,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
     const int ONE_DAY_IN_MINUTES = 24*60;
     readonly IAuthenticationService _authenticationService;
     readonly IEmailService _emailService;
-    readonly IUserService _userService;
+    readonly IUserServiceExtended _userService;
 
     public virtual ActionResult Index()
     {
@@ -83,14 +84,15 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
       {
         // Attempt to register the user
         MembershipCreateStatus createStatus;
-        Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, out createStatus);
+          // TODO: HAS 02/27/2013 Fix the namespacing for Membership here!
+        //Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, out createStatus);
 
-        if (createStatus == MembershipCreateStatus.Success)
-        {
-          FormsAuthentication.SetAuthCookie(model.UserName, createPersistentCookie: false);
-          return RedirectToAction("Index", "Home");
-        }
-        else ModelState.AddModelError("", ErrorCodeToString(createStatus));
+        ////if (createStatus == MembershipCreateStatus.Success)
+        //{
+        //  FormsAuthentication.SetAuthCookie(model.UserName, createPersistentCookie: false);
+        //  return RedirectToAction("Index", "Home");
+        //}
+        //else ModelState.AddModelError("", ErrorCodeToString(createStatus));
       }
 
       return RedirectToAction("Register");

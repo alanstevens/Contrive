@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
+using Contrive.Auth.Membership;
 using Contrive.Common;
 using Contrive.Common.Extensions;
 
-namespace Contrive.Auth
+namespace Contrive.Auth.Web.Membership
 {
   /// <summary>
   ///   Duplicates the functionality of the WebSecurity class from ASP.NET WebPages.

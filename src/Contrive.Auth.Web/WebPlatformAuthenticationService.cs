@@ -7,7 +7,7 @@ using Contrive.Web.Common;
 
 namespace Contrive.Auth.Web
 {
-  public class PlatformAuthenticationService : IPlatformAuthenticationService
+  public class WebPlatformAuthenticationService : IPlatformAuthenticationService
   {
     static HttpContextBase HttpContext { get { return new HttpContextWrapper(System.Web.HttpContext.Current); } }
 

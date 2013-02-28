@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Contrive.Auth.Membership;
 
 namespace Contrive.Auth.EntityFramework
 {
@@ -16,6 +17,6 @@ namespace Contrive.Auth.EntityFramework
     [MaxLength(250)]
     public string Description { get; set; }
 
-    public ICollection<IUser> Users { get; set; }
+    public ICollection<IUserExtended> Users { get; set; }
   }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
-using Contrive.Auth;
 using Contrive.Auth.EntityFramework;
+using Contrive.Auth.Membership;
 using Contrive.Common;
 using StructureMap.Configuration.DSL;
 
@@ -12,10 +12,10 @@ namespace Contrive.StructureMap
     {
       For<DbContext>().HybridHttpOrThreadLocalScoped().Use<ContriveContext>();
       For(typeof (IRepository<>)).HybridHttpOrThreadLocalScoped().Use(typeof (Repository<>));
-      For<IUserRepository>().Singleton().Use<UserRepository>();
+      For<IUserExtendedRepository>().Singleton().Use<UserExtendedRepository>();
       For<IRoleRepository>().Singleton().Use<RoleRepository>();
       For<IRole>().Use<Role>();
-      For<IUser>().Use<User>();
+      For<IUserExtended>().Use<User>();
     }
   }
 }

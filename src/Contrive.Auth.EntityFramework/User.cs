@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Contrive.Auth.Membership;
 
 namespace Contrive.Auth.EntityFramework
 {
-  public class User : IUser
+  public class User : IUserExtended
   {
     [Key]
     public Guid Id { get; set; }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Contrive.Auth.Membership;
 using Contrive.Common.Extensions;
 
 namespace Contrive.Auth.EntityFramework
@@ -23,7 +24,7 @@ namespace Contrive.Auth.EntityFramework
       return _repository.FirstOrDefault(r => r.Name == roleName);
     }
 
-    public IEnumerable<IUser> FindUsersInRole(string roleName, string usernameToMatch)
+    public IEnumerable<IUserExtended> FindUsersInRole(string roleName, string usernameToMatch)
     {
       var usersInRole = GetRoleByName(roleName).Users;
 
