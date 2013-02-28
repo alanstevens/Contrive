@@ -4,11 +4,11 @@ using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap
 {
-  public class DataRegistry : Registry
-  {
-    public DataRegistry()
+    public class DataRegistry : Registry
     {
-      For<IUnitOfWork>().HybridHttpOrThreadLocalScoped().Use<UnitOfWork>();
+        public DataRegistry()
+        {
+            For<IUnitOfWork>().HybridHttpOrThreadLocalScoped().Use<UnitOfWork>();
+        }
     }
-  }
 }

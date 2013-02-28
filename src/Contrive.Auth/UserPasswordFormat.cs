@@ -1,9 +1,9 @@
 namespace Contrive.Auth
 {
-  public enum UserPasswordFormat
-  {
-    Clear,
-    Hashed,
-    Encrypted,
-  }
+    public enum UserPasswordFormat
+    {
+        Clear,
+        Hashed,
+        Encrypted,
+    }
 }

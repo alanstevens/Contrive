@@ -1,6 +1,5 @@
 ﻿using Contrive.Auth;
 using Contrive.Auth.Membership;
-using Contrive.Auth.Web;
 using Contrive.Auth.Web.Membership;
 using Contrive.Common;
 using Microsoft.Practices.ServiceLocation;
@@ -21,7 +20,8 @@ namespace Contrive.StructureMap
 
             var sl = ServiceLocator.Current;
             var cryptoConfig = sl.GetInstance<ICryptoConfigurationProvider>();
-            var cryptographer = new Cryptographer(cryptoConfig.EncryptionKey, cryptoConfig.EncryptionAlgorithm, cryptoConfig.HmacKey, cryptoConfig.HashAlgorithm);
+            var cryptographer = new Cryptographer(cryptoConfig.EncryptionKey, cryptoConfig.EncryptionAlgorithm, cryptoConfig.HmacKey,
+                                                  cryptoConfig.HashAlgorithm);
             For<ICryptographer>().Singleton().Use(cryptographer);
 
             var userServiceConfig = sl.GetInstance<IMembershipConfigurationProvider>().UserServiceConfiguration;

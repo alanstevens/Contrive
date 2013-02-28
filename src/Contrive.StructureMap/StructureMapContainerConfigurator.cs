@@ -8,47 +8,49 @@ using StructureMap.ServiceLocatorAdapter;
 
 namespace Contrive.StructureMap
 {
-  public static class StructureMapContainerConfigurator
-  {
-    public static bool Configured { get; private set; }
-
-    public static void ConfigureWith(string assemblyDirectory,
-                                     string rootNamespace,
-                                     Action<IAssemblyScanner> customScanner = null,
-                                     Action<ConfigurationExpression> interceptors = null)
+    public static class StructureMapContainerConfigurator
     {
-      if (Configured) return;
+        public static bool Configured { get; private set; }
 
-      if (customScanner.IsNull()) customScanner = s => { };
+        public static void ConfigureWith(string assemblyDirectory,
+                                         string rootNamespace,
+                                         Action<IAssemblyScanner> customScanner = null,
+                                         Action<ConfigurationExpression> interceptors = null)
+        {
+            if (Configured) return;
 
-      if (interceptors.IsNull()) interceptors = x => { };
+            if (customScanner.IsNull()) customScanner = s => { };
 
-      var container = new Container();
+            if (interceptors.IsNull()) interceptors = x => { };
 
-      var serviceLocator = new StructureMapServiceLocator(container);
+            var container = new Container();
 
-      ServiceLocator.SetLocatorProvider(() => serviceLocator);
+            var serviceLocator = new StructureMapServiceLocator(container);
 
-      container.Configure(x =>
-                          {
-                            x.For<IContainer>().Use(container);
-                            x.For<IServiceLocator>().Singleton().Use(serviceLocator);
-                            interceptors(x);
-                            x.Scan(s =>
-                                   {
-                                     s.Assembly(Assembly.GetEntryAssembly());
-                                     s.Assembly(Assembly.GetExecutingAssembly());
-                                     if (assemblyDirectory.IsNotBlank() && rootNamespace.IsNotBlank())
-                                       s.AssembliesFromPath(assemblyDirectory,
-                                                            assembly =>
-                                                            assembly.GetName().Name.StartsWith(rootNamespace));
-                                     s.WithDefaultConventions();
-                                     s.LookForRegistries();
-                                     customScanner(s);
-                                   });
-                          });
+            ServiceLocator.SetLocatorProvider(() => serviceLocator);
 
-      Configured = true;
+            container.Configure(x =>
+                                {
+                                    x.For<IContainer>().Use(container);
+                                    x.For<IServiceLocator>().Singleton().Use(serviceLocator);
+                                    interceptors(x);
+                                    x.Scan(s =>
+                                           {
+                                               s.Assembly(Assembly.GetEntryAssembly());
+                                               s.Assembly(Assembly.GetExecutingAssembly());
+                                               if (assemblyDirectory.IsNotBlank() && rootNamespace.IsNotBlank())
+                                               {
+                                                   s.AssembliesFromPath(assemblyDirectory,
+                                                                        assembly =>
+                                                                        assembly.GetName().Name.StartsWith(rootNamespace));
+                                               }
+                                               s.WithDefaultConventions();
+                                               s.LookForRegistries();
+                                               customScanner(s);
+                                           });
+                                });
+
+            Configured = true;
+        }
     }
-  }
 }

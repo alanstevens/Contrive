@@ -4,11 +4,11 @@ using Contrive.Common;
 
 namespace Contrive.Auth.Web
 {
-  public class AutoMapperStartupTask : IStartupTask
-  {
-    public void OnStartup()
+    public class AutoMapperStartupTask : IStartupTask
     {
-      Mapper.CreateMap<UserCreateStatus, MembershipCreateStatus>();
+        public void OnStartup()
+        {
+            Mapper.CreateMap<UserCreateStatus, MembershipCreateStatus>();
+        }
     }
-  }
 }

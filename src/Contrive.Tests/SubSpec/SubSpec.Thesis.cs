@@ -5,47 +5,47 @@ using Xunit.Sdk;
 
 namespace Contrive.Tests.SubSpec
 {
-  [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-  public class ThesisAttribute : TheoryAttribute
-  {
-    protected override IEnumerable<ITestCommand> EnumerateTestCommands(IMethodInfo method)
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public class ThesisAttribute : TheoryAttribute
     {
-      // prepare specification invocations  
-      var theoryTestCommands = base.EnumerateTestCommands(method);
-
-      var commands = new List<ITestCommand>();
-
-      foreach (var item in theoryTestCommands)
-      {
-        if (item is TheoryCommand)
+        protected override IEnumerable<ITestCommand> EnumerateTestCommands(IMethodInfo method)
         {
-          commands.AddRange(Core.SpecificationContext.SafelyEnumerateTestCommands(method, m =>
-                                                                                          {
-                                                                                            // Create a new test class instance
-                                                                                            var obj =
-                                                                                              item.ShouldCreateInstance
-                                                                                                ? Activator.
-                                                                                                    CreateInstance(
-                                                                                                                   method
-                                                                                                                     .
-                                                                                                                     MethodInfo
-                                                                                                                     .
-                                                                                                                     ReflectedType)
-                                                                                                : null;
+            // prepare specification invocations  
+            var theoryTestCommands = base.EnumerateTestCommands(method);
 
-                                                                                            // create method
-                                                                                            item.Execute(obj);
-                                                                                          }));
-        }
-        else
-        {
-          commands.Clear();
-          commands.Add(item);
-          break;
-        }
-      }
+            var commands = new List<ITestCommand>();
 
-      return commands;
+            foreach (var item in theoryTestCommands)
+            {
+                if (item is TheoryCommand)
+                {
+                    commands.AddRange(Core.SpecificationContext.SafelyEnumerateTestCommands(method, m =>
+                                                                                                    {
+                                                                                                        // Create a new test class instance
+                                                                                                        var obj =
+                                                                                                            item.ShouldCreateInstance
+                                                                                                                ? Activator.
+                                                                                                                      CreateInstance(
+                                                                                                                                     method
+                                                                                                                                         .
+                                                                                                                                         MethodInfo
+                                                                                                                                         .
+                                                                                                                                         ReflectedType)
+                                                                                                                : null;
+
+                                                                                                        // create method
+                                                                                                        item.Execute(obj);
+                                                                                                    }));
+                }
+                else
+                {
+                    commands.Clear();
+                    commands.Add(item);
+                    break;
+                }
+            }
+
+            return commands;
+        }
     }
-  }
 }

@@ -2,18 +2,18 @@
 
 namespace Contrive.Common
 {
-  public interface IConfigurationProvider
-  {
-    NameValueCollection AppSettings { get; }
+    public interface IConfigurationProvider
+    {
+        NameValueCollection AppSettings { get; }
 
-    string DefaultConnectionString { get; }
+        string DefaultConnectionString { get; }
 
-    string DefaultConnectionProvider { get; }
+        string DefaultConnectionProvider { get; }
 
-    string GetConnectionString(string name);
+        string GetConnectionString(string name);
 
-    string GetConnectionProvider(string name);
+        string GetConnectionProvider(string name);
 
-    T GetSection<T>(string sectionName);
-  }
+        T GetSection<T>(string sectionName);
+    }
 }

@@ -2,14 +2,14 @@ using System;
 
 namespace Contrive.Common
 {
-  public interface ICryptoConfigurationProvider
-  {
-    Type EncryptionAlgorithm { get; }
+    public interface ICryptoConfigurationProvider
+    {
+        Type EncryptionAlgorithm { get; }
 
-    byte[] EncryptionKey { get; }
+        byte[] EncryptionKey { get; }
 
-    Type HashAlgorithm { get; }
+        Type HashAlgorithm { get; }
 
-    byte[] HmacKey { get; }
-  }
+        byte[] HmacKey { get; }
+    }
 }

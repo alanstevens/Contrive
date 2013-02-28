@@ -4,20 +4,20 @@ using Contrive.Common;
 
 namespace Contrive.Web.Common.Modules
 {
-  public abstract class HttpModuleBase : DisposableBase, IHttpModule
-  {
-    protected Action OnBeginRequest = () => { };
-    protected Action OnEndRequest = () => { };
-    protected Action OnError = () => { };
-    protected HttpContextWrapper _context;
-
-    public void Init(HttpApplication application)
+    public abstract class HttpModuleBase : DisposableBase, IHttpModule
     {
-      _context = new HttpContextWrapper(application.Context);
+        protected Action OnBeginRequest = () => { };
+        protected Action OnEndRequest = () => { };
+        protected Action OnError = () => { };
+        protected HttpContextWrapper _context;
 
-      application.BeginRequest += (s, e) => OnBeginRequest();
-      application.Error += (s, e) => OnError();
-      application.EndRequest += (s, e) => OnEndRequest();
+        public void Init(HttpApplication application)
+        {
+            _context = new HttpContextWrapper(application.Context);
+
+            application.BeginRequest += (s, e) => OnBeginRequest();
+            application.Error += (s, e) => OnError();
+            application.EndRequest += (s, e) => OnEndRequest();
+        }
     }
-  }
 }

@@ -4,26 +4,26 @@ using System.Linq;
 
 namespace Contrive.Common.Extensions
 {
-  public static class TypeExtensions
-  {
-    [DebuggerStepThrough]
-    public static bool TryGetInterface<T>(this Type type, out Type interfaceType)
+    public static class TypeExtensions
     {
-      interfaceType = type.GetInterfaces().FirstOrDefault(t => t == typeof (T));
+        [DebuggerStepThrough]
+        public static bool TryGetInterface<T>(this Type type, out Type interfaceType)
+        {
+            interfaceType = type.GetInterfaces().FirstOrDefault(t => t == typeof (T));
 
-      return interfaceType != null;
-    }
+            return interfaceType != null;
+        }
 
-    [DebuggerStepThrough]
-    public static T Create<T>(this Type type) where T : class
-    {
-      return type.Create() as T;
-    }
+        [DebuggerStepThrough]
+        public static T Create<T>(this Type type) where T : class
+        {
+            return type.Create() as T;
+        }
 
-    [DebuggerStepThrough]
-    public static object Create(this Type type)
-    {
-      return Activator.CreateInstance(type);
+        [DebuggerStepThrough]
+        public static object Create(this Type type)
+        {
+            return Activator.CreateInstance(type);
+        }
     }
-  }
 }

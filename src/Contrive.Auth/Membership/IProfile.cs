@@ -2,16 +2,16 @@ using System;
 
 namespace Contrive.Auth.Membership
 {
-  public interface IProfile
-  {
-    string UserName { get; }
+    public interface IProfile
+    {
+        string UserName { get; }
 
-    DateTime LastActivityDate { get; }
+        DateTime LastActivityDate { get; }
 
-    DateTime LastUpdatedDate { get; }
+        DateTime LastUpdatedDate { get; }
 
-    bool IsAnonymous { get; }
+        bool IsAnonymous { get; }
 
-    int Size { get; }
-  }
+        int Size { get; }
+    }
 }

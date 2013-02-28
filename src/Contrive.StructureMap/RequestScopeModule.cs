@@ -3,13 +3,13 @@ using StructureMap;
 
 namespace Contrive.StructureMap
 {
-  public class RequestScopeModule : HttpModuleBase
-  {
-    public RequestScopeModule()
+    public class RequestScopeModule : HttpModuleBase
     {
-      OnEndRequest = ObjectFactory.ReleaseAndDisposeAllHttpScopedObjects;
-    }
+        public RequestScopeModule()
+        {
+            OnEndRequest = ObjectFactory.ReleaseAndDisposeAllHttpScopedObjects;
+        }
 
-    protected override void OnDisposing(bool disposing) { }
-  }
+        protected override void OnDisposing(bool disposing) {}
+    }
 }

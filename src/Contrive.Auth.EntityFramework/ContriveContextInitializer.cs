@@ -6,43 +6,43 @@ using Microsoft.Practices.ServiceLocation;
 
 namespace Contrive.Auth.EntityFramework
 {
-  public class ContriveContextInitializer : DropCreateDatabaseAlways<ContriveContext>
-  {
-    ContriveContextInitializer() {}
-
-    public static void Initialize()
+    public class ContriveContextInitializer : DropCreateDatabaseAlways<ContriveContext>
     {
-      Database.SetInitializer(new ContriveContextInitializer());
+        ContriveContextInitializer() {}
 
-      EnsureDbCreated();
-    }
+        public static void Initialize()
+        {
+            Database.SetInitializer(new ContriveContextInitializer());
 
-    static void EnsureDbCreated()
-    {
-      using (var db = new ContriveContext())
-      {
-        // This will create the database
+            EnsureDbCreated();
+        }
+
+        static void EnsureDbCreated()
+        {
+            using (var db = new ContriveContext())
+            {
+                // This will create the database
 #pragma warning disable 168
-        var test = db.Users.FirstOrDefault(usr => usr.UserName == "test");
+                var test = db.Users.FirstOrDefault(usr => usr.UserName == "test");
 #pragma warning restore 168
-      }
+            }
+        }
+
+        protected override void Seed(ContriveContext context)
+        {
+            var userService = ServiceLocator.Current.GetInstance<IUserService>();
+            var roleService = ServiceLocator.Current.GetInstance<IRoleService>();
+            var seedRoles = new[] {"Admin", "ProjectManager", "Developer",};
+
+            seedRoles.Each(roleService.CreateRole);
+
+            var seedUsers = new[] {new {Username = "test", Password = "test", Email = "test@test.com",}};
+
+            seedUsers.Each(u => userService.CreateUser(u.Username, u.Password, u.Email));
+
+            var userNames = seedUsers.Select(u => u.Username).ToArray();
+
+            roleService.AddUsersToRoles(userNames, seedRoles);
+        }
     }
-
-    protected override void Seed(ContriveContext context)
-    {
-      var userService = ServiceLocator.Current.GetInstance<IUserService>();
-      var roleService = ServiceLocator.Current.GetInstance<IRoleService>();
-      var seedRoles = new[] {"Admin", "ProjectManager", "Developer",};
-
-      seedRoles.Each(roleService.CreateRole);
-
-      var seedUsers = new[] {new {Username = "test", Password = "test", Email = "test@test.com",}};
-
-      seedUsers.Each(u => userService.CreateUser(u.Username, u.Password, u.Email));
-
-      var userNames = seedUsers.Select(u => u.Username).ToArray();
-
-      roleService.AddUsersToRoles(userNames, seedRoles);
-    }
-  }
 }

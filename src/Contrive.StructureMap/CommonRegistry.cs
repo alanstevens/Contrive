@@ -4,12 +4,12 @@ using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap
 {
-  public class CommonRegistry : Registry
-  {
-    public CommonRegistry()
+    public class CommonRegistry : Registry
     {
-      For<SynchronizationContext>().Use(() => SynchronizationContext.Current);
-      For<IEventAggregator>().Singleton().Use<EventAggregator>();
+        public CommonRegistry()
+        {
+            For<SynchronizationContext>().Use(() => SynchronizationContext.Current);
+            For<IEventAggregator>().Singleton().Use<EventAggregator>();
+        }
     }
-  }
 }

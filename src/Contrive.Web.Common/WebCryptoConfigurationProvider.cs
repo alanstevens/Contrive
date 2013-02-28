@@ -8,78 +8,78 @@ using Contrive.Common.Extensions;
 
 namespace Contrive.Web.Common
 {
-  public class WebCryptoConfigurationProvider : ConfigurationProvider, ICryptoConfigurationProvider
-  {
-    public byte[] EncryptionKey
+    public class WebCryptoConfigurationProvider : ConfigurationProvider, ICryptoConfigurationProvider
     {
-      [DebuggerStepThrough] get { return GetMachineKeySection().DecryptionKey.HexToBinary(); }
-    }
+        public byte[] EncryptionKey
+        {
+            [DebuggerStepThrough] get { return GetMachineKeySection().DecryptionKey.HexToBinary(); }
+        }
 
-    public Type EncryptionAlgorithm
-    {
-      [DebuggerStepThrough] get { return GetEncryptionAlgorithmType(GetMachineKeySection().Decryption); }
-    }
+        public Type EncryptionAlgorithm
+        {
+            [DebuggerStepThrough] get { return GetEncryptionAlgorithmType(GetMachineKeySection().Decryption); }
+        }
 
-    public byte[] HmacKey
-    {
-      [DebuggerStepThrough] get { return GetMachineKeySection().ValidationKey.HexToBinary(); }
-    }
+        public byte[] HmacKey
+        {
+            [DebuggerStepThrough] get { return GetMachineKeySection().ValidationKey.HexToBinary(); }
+        }
 
-    public Type HashAlgorithm
-    {
-      [DebuggerStepThrough] get { return GetValidationAlgorithmType(GetMachineKeySection().Validation); }
-    }
+        public Type HashAlgorithm
+        {
+            [DebuggerStepThrough] get { return GetValidationAlgorithmType(GetMachineKeySection().Validation); }
+        }
 
-    MachineKeySection GetMachineKeySection()
-    {
-      MachineKeySection machineKeySection;
-      try
-      {
-        machineKeySection = GetSection<MachineKeySection>("system.web/machineKey");
-      }
-      catch (Exception ex)
-      {
-        throw new ConfigurationErrorsException("Encryption configuration not found", ex);
-      }
-      return machineKeySection;
-    }
+        MachineKeySection GetMachineKeySection()
+        {
+            MachineKeySection machineKeySection;
+            try
+            {
+                machineKeySection = GetSection<MachineKeySection>("system.web/machineKey");
+            }
+            catch (Exception ex)
+            {
+                throw new ConfigurationErrorsException("Encryption configuration not found", ex);
+            }
+            return machineKeySection;
+        }
 
-    static Type GetValidationAlgorithmType(MachineKeyValidation enumValue)
-    {
-      switch (enumValue)
-      {
-        case MachineKeyValidation.MD5:
-          return typeof (MD5CryptoServiceProvider);
-        case MachineKeyValidation.SHA1:
-          return typeof (SHA1);
-        case MachineKeyValidation.TripleDES:
-          return typeof (TripleDESCryptoServiceProvider);
-        case MachineKeyValidation.AES:
-          return typeof (AesCryptoServiceProvider);
-        case MachineKeyValidation.HMACSHA256:
-          return typeof (HMACSHA256);
-        case MachineKeyValidation.HMACSHA384:
-          return typeof (HMACSHA384);
-        case MachineKeyValidation.HMACSHA512:
-          return typeof (HMACSHA512);
-        default:
-          throw new ArgumentException("Wrong validation enum.");
-      }
-    }
+        static Type GetValidationAlgorithmType(MachineKeyValidation enumValue)
+        {
+            switch (enumValue)
+            {
+                case MachineKeyValidation.MD5:
+                    return typeof (MD5CryptoServiceProvider);
+                case MachineKeyValidation.SHA1:
+                    return typeof (SHA1);
+                case MachineKeyValidation.TripleDES:
+                    return typeof (TripleDESCryptoServiceProvider);
+                case MachineKeyValidation.AES:
+                    return typeof (AesCryptoServiceProvider);
+                case MachineKeyValidation.HMACSHA256:
+                    return typeof (HMACSHA256);
+                case MachineKeyValidation.HMACSHA384:
+                    return typeof (HMACSHA384);
+                case MachineKeyValidation.HMACSHA512:
+                    return typeof (HMACSHA512);
+                default:
+                    throw new ArgumentException("Wrong validation enum.");
+            }
+        }
 
-    static Type GetEncryptionAlgorithmType(string algorithmName)
-    {
-      switch (algorithmName)
-      {
-        case "Auto":
-        case "AES":
-          return typeof (AesCryptoServiceProvider);
-        case "3DES":
-          return typeof (TripleDESCryptoServiceProvider);
-        default:
-          var message = "Unrecognized Algorithm Name: {0}".FormatWith(algorithmName);
-          throw new ConfigurationErrorsException(message);
-      }
+        static Type GetEncryptionAlgorithmType(string algorithmName)
+        {
+            switch (algorithmName)
+            {
+                case "Auto":
+                case "AES":
+                    return typeof (AesCryptoServiceProvider);
+                case "3DES":
+                    return typeof (TripleDESCryptoServiceProvider);
+                default:
+                    var message = "Unrecognized Algorithm Name: {0}".FormatWith(algorithmName);
+                    throw new ConfigurationErrorsException(message);
+            }
+        }
     }
-  }
 }

@@ -2,28 +2,28 @@ using System.Collections.Generic;
 
 namespace Contrive.Auth.Membership
 {
-  public interface IRoleService
-  {
-    string ApplicationName { get; set; }
+    public interface IRoleService
+    {
+        string ApplicationName { get; set; }
 
-    bool RoleExists(string roleName);
+        bool RoleExists(string roleName);
 
-    bool IsUserInRole(string userName, string roleName);
+        bool IsUserInRole(string userName, string roleName);
 
-    IEnumerable<IRole> GetAllRoles();
+        IEnumerable<IRole> GetAllRoles();
 
-    IEnumerable<IUserExtended> GetUsersInRole(string roleName);
+        IEnumerable<IUserExtended> GetUsersInRole(string roleName);
 
-    IEnumerable<IUserExtended> FindUsersInRole(string roleName, string usernameToMatch);
+        IEnumerable<IUserExtended> FindUsersInRole(string roleName, string usernameToMatch);
 
-    bool DeleteRole(string roleName, bool throwOnPopulatedRole = false);
+        bool DeleteRole(string roleName, bool throwOnPopulatedRole = false);
 
-    IEnumerable<IRole> GetRolesForUser(string userName);
+        IEnumerable<IRole> GetRolesForUser(string userName);
 
-    void CreateRole(string roleName);
+        void CreateRole(string roleName);
 
-    void AddUsersToRoles(string[] users, string[] roles);
+        void AddUsersToRoles(string[] users, string[] roles);
 
-    void RemoveUsersFromRoles(string[] users, string[] roles);
-  }
+        void RemoveUsersFromRoles(string[] users, string[] roles);
+    }
 }

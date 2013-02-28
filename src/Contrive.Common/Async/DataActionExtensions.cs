@@ -5,81 +5,81 @@ using Microsoft.Practices.ServiceLocation;
 
 namespace Contrive.Common.Async
 {
-  public static class DataActionExtensions
-  {
-    public static Action<Action, Action, SynchronizationContext, bool> Executor =
-      (action, uponCompletion, context, indicateBusy) =>
-      {
-        action();
-        if (uponCompletion.IsNotNull()) uponCompletion();
-      };
-
-    public static void InvokeDataProcess(this Action action,
-                                         Action uponCompletion = null,
-                                         SynchronizationContext syncContext = null,
-                                         bool indicateBusy = true)
+    public static class DataActionExtensions
     {
-      Executor.Invoke(action, uponCompletion, syncContext, indicateBusy);
-    }
-  }
+        public static Action<Action, Action, SynchronizationContext, bool> Executor =
+            (action, uponCompletion, context, indicateBusy) =>
+            {
+                action();
+                if (uponCompletion.IsNotNull()) uponCompletion();
+            };
 
-  public class DataActionExtensionsStartupTask : IStartupTask
-  {
-    public DataActionExtensionsStartupTask(IEventAggregator eventAggregator)
-    {
-      _eventAggregator = eventAggregator;
+        public static void InvokeDataProcess(this Action action,
+                                             Action uponCompletion = null,
+                                             SynchronizationContext syncContext = null,
+                                             bool indicateBusy = true)
+        {
+            Executor.Invoke(action, uponCompletion, syncContext, indicateBusy);
+        }
     }
 
-    readonly IEventAggregator _eventAggregator;
-
-    public void OnStartup()
+    public class DataActionExtensionsStartupTask : IStartupTask
     {
-      DataActionExtensions.Executor = (dataAction, uponCompletion, syncContext, indicateBusy) =>
-                                      {
-                                        Action work = () =>
-                                                      {
-                                                        try
-                                                        {
-                                                          // TODO: HAS 10/04/2012 What happens if we have multiple calls using this UnitOfWork?
-                                                          using (ServiceLocator.Current.GetInstance<IUnitOfWork>())
-                                                          {
-                                                            dataAction();
-                                                          }
-                                                        }
-                                                        catch (Exception ex)
-                                                        {
-                                                          this.LogException(ex);
-                                                          if (indicateBusy) _eventAggregator.Publish(new DataActionCompleteEvent());
-                                                          throw;
-                                                        }
-                                                      };
+        public DataActionExtensionsStartupTask(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
 
-                                        Action continueWith = () =>
+        readonly IEventAggregator _eventAggregator;
+
+        public void OnStartup()
+        {
+            DataActionExtensions.Executor = (dataAction, uponCompletion, syncContext, indicateBusy) =>
+                                            {
+                                                Action work = () =>
                                                               {
-                                                                try
-                                                                {
-                                                                  if (uponCompletion.IsNotNull()) uponCompletion();
-                                                                }
-                                                                catch (Exception ex)
-                                                                {
-                                                                  this.LogException(ex);
-                                                                  throw;
-                                                                }
-                                                                finally
-                                                                {
-                                                                  if (indicateBusy)
-                                                                    _eventAggregator.Publish(new DataActionCompleteEvent());
-                                                                }
+                                                                  try
+                                                                  {
+                                                                      // TODO: HAS 10/04/2012 What happens if we have multiple calls using this UnitOfWork?
+                                                                      using (ServiceLocator.Current.GetInstance<IUnitOfWork>())
+                                                                      {
+                                                                          dataAction();
+                                                                      }
+                                                                  }
+                                                                  catch (Exception ex)
+                                                                  {
+                                                                      this.LogException(ex);
+                                                                      if (indicateBusy) _eventAggregator.Publish(new DataActionCompleteEvent());
+                                                                      throw;
+                                                                  }
                                                               };
 
-                                        if (indicateBusy) _eventAggregator.Publish(new DataActionBusyEvent());
+                                                Action continueWith = () =>
+                                                                      {
+                                                                          try
+                                                                          {
+                                                                              if (uponCompletion.IsNotNull()) uponCompletion();
+                                                                          }
+                                                                          catch (Exception ex)
+                                                                          {
+                                                                              this.LogException(ex);
+                                                                              throw;
+                                                                          }
+                                                                          finally
+                                                                          {
+                                                                              if (indicateBusy)
+                                                                                  _eventAggregator.Publish(new DataActionCompleteEvent());
+                                                                          }
+                                                                      };
 
-                                        work.RunAsync(continueWith);
-                                      };
+                                                if (indicateBusy) _eventAggregator.Publish(new DataActionBusyEvent());
+
+                                                work.RunAsync(continueWith);
+                                            };
+        }
     }
-  }
 
-  public class DataActionBusyEvent {}
+    public class DataActionBusyEvent {}
 
-  public class DataActionCompleteEvent {}
+    public class DataActionCompleteEvent {}
 }

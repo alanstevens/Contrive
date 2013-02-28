@@ -3,22 +3,22 @@ using Contrive.Common;
 
 namespace Contrive.Data.Common.Sql
 {
-  public class SqlParameterStartupTask : IStartupTask
-  {
-    public void OnStartup()
+    public class SqlParameterStartupTask : IStartupTask
     {
-      AddDbParameterExtensions.CreateParameter =
-        (name, type, direction, value, size, precision, scale) =>
-        new SqlParameter
+        public void OnStartup()
         {
-          ParameterName = name,
-          DbType = type,
-          Direction = direction,
-          Value = value,
-          Size = size,
-          Precision = precision,
-          Scale = scale
-        };
+            AddDbParameterExtensions.CreateParameter =
+                (name, type, direction, value, size, precision, scale) =>
+                new SqlParameter
+                {
+                    ParameterName = name,
+                    DbType = type,
+                    Direction = direction,
+                    Value = value,
+                    Size = size,
+                    Precision = precision,
+                    Scale = scale
+                };
+        }
     }
-  }
 }

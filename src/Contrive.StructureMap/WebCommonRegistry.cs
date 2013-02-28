@@ -5,13 +5,13 @@ using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap
 {
-  public class WebCommonRegistry : Registry
-  {
-    public WebCommonRegistry()
+    public class WebCommonRegistry : Registry
     {
-      For<IWebConfigurationProvider>().Singleton().Use<WebConfigurationProvider>();
-      For<ICache>().HttpContextScoped().Use<Cache>();
-      For<IErrorView>().Singleton().Use<MvcErrorView>();
+        public WebCommonRegistry()
+        {
+            For<IWebConfigurationProvider>().Singleton().Use<WebConfigurationProvider>();
+            For<ICache>().HttpContextScoped().Use<Cache>();
+            For<IErrorView>().Singleton().Use<MvcErrorView>();
+        }
     }
-  }
 }

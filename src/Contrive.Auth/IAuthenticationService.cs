@@ -2,14 +2,14 @@ using System;
 
 namespace Contrive.Auth
 {
-  public interface IAuthenticationService
-  {
-    bool LogOn(string userName, string password, bool rememberMe = false);
+    public interface IAuthenticationService
+    {
+        bool LogOn(string userName, string password, bool rememberMe = false);
 
-    void LogOff();
+        void LogOff();
 
-    void SignOut(string userName);
+        void SignOut(string userName);
 
-    void SignOut(Guid userId);
-  }
+        void SignOut(Guid userId);
+    }
 }

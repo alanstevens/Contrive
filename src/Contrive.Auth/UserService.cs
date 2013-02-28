@@ -114,7 +114,7 @@ namespace Contrive.Auth
             }
             catch (ArgumentException e)
             {
-        return UserCreateStatus.PasswordTooLong;
+                return UserCreateStatus.PasswordTooLong;
             }
             _userRepository.Insert(newUser);
 
@@ -181,7 +181,7 @@ namespace Contrive.Auth
                 default:
                     throw new ProviderException("Unsupported password format.");
             }
-        
+
             if (encodedPassword.Length > MAX_HASHED_PASSWORD_LENGTH)
                 throw new ArgumentException("Password too long");
 

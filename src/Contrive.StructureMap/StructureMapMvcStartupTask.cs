@@ -4,13 +4,13 @@ using StructureMap;
 
 namespace Contrive.StructureMap
 {
-  public class StructureMapMvcStartupTask
-  {
-    public StructureMapMvcStartupTask()
+    public class StructureMapMvcStartupTask
     {
-        var container = ServiceLocator.Current.GetInstance<IContainer>();
-        var dependencyResolver = new StructureMapDependencyResolver(container);
-        DependencyResolver.SetResolver(dependencyResolver);
+        public StructureMapMvcStartupTask()
+        {
+            var container = ServiceLocator.Current.GetInstance<IContainer>();
+            var dependencyResolver = new StructureMapDependencyResolver(container);
+            DependencyResolver.SetResolver(dependencyResolver);
+        }
     }
-  }
 }

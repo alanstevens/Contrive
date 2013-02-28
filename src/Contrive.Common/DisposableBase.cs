@@ -3,28 +3,28 @@ using System.Diagnostics;
 
 namespace Contrive.Common
 {
-  public abstract class DisposableBase : IDisposable
-  {
-    bool _isDisposed;
-
-    [DebuggerStepThrough]
-    public void Dispose()
+    public abstract class DisposableBase : IDisposable
     {
-      Dispose(true);
-      GC.SuppressFinalize(this);
-    }
+        bool _isDisposed;
 
-    void Dispose(bool disposing)
-    {
-      if (!_isDisposed) OnDisposing(disposing);
-      _isDisposed = true;
-    }
+        [DebuggerStepThrough]
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-    protected abstract void OnDisposing(bool disposing);
+        void Dispose(bool disposing)
+        {
+            if (!_isDisposed) OnDisposing(disposing);
+            _isDisposed = true;
+        }
 
-    ~DisposableBase()
-    {
-      Dispose(false);
+        protected abstract void OnDisposing(bool disposing);
+
+        ~DisposableBase()
+        {
+            Dispose(false);
+        }
     }
-  }
 }

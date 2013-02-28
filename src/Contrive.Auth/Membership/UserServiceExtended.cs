@@ -11,8 +11,8 @@ namespace Contrive.Auth.Membership
     public class UserServiceExtended : IUserServiceExtended
     {
         public UserServiceExtended(IUserExtendedRepository userRepository,
-                           ICryptographer cryptographer,
-                           IUserServiceSettings settings)
+                                   ICryptographer cryptographer,
+                                   IUserServiceSettings settings)
         {
             _userRepository = userRepository;
             _cryptographer = cryptographer;
@@ -63,7 +63,7 @@ namespace Contrive.Auth.Membership
             if (Settings.RequiresQuestionAndAnswer)
             {
                 throw new NotSupportedException(
-                  "Contrive: RequiresQuestionAndAnswer not supported.");
+                    "Contrive: RequiresQuestionAndAnswer not supported.");
             }
 
             if (!IsValidPassword(password)) return UserCreateStatus.InvalidPassword;
@@ -196,7 +196,7 @@ namespace Contrive.Auth.Membership
             {
                 user.PasswordVerificationToken = _cryptographer.GenerateToken();
                 user.PasswordVerificationTokenExpirationDate =
-                  DateTime.UtcNow.AddMinutes(tokenExpirationInMinutesFromNow);
+                    DateTime.UtcNow.AddMinutes(tokenExpirationInMinutesFromNow);
             }
 
             return user.PasswordVerificationToken;

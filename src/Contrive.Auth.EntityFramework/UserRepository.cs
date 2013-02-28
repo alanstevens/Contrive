@@ -1,5 +1,4 @@
 ﻿using Contrive.Common;
-using Contrive.Common.Extensions;
 
 namespace Contrive.Auth.EntityFramework
 {
@@ -11,7 +10,6 @@ namespace Contrive.Auth.EntityFramework
         }
 
         readonly IRepository<IUser> _repository;
-
 
         public IUser GetUserByUserName(string userName)
         {

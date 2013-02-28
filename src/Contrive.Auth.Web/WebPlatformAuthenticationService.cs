@@ -7,38 +7,38 @@ using Contrive.Web.Common;
 
 namespace Contrive.Auth.Web
 {
-  public class WebPlatformAuthenticationService : IPlatformAuthenticationService
-  {
-    static HttpContextBase HttpContext { get { return new HttpContextWrapper(System.Web.HttpContext.Current); } }
-
-    public IPrincipal CurrentPrincipal { get { return HttpContext.User; } }
-
-    public bool UserIsAuthenticated { get { return HttpContext.Request.IsAuthenticated; } }
-
-    public bool SignIn(string userName, string password, bool rememberMe = false)
+    public class WebPlatformAuthenticationService : IPlatformAuthenticationService
     {
-      FormsAuthentication.SetAuthCookie(userName, rememberMe);
-      return true;
-    }
+        static HttpContextBase HttpContext { get { return new HttpContextWrapper(System.Web.HttpContext.Current); } }
 
-    public void SignOutCurrentUser()
-    {
-      FormsAuthentication.SignOut();
-    }
+        public IPrincipal CurrentPrincipal { get { return HttpContext.User; } }
 
-    public void SignOut(string userName)
-    {
-      FormsAuthentication.SignOut();
-    }
+        public bool UserIsAuthenticated { get { return HttpContext.Request.IsAuthenticated; } }
 
-    public void SignOut(Guid userId)
-    {
-      FormsAuthentication.SignOut();
-    }
+        public bool SignIn(string userName, string password, bool rememberMe = false)
+        {
+            FormsAuthentication.SetAuthCookie(userName, rememberMe);
+            return true;
+        }
 
-    public void Deauthorize()
-    {
-      HttpContext.Response.SetStatusAndReturn(HttpStatusCode.Unauthorized);
+        public void SignOutCurrentUser()
+        {
+            FormsAuthentication.SignOut();
+        }
+
+        public void SignOut(string userName)
+        {
+            FormsAuthentication.SignOut();
+        }
+
+        public void SignOut(Guid userId)
+        {
+            FormsAuthentication.SignOut();
+        }
+
+        public void Deauthorize()
+        {
+            HttpContext.Response.SetStatusAndReturn(HttpStatusCode.Unauthorized);
+        }
     }
-  }
 }

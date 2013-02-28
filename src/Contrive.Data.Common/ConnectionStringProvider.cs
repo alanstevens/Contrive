@@ -2,8 +2,8 @@
 
 namespace Contrive.Data.Common
 {
-  public static class ConnectionStringProvider
-  {
-    public static Func<string> GetConnectionString = () => "";
-  }
+    public static class ConnectionStringProvider
+    {
+        public static Func<string> GetConnectionString = () => "";
+    }
 }
