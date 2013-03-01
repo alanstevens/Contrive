@@ -24,23 +24,18 @@ namespace Contrive.Auth.EntityFramework
         public void Insert(IUser user)
         {
             _repository.Insert(user);
-            SaveChanges();
+            _repository.SaveChanges();
         }
 
         public void Update(IUser user)
         {
             _repository.Update(user);
-            SaveChanges();
+            _repository.SaveChanges();
         }
 
         public void Delete(IUser user)
         {
             _repository.Delete(user);
-            SaveChanges();
-        }
-
-        void SaveChanges()
-        {
             _repository.SaveChanges();
         }
     }

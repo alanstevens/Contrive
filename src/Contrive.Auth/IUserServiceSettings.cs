@@ -2,19 +2,15 @@ namespace Contrive.Auth
 {
     public interface IUserServiceSettings
     {
-        string Realm { get; set; }
+        string Realm { get; }
 
-        string ApplicationName { get; set; }
+        string EmailSender { get; }
 
-        bool EnablePasswordRetrieval { get; }
+        string EmailSubject { get; }
 
-        bool EnablePasswordReset { get; }
+        string EmailTemplatePath { get; }
 
-        bool RequiresQuestionAndAnswer { get; }
-
-        int MaxInvalidPasswordAttempts { get; }
-
-        int PasswordAttemptWindow { get; }
+        int MaxHashedPasswordLength { get; }
 
         bool RequiresUniqueEmail { get; }
 
@@ -25,13 +21,5 @@ namespace Contrive.Auth
         int MinRequiredNonAlphanumericCharacters { get; }
 
         string PasswordStrengthRegularExpression { get; }
-
-        int MinPasswordLength { get; }
-
-        string ContriveEmailFrom { get; }
-
-        string ContriveEmailSubject { get; }
-
-        string ContriveEmailTemplatePath { get; }
     }
 }

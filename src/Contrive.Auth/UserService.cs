@@ -17,8 +17,6 @@ namespace Contrive.Auth
             _settings = settings;
         }
 
-        const int MAX_HASHED_PASSWORD_LENGTH = 128;
-
         readonly ICryptographer _cryptographer;
         readonly IUserServiceSettings _settings;
         readonly IUserRepository _userRepository;
@@ -182,7 +180,7 @@ namespace Contrive.Auth
                     throw new ProviderException("Unsupported password format.");
             }
 
-            if (encodedPassword.Length > MAX_HASHED_PASSWORD_LENGTH)
+            if (encodedPassword.Length > _settings.MaxHashedPasswordLength)
                 throw new ArgumentException("Password too long");
 
             return encodedPassword;

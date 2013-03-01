@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Contrive.Auth.Membership;
 
-namespace Contrive.Auth.EntityFramework
+namespace Contrive.Auth.EntityFramework.Membership
 {
     public class Role : IRole
     {

@@ -70,11 +70,13 @@
   <ItemGroup>
     <Compile Include="ContriveContext.cs" />
     <Compile Include="ContriveContextInitializer.cs" />
+    <Compile Include="Membership\MembershipContextInitializer.cs" />
+    <Compile Include="Membership\MembershipContext.cs" />
+    <Compile Include="Membership\Role.cs" />
+    <Compile Include="Membership\RoleRepository.cs" />
+    <Compile Include="Membership\UserExtendedRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
-    <Compile Include="Role.cs" />
-    <Compile Include="RoleRepository.cs" />
-    <Compile Include="UserExtendedRepository.cs" />
     <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>

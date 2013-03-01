@@ -1,12 +1,14 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Objects;
+using Contrive.Auth.Membership;
 
-namespace Contrive.Auth.EntityFramework
+namespace Contrive.Auth.EntityFramework.Membership
 {
-    public class ContriveContext : DbContext
+    public class MembershipContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserExtended> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public ObjectContext ObjectContext()
         {

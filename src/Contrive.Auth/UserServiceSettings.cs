@@ -12,17 +12,16 @@ namespace Contrive.Auth
         {
             Verify.NotNull(settings, "settings");
 
-            ApplicationName = GetConfigValue(settings["applicationName"], "/"); //,HostingEnvironment.ApplicationVirtualPath);
+            Realm = GetConfigValue(settings["HTTP.Realm"], "Application");
 
-            EnablePasswordRetrieval = Convert.ToBoolean(GetConfigValue(settings["enablePasswordReset"], "false"));
+            EmailSender = GetConfigValue(settings["EmailSender"], "Application");
 
-            EnablePasswordReset = Convert.ToBoolean(GetConfigValue(settings["enablePasswordRetrieval"], "true"));
+            EmailSubject = GetConfigValue(settings["EmailSubject"], "Password Reset Request");
 
-            RequiresQuestionAndAnswer = Convert.ToBoolean(GetConfigValue(settings["requiresQuestionAndAnswer"], "false"));
+            EmailTemplatePath = GetConfigValue(settings["EmailTemplatePath"],
+                                               "~/Content/Contrive/ResetPassword.html");
 
-            MaxInvalidPasswordAttempts = Convert.ToInt32(GetConfigValue(settings["maxInvalidPasswordAttempts"], "5"));
-
-            PasswordAttemptWindow = Convert.ToInt32(GetConfigValue(settings["passwordAttemptWindow"], "10"));
+            MaxHashedPasswordLength = Convert.ToInt32(GetConfigValue(settings["MaxHashedPasswordLength"], "128"));
 
             RequiresUniqueEmail = Convert.ToBoolean(GetConfigValue(settings["requiresUniqueEmail"], "true"));
 
@@ -32,15 +31,6 @@ namespace Contrive.Auth
             MinRequiredPasswordLength = Convert.ToInt32(GetConfigValue(settings["minRequiredPasswordLength"], "6"));
 
             PasswordStrengthRegularExpression = GetConfigValue(settings["passwordStrengthRegularExpression"], "");
-
-            Realm = GetConfigValue(settings["HTTP.Realm"], "Application");
-
-            ContriveEmailFrom = GetConfigValue(settings["Contrive.Auth.EmailFrom"], "Application");
-
-            ContriveEmailSubject = GetConfigValue(settings["Contrive.Auth.EmailSubject"], "Password Reset Request");
-
-            ContriveEmailTemplatePath = GetConfigValue(settings["Contrive.Auth.EmailTemplatePath"],
-                                                       "~/Content/Contrive/ResetPassword.html");
 
             var format = settings["passwordFormat"] ?? "Hashed";
 
@@ -59,39 +49,27 @@ namespace Contrive.Auth
             }
         }
 
-        public string Realm { get; set; }
+        public string Realm { get; private set; }
 
-        public string ApplicationName { get; set; }
+        public string EmailSender { get; private set; }
 
-        public bool EnablePasswordRetrieval { get; internal set; }
+        public string EmailSubject { get; private set; }
 
-        public bool EnablePasswordReset { get; internal set; }
+        public string EmailTemplatePath { get; private set; }
 
-        public bool RequiresQuestionAndAnswer { get; internal set; }
+        public int MaxHashedPasswordLength { get; private set; }
 
-        public int MaxInvalidPasswordAttempts { get; internal set; }
+        public bool RequiresUniqueEmail { get; private set; }
 
-        public int PasswordAttemptWindow { get; internal set; }
+        public UserPasswordFormat PasswordFormat { get; private set; }
 
-        public bool RequiresUniqueEmail { get; internal set; }
+        public int MinRequiredPasswordLength { get; private set; }
 
-        public UserPasswordFormat PasswordFormat { get; internal set; }
+        public int MinRequiredNonAlphanumericCharacters { get; private set; }
 
-        public int MinRequiredPasswordLength { get; internal set; }
+        public string PasswordStrengthRegularExpression { get; private set; }
 
-        public int MinRequiredNonAlphanumericCharacters { get; internal set; }
-
-        public string PasswordStrengthRegularExpression { get; internal set; }
-
-        public string ContriveEmailFrom { get; internal set; }
-
-        public string ContriveEmailSubject { get; internal set; }
-
-        public string ContriveEmailTemplatePath { get; internal set; }
-
-        public int MinPasswordLength { get { return MinRequiredPasswordLength; } }
-
-        static string GetConfigValue(string configValue, string defaultValue)
+        protected static string GetConfigValue(string configValue, string defaultValue)
         {
             return configValue.IsEmpty() ? defaultValue : configValue;
         }

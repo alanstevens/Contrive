@@ -73,7 +73,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
 
         public virtual ActionResult Register()
         {
-            var model = new RegisterViewModel {MinRequiredPasswordLength = _userService.Settings.MinPasswordLength};
+            var model = new RegisterViewModel {MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength};
             return View(model);
         }
 
@@ -167,8 +167,8 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
                     var rootUrl = Request.Url.GetLeftPart(UriPartial.Authority);
                     var body = _emailService.BuildMessageBody(user.UserName, passwordResetToken, rootUrl,
                                                               Convert.ToInt32(duration.TotalHours),
-                                                              settings.ContriveEmailTemplatePath);
-                    _emailService.SendEmail(settings.ContriveEmailFrom, user.Email, settings.ContriveEmailSubject, body);
+                                                              settings.EmailTemplatePath);
+                    _emailService.SendEmail(settings.EmailSender, user.Email, settings.EmailSubject, body);
                 }
                 catch (Exception) {}
             }

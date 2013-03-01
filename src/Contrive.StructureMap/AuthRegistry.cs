@@ -2,7 +2,6 @@
 using Contrive.Auth.Membership;
 using Contrive.Auth.Web.Membership;
 using Contrive.Common;
-using Microsoft.Practices.ServiceLocation;
 using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap
@@ -11,22 +10,20 @@ namespace Contrive.StructureMap
     {
         public AuthRegistry()
         {
-            For<IMembershipConfigurationProvider>().Singleton().Use<MembershipConfigurationProvider>();
-            For<UserServiceExtended>().Singleton();
-            Forward<UserServiceExtended, IUserService>();
-            Forward<UserServiceExtended, IUserServiceExtended>();
+            For<IAuthConfigurationProvider>().Singleton().Use<IAuthConfigurationProvider>();
+            For<IUserService>().Singleton().Use<UserService>();
             For<IRoleService>().Singleton().Use<RoleService>();
             For<ISecurityService>().Singleton().Use<SecurityService>();
-
-            var sl = ServiceLocator.Current;
-            var cryptoConfig = sl.GetInstance<ICryptoConfigurationProvider>();
-            var cryptographer = new Cryptographer(cryptoConfig.EncryptionKey, cryptoConfig.EncryptionAlgorithm, cryptoConfig.HmacKey,
-                                                  cryptoConfig.HashAlgorithm);
-            For<ICryptographer>().Singleton().Use(cryptographer);
-
-            var userServiceConfig = sl.GetInstance<IMembershipConfigurationProvider>().UserServiceConfiguration;
-            var userServiceSettings = new UserServiceSettings(userServiceConfig);
-            For<IUserServiceSettings>().Singleton().Use(userServiceSettings);
+            For<ICryptographer>().Singleton().Use(s =>
+                                                  {
+                                                      var cryptoConfig = s.GetInstance<ICryptoConfigurationProvider>();
+                                                      return new Cryptographer(cryptoConfig.EncryptionKey,
+                                                                               cryptoConfig.EncryptionAlgorithm,
+                                                                               cryptoConfig.HmacKey,
+                                                                               cryptoConfig.HashAlgorithm);
+                                                  });
+            For<IUserServiceSettings>().Singleton()
+                                       .Use(s => new UserServiceSettings(s.GetInstance<IAuthConfigurationProvider>().UserServiceConfiguration));
         }
     }
 }

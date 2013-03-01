@@ -1,13 +1,15 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Contrive.Common.Extensions;
 using Microsoft.Practices.ServiceLocation;
+using log4net;
 
 namespace Contrive.Common
 {
     // Called like so:
-    // Bootstrapper.Configurator = ContriveStructureMapConfigurator.Configure;
+    // Bootstrapper.Configurator = StructureMapConfigurator.Configure;
     // Bootstrapper.Run("Contrive");
     public static class Bootstrapper
     {
@@ -28,9 +30,20 @@ namespace Contrive.Common
 
         public static void Run(string rootNamespace)
         {
-            Configurator.Invoke(AssemblyDirectory, rootNamespace);
-
             BeforeStartup();
+
+            try
+            {
+                Configurator.Invoke(AssemblyDirectory, rootNamespace);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Debugger.Break();
+#endif
+                // a container failure probably means no IoC, so we fall back to basic object usage
+                LogManager.GetLogger(typeof (Bootstrapper).Name).Fatal(ex);
+            }
 
             // run the startup tasks
             ServiceLocator.Current.GetAllInstances<IStartupTask>().Each(x => x.OnStartup());

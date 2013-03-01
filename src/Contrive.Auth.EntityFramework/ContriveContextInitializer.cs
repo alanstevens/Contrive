@@ -1,6 +1,5 @@
 using System.Data.Entity;
 using System.Linq;
-using Contrive.Auth.Membership;
 using Contrive.Common.Extensions;
 using Microsoft.Practices.ServiceLocation;
 
@@ -31,18 +30,10 @@ namespace Contrive.Auth.EntityFramework
         protected override void Seed(ContriveContext context)
         {
             var userService = ServiceLocator.Current.GetInstance<IUserService>();
-            var roleService = ServiceLocator.Current.GetInstance<IRoleService>();
-            var seedRoles = new[] {"Admin", "ProjectManager", "Developer",};
-
-            seedRoles.Each(roleService.CreateRole);
 
             var seedUsers = new[] {new {Username = "test", Password = "test", Email = "test@test.com",}};
 
             seedUsers.Each(u => userService.CreateUser(u.Username, u.Password, u.Email));
-
-            var userNames = seedUsers.Select(u => u.Username).ToArray();
-
-            roleService.AddUsersToRoles(userNames, seedRoles);
         }
     }
 }

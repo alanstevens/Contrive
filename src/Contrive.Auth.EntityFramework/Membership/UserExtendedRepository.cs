@@ -5,7 +5,7 @@ using Contrive.Auth.Membership;
 using Contrive.Common;
 using Contrive.Common.Extensions;
 
-namespace Contrive.Auth.EntityFramework
+namespace Contrive.Auth.EntityFramework.Membership
 {
     public class UserExtendedRepository : IUserExtendedRepository
     {

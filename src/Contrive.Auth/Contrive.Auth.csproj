@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="AuthenticationService.cs" />
     <Compile Include="EmailService.cs" />
+    <Compile Include="IAuthConfigurationProvider.cs" />
     <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IPlatformAuthenticationService.cs" />
     <Compile Include="IUser.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="IUserServiceSettings.cs" />
     <Compile Include="Membership\CreateUserException.cs" />
     <Compile Include="Membership\IMembershipConfigurationProvider.cs" />
+    <Compile Include="Membership\IMembershipSettings.cs" />
     <Compile Include="Membership\IProfile.cs" />
     <Compile Include="Membership\IProfileService.cs" />
     <Compile Include="Membership\IRole.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Membership\IUserExtended.cs" />
     <Compile Include="Membership\IUserExtendedRepository.cs" />
     <Compile Include="Membership\IUserServiceExtended.cs" />
+    <Compile Include="Membership\MembershipSettings.cs" />
     <Compile Include="Membership\ProfileAuthenticationType.cs" />
     <Compile Include="Membership\RoleService.cs" />
     <Compile Include="Membership\UserExtended.cs" />

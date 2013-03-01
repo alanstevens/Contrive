@@ -1,12 +1,9 @@
 using System.Collections.Specialized;
-using Contrive.Common;
 
 namespace Contrive.Auth.Membership
 {
-    public interface IMembershipConfigurationProvider : IConfigurationProvider
+    public interface IMembershipConfigurationProvider : IAuthConfigurationProvider
     {
         NameValueCollection RoleServiceConfiguration { get; }
-
-        NameValueCollection UserServiceConfiguration { get; }
     }
 }

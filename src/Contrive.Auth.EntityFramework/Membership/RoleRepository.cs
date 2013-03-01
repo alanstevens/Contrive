@@ -3,7 +3,7 @@ using System.Linq;
 using Contrive.Auth.Membership;
 using Contrive.Common.Extensions;
 
-namespace Contrive.Auth.EntityFramework
+namespace Contrive.Auth.EntityFramework.Membership
 {
     public class RoleRepository : IRoleRepository
     {
