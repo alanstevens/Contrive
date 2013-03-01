@@ -56,9 +56,6 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.2.2.0\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -66,22 +63,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthConfigurationProvider.cs" />
-    <Compile Include="Membership\MembershipConfigurationProvider.cs" />
-    <Compile Include="Membership\Profile.cs" />
-    <Compile Include="Membership\ProfileService.cs" />
-    <Compile Include="Membership\SecurityService.cs" />
-    <Compile Include="Membership\WebSecurity.cs" />
     <Compile Include="WebPlatformAuthenticationService.cs" />
-    <Compile Include="Membership\ContriveMembershipProvider.cs" />
-    <Compile Include="Membership\ContriveRoleProvider.cs" />
-    <Compile Include="Membership\ContriveProfileProvider.cs" />
-    <Compile Include="Membership\String_Resources.cs" />
     <Compile Include="Modules\AuthenticationModuleBase.cs" />
     <Compile Include="Modules\BasicAuthenticationModule.cs" />
     <Compile Include="Modules\DigestAuthenticationModule.cs" />
@@ -89,6 +74,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Contrive.Auth.Membership\Contrive.Auth.Membership.csproj">
+      <Project>{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}</Project>
+      <Name>Contrive.Auth.Membership</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contrive.Auth\Contrive.Auth.csproj">
       <Project>{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}</Project>
       <Name>Contrive.Auth</Name>

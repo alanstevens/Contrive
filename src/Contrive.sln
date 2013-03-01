@@ -32,6 +32,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\readme.md = ..\readme.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Auth.Membership", "Contrive.Auth.Membership\Contrive.Auth.Membership.csproj", "{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Auth.Web.Membership", "Contrive.Auth.Web.Membership\Contrive.Auth.Web.Membership.csproj", "{CD8FB741-4558-476C-8458-5B4F3A8011A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +116,22 @@ Global
 		{EDE4D614-2999-416D-8FA0-63D4A3A9175F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDE4D614-2999-416D-8FA0-63D4A3A9175F}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
 		{EDE4D614-2999-416D-8FA0-63D4A3A9175F}.Staging|Any CPU.Build.0 = Staging|Any CPU
+		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Integration|Any CPU.ActiveCfg = Release|Any CPU
+		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Integration|Any CPU.Build.0 = Release|Any CPU
+		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Staging|Any CPU.ActiveCfg = Release|Any CPU
+		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Integration|Any CPU.ActiveCfg = Release|Any CPU
+		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Integration|Any CPU.Build.0 = Release|Any CPU
+		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Staging|Any CPU.ActiveCfg = Release|Any CPU
+		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Staging|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime;
 using Contrive.Auth.Membership;
 

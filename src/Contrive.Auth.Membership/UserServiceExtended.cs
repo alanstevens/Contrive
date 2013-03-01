@@ -12,7 +12,7 @@ namespace Contrive.Auth.Membership
     {
         public UserServiceExtended(IUserExtendedRepository userRepository,
                                    ICryptographer cryptographer,
-                                   IUserServiceSettings settings)
+                                   IMembershipSettings settings)
         {
             _userRepository = userRepository;
             _cryptographer = cryptographer;
@@ -25,7 +25,7 @@ namespace Contrive.Auth.Membership
         readonly ICryptographer _cryptographer;
         readonly IUserExtendedRepository _userRepository;
 
-        public IUserServiceSettings Settings { get; private set; }
+        public IMembershipSettings Settings { get; private set; }
 
         public bool ValidateUser(string userName, string password)
         {

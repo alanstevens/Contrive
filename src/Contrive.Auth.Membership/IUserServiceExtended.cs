@@ -5,7 +5,7 @@ namespace Contrive.Auth.Membership
 {
     public interface IUserServiceExtended
     {
-        IUserServiceSettings Settings { get; }
+        IMembershipSettings Settings { get; }
 
         bool ChangePassword(string userName, string oldPassword, string newPassword);
 

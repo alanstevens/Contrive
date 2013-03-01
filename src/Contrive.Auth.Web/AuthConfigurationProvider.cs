@@ -9,14 +9,13 @@ namespace Contrive.Auth.Web
     {
         public NameValueCollection UserServiceConfiguration
         {
-            [DebuggerStepThrough]
-            get { return GetUserServiceSettings(); }
+            [DebuggerStepThrough] get { return GetUserServiceSettings(); }
         }
 
         NameValueCollection GetUserServiceSettings()
         {
             // TODO: HAS 02/28/2013 Make this a base class for both client and web versions.
-            NameValueCollection settings = new NameValueCollection
+            var settings = new NameValueCollection
             {
                 {"HTTP.Realm", AppSettings["HTTP.Realm"]},
                 {"ContriveEmailFrom", AppSettings["EmailSender"]},

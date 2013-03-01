@@ -2,7 +2,7 @@ using System;
 using System.Runtime;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using Contrive.Auth.Properties;
+using Contrive.Auth.Membership.Properties;
 
 namespace Contrive.Auth.Membership
 {

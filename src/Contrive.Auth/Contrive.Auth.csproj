@@ -56,10 +56,6 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -74,41 +70,12 @@
     <Compile Include="IUserRepository.cs" />
     <Compile Include="IUserService.cs" />
     <Compile Include="IUserServiceSettings.cs" />
-    <Compile Include="Membership\CreateUserException.cs" />
-    <Compile Include="Membership\IMembershipConfigurationProvider.cs" />
-    <Compile Include="Membership\IMembershipSettings.cs" />
-    <Compile Include="Membership\IProfile.cs" />
-    <Compile Include="Membership\IProfileService.cs" />
-    <Compile Include="Membership\IRole.cs" />
-    <Compile Include="Membership\IRoleRepository.cs" />
-    <Compile Include="Membership\IRoleService.cs" />
-    <Compile Include="Membership\ISecurityService.cs" />
-    <Compile Include="Membership\IUserExtended.cs" />
-    <Compile Include="Membership\IUserExtendedRepository.cs" />
-    <Compile Include="Membership\IUserServiceExtended.cs" />
-    <Compile Include="Membership\MembershipSettings.cs" />
-    <Compile Include="Membership\ProfileAuthenticationType.cs" />
-    <Compile Include="Membership\RoleService.cs" />
-    <Compile Include="Membership\UserExtended.cs" />
-    <Compile Include="Membership\UserServiceExtended.cs" />
-    <Compile Include="Properties\ApplicationServicesStrings.Designer.cs">
-      <DependentUpon>ApplicationServicesStrings.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserCreateStatus.cs" />
     <Compile Include="UserService.cs" />
     <Compile Include="UserPasswordFormat.cs" />
     <Compile Include="UserServiceSettings.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\ApplicationServicesStrings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ApplicationServicesStrings.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

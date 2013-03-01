@@ -141,6 +141,10 @@
     <Content Include="Areas\Contrive\Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Contrive.Auth.Membership\Contrive.Auth.Membership.csproj">
+      <Project>{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}</Project>
+      <Name>Contrive.Auth.Membership</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contrive.Auth\Contrive.Auth.csproj">
       <Project>{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}</Project>
       <Name>Contrive.Auth</Name>

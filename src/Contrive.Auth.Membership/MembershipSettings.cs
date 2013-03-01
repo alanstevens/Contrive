@@ -23,7 +23,6 @@ namespace Contrive.Auth.Membership
             MaxInvalidPasswordAttempts = Convert.ToInt32(GetConfigValue(settings["maxInvalidPasswordAttempts"], "5"));
 
             PasswordAttemptWindow = Convert.ToInt32(GetConfigValue(settings["passwordAttemptWindow"], "10"));
-
         }
 
         public string ApplicationName { get; private set; }

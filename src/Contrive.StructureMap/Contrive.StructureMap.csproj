@@ -59,7 +59,6 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -100,13 +99,17 @@
       <Project>{4D901CB3-DE1C-4A70-801E-1BE06C5C2E4E}</Project>
       <Name>Contrive.Auth.EntityFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Contrive.Auth.Membership\Contrive.Auth.Membership.csproj">
+      <Project>{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}</Project>
+      <Name>Contrive.Auth.Membership</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contrive.Auth.Web.Membership\Contrive.Auth.Web.Membership.csproj">
+      <Project>{CD8FB741-4558-476C-8458-5B4F3A8011A3}</Project>
+      <Name>Contrive.Auth.Web.Membership</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contrive.Auth\Contrive.Auth.csproj">
       <Project>{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}</Project>
       <Name>Contrive.Auth</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Contrive.Auth.Web\Contrive.Auth.Web.csproj">
-      <Project>{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}</Project>
-      <Name>Contrive.Auth.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\Contrive.Common\Contrive.Common.csproj">
       <Project>{00B479B8-86CD-4EDB-B6B0-F0C574B1F00B}</Project>
