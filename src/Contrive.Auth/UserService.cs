@@ -110,7 +110,7 @@ namespace Contrive.Auth
             {
                 newUser.Password = EncodePassword(password, passwordSalt);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 return UserCreateStatus.PasswordTooLong;
             }

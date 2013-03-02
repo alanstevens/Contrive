@@ -1,0 +1,23 @@
+using System.Web.Mvc;
+using GoldMail.Common;
+using GoldMail.Common.Extensions;
+
+namespace GoldMail.CloudComposer.Web.Common.Mvc
+{
+    public class LogErrorAttribute : HandleErrorAttribute, IStartupTask
+    {
+        public void OnStartup()
+        {
+            GlobalFilters.Filters.Add(new LogErrorAttribute());
+        }
+
+        public override void OnException(ExceptionContext exceptionContext)
+        {
+            base.OnException(exceptionContext);
+
+            // We want to log exceptions that were handled by the base implementation.
+            // Unhandled exceptions are always logged.
+            if (exceptionContext.ExceptionHandled) this.LogException(exceptionContext.Exception);
+        }
+    }
+}

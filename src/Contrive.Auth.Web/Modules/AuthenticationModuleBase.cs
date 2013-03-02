@@ -7,19 +7,11 @@ namespace Contrive.Auth.Web.Modules
 {
     public abstract class AuthenticationModuleBase : IHttpModule
     {
-        protected AuthenticationModuleBase()
-        {
-            _userService = ServiceLocator.Current.GetInstance<IUserService>();
-            _config = ServiceLocator.Current.GetInstance<IConfigurationProvider>();
-        }
-
         const int ACCESS_DENIED_STATUS_CODE = 401;
         const string ACCESS_DENIED_STATUS_TEXT = "Access Denied";
         protected const string CHALLENGE_HEADER_NAME = "WWW-Authenticate";
         public const string RESPONSE_HEADER_NAME = "Authorization";
-        protected readonly IConfigurationProvider _config;
 
-        protected readonly IUserService _userService;
         protected string _realm;
 
         /// <summary>
@@ -34,6 +26,16 @@ namespace Contrive.Auth.Web.Modules
         }
 
         public virtual void Dispose() {}
+
+        protected static IConfigurationProvider GetConfigurationProvider()
+        {
+            return ServiceLocator.Current.GetInstance<IConfigurationProvider>();
+        }
+
+        protected static IUserService GetUserService()
+        {
+            return ServiceLocator.Current.GetInstance<IUserService>();
+        }
 
         protected static void AccessDenied(HttpApplication app)
         {

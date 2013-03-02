@@ -46,14 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContriveMembershipProvider.cs" />
-    <Compile Include="ContriveProfileProvider.cs" />
     <Compile Include="ContriveRoleProvider.cs" />
     <Compile Include="MembershipConfigurationProvider.cs" />
-    <Compile Include="Profile.cs" />
-    <Compile Include="ProfileService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityService.cs" />
-    <Compile Include="String_Resources.cs" />
     <Compile Include="WebSecurity.cs" />
   </ItemGroup>
   <ItemGroup>

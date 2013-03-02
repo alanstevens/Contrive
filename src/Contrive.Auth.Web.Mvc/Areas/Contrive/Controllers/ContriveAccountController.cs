@@ -83,7 +83,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
             if (ModelState.IsValid)
             {
                 // Attempt to register the user
-                MembershipCreateStatus createStatus;
+                //MembershipCreateStatus createStatus;
                 // TODO: HAS 02/27/2013 Fix the namespacing for Membership here!
                 //Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, out createStatus);
 

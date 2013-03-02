@@ -6,22 +6,19 @@ using Contrive.Common.Extensions;
 
 namespace Contrive.Common
 {
-    public class Cryptographer : CryptographerBase
+    public class Cryptographer<ENCRYPTION_ALGORITHM, HASH_ALGORITM> : CryptographerBase
+        where ENCRYPTION_ALGORITHM : SymmetricAlgorithm, new()
+        where HASH_ALGORITM : HashAlgorithm, new()
     {
-        public Cryptographer(byte[] encryptionKey, Type encryptionAlgorithm, byte[] hmacKey, Type hashAlgorithm)
+        public Cryptographer(byte[] encryptionKey, byte[] hmacKey)
         {
             Verify.NotEmpty(encryptionKey, "encryptionKey");
-            Verify.NotNull(encryptionAlgorithm, "encryptionAlgorithm");
-            Verify.NotNull(hashAlgorithm, "hashAlgorithm");
-            _encryptionAlgorithm = encryptionAlgorithm;
+            Verify.NotEmpty(hmacKey, "hmacKey");
             _hmacKey = hmacKey;
-            _hashAlgorithm = hashAlgorithm;
             _encryptionKey = encryptionKey;
         }
 
-        readonly Type _encryptionAlgorithm;
         readonly byte[] _encryptionKey;
-        readonly Type _hashAlgorithm;
         readonly byte[] _hmacKey;
         int _hashSize;
 
@@ -31,7 +28,7 @@ namespace Contrive.Common
             {
                 if (_hashSize == 0)
                 {
-                    using (var hashAlgorithm = _hashAlgorithm.Create<HashAlgorithm>())
+                    using (var hashAlgorithm = new HASH_ALGORITM())
                     {
                         _hashSize = hashAlgorithm.HashSize;
                     }
@@ -61,7 +58,7 @@ namespace Contrive.Common
         protected override string Decode(string encodedData, Protection protectionOption)
         {
             Verify.NotNull(encodedData, "encodedData");
-            if (encodedData.Length%2 != 0) throw new ArgumentException(null, "encodedData");
+            if (encodedData.Length % 2 != 0) throw new ArgumentException(null, "encodedData");
             byte[] buffer;
 
             try
@@ -93,13 +90,11 @@ namespace Contrive.Common
                 if (hashValue == null || hashValue.Length != HashSize) return null;
 
                 for (var index = 0; index < hashValue.Length; ++index)
-                {
                     if (hashValue[index] != bufferCopy[buffer.Length + index])
                         return null;
-                }
             }
 
-            return Encoding.Unicode.GetString(buffer);
+            return Encoding.UTF8.GetString(buffer);
         }
 
         byte[] Protect(byte[] buffer)
@@ -108,7 +103,7 @@ namespace Contrive.Common
 
             byte[] outputBuffer;
 
-            using (var algorithm = _encryptionAlgorithm.Create<SymmetricAlgorithm>())
+            using (var algorithm = new ENCRYPTION_ALGORITHM())
             {
                 using (var ms = new MemoryStream())
                 {
@@ -117,12 +112,13 @@ namespace Contrive.Common
 
                     ms.Write(algorithm.IV, 0, algorithm.IV.Length);
 
-                    var encryptor = algorithm.CreateEncryptor();
-
-                    using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    using (var encryptor = algorithm.CreateEncryptor())
                     {
-                        cs.Write(buffer, 0, buffer.Length);
-                        cs.FlushFinalBlock();
+                        using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                        {
+                            cs.Write(buffer, 0, buffer.Length);
+                            cs.FlushFinalBlock();
+                        }
                     }
 
                     outputBuffer = ms.ToArray();
@@ -138,7 +134,7 @@ namespace Contrive.Common
 
             byte[] outputBuffer;
 
-            using (var algorithm = _encryptionAlgorithm.Create<SymmetricAlgorithm>())
+            using (var algorithm = new ENCRYPTION_ALGORITHM())
             {
                 try
                 {
@@ -146,7 +142,7 @@ namespace Contrive.Common
 
                     Array.Copy(inputBuffer, inputVectorBuffer, inputVectorBuffer.Length);
 
-                    algorithm.IV = inputVectorBuffer;
+                    Buffer.BlockCopy(inputVectorBuffer, 0, algorithm.IV, 0, inputVectorBuffer.Length);
                     algorithm.Key = _encryptionKey;
 
                     using (var ms = new MemoryStream())
@@ -172,16 +168,17 @@ namespace Contrive.Common
 
         byte[] Hash(byte[] buffer)
         {
-            KeyedHashAlgorithm keyedHashAlgorithm = null;
-            HashAlgorithm hashAlgorithm = null;
+            byte[] hash;
 
-            keyedHashAlgorithm = _hashAlgorithm.Create<KeyedHashAlgorithm>();
+            using (var hashAlgorithm = new HASH_ALGORITM())
+            {
+                if (hashAlgorithm.Is<KeyedHashAlgorithm>())
+                    hash = HashKeyed(hashAlgorithm.As<KeyedHashAlgorithm>(), buffer, _hmacKey);
+                else
+                    hash = HashNonKeyed(hashAlgorithm, buffer, _hmacKey);
+            }
 
-            if (keyedHashAlgorithm.IsNull()) hashAlgorithm = _hashAlgorithm.Create<HashAlgorithm>();
-
-            if (hashAlgorithm.IsNull()) return HashKeyed(keyedHashAlgorithm, buffer, _hmacKey);
-
-            return HashNonKeyed(hashAlgorithm, buffer, _hmacKey);
+            return hash;
         }
 
         static byte[] HashNonKeyed(HashAlgorithm algorithm, byte[] buffer, byte[] validationKey)

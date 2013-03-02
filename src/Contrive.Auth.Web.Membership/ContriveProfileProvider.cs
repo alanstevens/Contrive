@@ -354,7 +354,7 @@ namespace Contrive.Auth.Web.Membership
             if (temp == null || temp.Length < 1)
                 throw new ProviderException(String_Resources.GetString(String_Resources.Connection_name_not_specified));
             //_sqlConnectionString = SqlConnectionHelper.GetConnectionString(temp, true, true);
-            if (_sqlConnectionString == null || _sqlConnectionString.Length < 1)
+            if (string.IsNullOrEmpty(_sqlConnectionString))
                 throw new ProviderException(String_Resources.GetString(String_Resources.Connection_string_not_found, temp));
 
             _AppName = config["applicationName"];

@@ -1,7 +1,7 @@
 ﻿using Contrive.Auth;
-using Contrive.Auth.Membership;
-using Contrive.Auth.Web.Membership;
+using Contrive.Auth.Web;
 using Contrive.Common;
+using Contrive.Common.Extensions;
 using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap
@@ -10,20 +10,28 @@ namespace Contrive.StructureMap
     {
         public AuthRegistry()
         {
-            For<IAuthConfigurationProvider>().Singleton().Use<IAuthConfigurationProvider>();
+            For<IAuthConfigurationProvider>().Singleton().Use<AuthConfigurationProvider>();
             For<IUserService>().Singleton().Use<UserService>();
-            For<IRoleService>().Singleton().Use<RoleService>();
-            For<ISecurityService>().Singleton().Use<SecurityService>();
             For<ICryptographer>().Singleton().Use(s =>
                                                   {
                                                       var cryptoConfig = s.GetInstance<ICryptoConfigurationProvider>();
-                                                      return new Cryptographer(cryptoConfig.EncryptionKey,
-                                                                               cryptoConfig.EncryptionAlgorithm,
-                                                                               cryptoConfig.HmacKey,
-                                                                               cryptoConfig.HashAlgorithm);
+                                                      return BuildCryptographer(cryptoConfig);
                                                   });
             For<IUserServiceSettings>().Singleton()
                                        .Use(s => new UserServiceSettings(s.GetInstance<IAuthConfigurationProvider>().UserServiceConfiguration));
+        }
+
+        static ICryptographer BuildCryptographer(ICryptoConfigurationProvider cryptoConfig)
+        {
+            var encryptionAlgorithm = cryptoConfig.EncryptionAlgorithm;
+            var hashAlgorithm = cryptoConfig.HashAlgorithm;
+            var encryptionKey = cryptoConfig.EncryptionKey;
+            var hmacKey = cryptoConfig.HmacKey;
+            var generic = typeof (Cryptographer<,>);
+            var specific = generic.MakeGenericType(new[] {encryptionAlgorithm, hashAlgorithm});
+            var ci = specific.GetConstructor(new[] {typeof (byte[]), typeof (byte[])});
+            var o = ci.Invoke(new object[] {encryptionKey, hmacKey});
+            return o.As<ICryptographer>();
         }
     }
 }

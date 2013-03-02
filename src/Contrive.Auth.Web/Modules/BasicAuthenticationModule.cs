@@ -3,6 +3,7 @@ using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Web;
+using Contrive.Common;
 
 namespace Contrive.Auth.Web.Modules
 {
@@ -11,7 +12,7 @@ namespace Contrive.Auth.Web.Modules
     {
         public BasicAuthenticationModule()
         {
-            _realm = _config.AppSettings["HTTPAuth.Components.AuthBasic_Realm"];
+            _realm = GetConfigurationProvider().AppSettings["HTTPAuth.Components.AuthBasic_Realm"];
         }
 
         const string AUTHENTICATION_METHOD_NAME = "Basic";
@@ -32,7 +33,7 @@ namespace Contrive.Auth.Web.Modules
             ParseUserNameAndPassword(authString, out userName, out password);
 
             // Validate user
-            if (_userService.ValidateUser(userName, password))
+            if (GetUserService().ValidateUser(userName, password))
             {
                 // Success - set user
                 var identity = new GenericIdentity(userName, AUTHENTICATION_METHOD_NAME);
