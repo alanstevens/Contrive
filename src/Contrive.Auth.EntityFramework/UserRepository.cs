@@ -1,4 +1,6 @@
-﻿using Contrive.Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Contrive.Common;
 
 namespace Contrive.Auth.EntityFramework
 {
@@ -19,6 +21,11 @@ namespace Contrive.Auth.EntityFramework
         public IUser GetUserByEmailAddress(string emailAddress)
         {
             return _repository.FirstOrDefault(u => u.Email == emailAddress);
+        }
+
+        public IEnumerable<IUser> GetUsersForUserNames(IEnumerable<string> userNames)
+        {
+            return _repository.Where(u => userNames.Contains(u.UserName));
         }
 
         public void Insert(IUser user)

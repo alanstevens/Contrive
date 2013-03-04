@@ -4,12 +4,12 @@ using Contrive.Auth;
 
 namespace Contrive.Web.Common
 {
-    public interface IUserService
+    public interface IFormsAuthService
     {
         IUser CurrentUser { get; }
 
         void UpdateCurrentUserWith(IPrincipal principal);
 
-        void UpdateCurrentUserWith(IUser user, Dictionary<string, string> userCapabilities = null);
+        void UpdateCurrentUserWith(IUser user, bool stayLoggedIn = false, IEnumerable<string> roleNames = null);
     }
 }

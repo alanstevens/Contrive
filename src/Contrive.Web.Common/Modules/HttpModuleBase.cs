@@ -9,12 +9,13 @@ namespace Contrive.Web.Common.Modules
         protected Action OnBeginRequest = () => { };
         protected Action OnEndRequest = () => { };
         protected Action OnError = () => { };
-        protected HttpContextBase _context;
+        HttpApplication _application;
+
+        protected HttpContextBase Context { get { return new HttpContextWrapper(_application.Context); } }
 
         public void Init(HttpApplication application)
         {
-            _context = new HttpContextWrapper(application.Context);
-
+            _application = application;
             application.BeginRequest += (s, e) => OnBeginRequest();
             application.Error += (s, e) => OnError();
             application.EndRequest += (s, e) => OnEndRequest();

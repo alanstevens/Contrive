@@ -6,7 +6,7 @@ namespace Contrive.Auth
 
         IUser GetUserByUserName(string userName);
 
-        bool ValidateUser(string userName, string password);
+        IUser ValidateUser(string userName, string password);
 
         UserCreateStatus CreateUser(string userName,
                                     string password,

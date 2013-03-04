@@ -8,7 +8,7 @@ namespace Contrive.Auth.EntityFramework.Membership
     public class MembershipContext : DbContext
     {
         public DbSet<UserExtended> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<RoleExtended> Roles { get; set; }
 
         public ObjectContext ObjectContext()
         {

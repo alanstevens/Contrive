@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="ContriveMembershipProvider.cs" />
     <Compile Include="ContriveRoleProvider.cs" />
-    <Compile Include="MembershipConfigurationProvider.cs" />
+    <Compile Include="AuthConfigurationProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityService.cs" />
     <Compile Include="WebSecurity.cs" />

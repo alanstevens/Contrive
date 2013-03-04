@@ -1,4 +1,6 @@
-﻿namespace Contrive.Auth
+﻿using System.Collections.Generic;
+
+namespace Contrive.Auth
 {
     public interface IUserRepository
     {
@@ -11,5 +13,7 @@
         void Update(IUser user);
 
         void Delete(IUser user);
+
+        IEnumerable<IUser> GetUsersForUserNames(IEnumerable<string> userNames);
     }
 }

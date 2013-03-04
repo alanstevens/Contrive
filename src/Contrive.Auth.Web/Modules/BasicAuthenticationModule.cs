@@ -4,6 +4,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Web;
 using Contrive.Common;
+using Contrive.Common.Extensions;
 
 namespace Contrive.Auth.Web.Modules
 {
@@ -33,7 +34,7 @@ namespace Contrive.Auth.Web.Modules
             ParseUserNameAndPassword(authString, out userName, out password);
 
             // Validate user
-            if (GetUserService().ValidateUser(userName, password))
+            if (GetUserService().ValidateUser(userName, password).IsNotNull())
             {
                 // Success - set user
                 var identity = new GenericIdentity(userName, AUTHENTICATION_METHOD_NAME);

@@ -11,13 +11,13 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
     [Authorize(Roles = "Admin")]
     public class MembershipController : Controller
     {
-        public MembershipController(IRoleService roleService, IUserServiceExtended userService)
+        public MembershipController(IRoleServiceExtended roleServiceExtended, IUserServiceExtended userService)
         {
-            _roleService = roleService;
+            _roleServiceExtended = roleServiceExtended;
             _userService = userService;
         }
 
-        readonly IRoleService _roleService;
+        readonly IRoleServiceExtended _roleServiceExtended;
         readonly IUserServiceExtended _userService;
 
         public virtual ActionResult Index(string searchterm, string filterby)
@@ -93,7 +93,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
         {
             var user = _userService.GetUserByUserName(userName);
 
-            var viewModel = new UserViewModel {User = user, Roles = _roleService.GetRolesForUser(userName)};
+            var viewModel = new UserViewModel {User = user, Roles = _roleServiceExtended.GetRolesForUser(userName)};
             //viewModel.RequiresSecretQuestionAndAnswer = _userService.RequiresQuestionAndAnswer;
 
             return View(viewModel);
@@ -188,18 +188,18 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
         {
             if (string.IsNullOrEmpty(username)) return RedirectToAction("Index");
 
-            var allRoles = _roleService.GetAllRoles();
+            var allRoles = _roleServiceExtended.GetAllRoles();
             var model = new GrantRolesToUserViewModel
             {
                 UserName = username,
                 AvailableRoles =
                     (string.IsNullOrEmpty(username)
                          ? new SelectList(allRoles)
-                         : new SelectList(allRoles.Where(r => !_roleService.GetRolesForUser(username).Contains(r)))),
+                         : new SelectList(allRoles.Where(r => !_roleServiceExtended.GetRolesForUser(username).Contains(r)))),
                 GrantedRoles =
                     (string.IsNullOrEmpty(username)
                          ? new SelectList(new string[] {})
-                         : new SelectList(_roleService.GetRolesForUser(username)))
+                         : new SelectList(_roleServiceExtended.GetRolesForUser(username)))
             };
 
             return View(model);
@@ -228,7 +228,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
 
             try
             {
-                _roleService.AddUsersToRoles(new[] {userName}, roleNames);
+                _roleServiceExtended.AddUsersToRoles(new[] {userName}, roleNames);
 
                 response.Success = true;
                 response.Message = "The Role(s) has been GRANTED successfully to " + userName;
@@ -272,7 +272,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
 
             try
             {
-                _roleService.RemoveUsersFromRoles(new[] {userName}, roleNames);
+                _roleServiceExtended.RemoveUsersFromRoles(new[] {userName}, roleNames);
 
                 response.Success = true;
                 response.Message = "The Role(s) has been REVOKED successfully for " + userName;

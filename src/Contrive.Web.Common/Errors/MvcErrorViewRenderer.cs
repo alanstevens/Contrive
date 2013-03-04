@@ -6,9 +6,9 @@ using Contrive.Common.Extensions;
 namespace Contrive.Web.Common.Errors
 {
     // Based on https://github.com/PureKrome/MagicalUnicorn.MvcErrorToolkit
-    public class MvcErrorView : ErrorViewBase
+    public class MvcErrorViewRenderer : ErrorViewRendererBase
     {
-        public MvcErrorView(IWebConfigurationProvider config) : base(config) {}
+        public MvcErrorViewRenderer(IWebConfigurationProvider config) : base(config) {}
 
         protected override void RenderCustomErrorView(HttpRequestBase request,
                                                       HttpResponseBase response,

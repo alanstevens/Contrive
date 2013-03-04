@@ -34,7 +34,12 @@ namespace Contrive.Auth.Membership
 
         public DateTime? FailedPasswordAttemptWindowStart { get; set; }
 
-        public ICollection<IRole> Roles { get; set; }
+        public ICollection<IRoleExtended> Roles { get; set; }
+
+        public bool IsNew
+        {
+            get { return Id == Guid.Empty; }
+        }
 
         //[MaxLength(100)]
         //public string PasswordQuestion { get; set; }
@@ -53,9 +58,13 @@ namespace Contrive.Auth.Membership
         //Optional
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
         public string TimeZone { get; set; }
         public string Culture { get; set; }
 
         public string AuthDigest { get; set; }
+
+        // TODO: HAS 03/03/2013 Get rid of this member
+        ICollection<IRole> IUser.Roles { get { return null; } set { } }
     }
 }

@@ -31,7 +31,7 @@ namespace Contrive.Auth.EntityFramework.Membership
         protected override void Seed(MembershipContext context)
         {
             var userService = ServiceLocator.Current.GetInstance<IUserServiceExtended>();
-            var roleService = ServiceLocator.Current.GetInstance<IRoleService>();
+            var roleService = ServiceLocator.Current.GetInstance<IRoleServiceExtended>();
             var seedRoles = new[] {"Admin", "ProjectManager", "Developer",};
 
             seedRoles.Each(roleService.CreateRole);

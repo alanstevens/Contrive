@@ -5,7 +5,7 @@ using Contrive.Auth.Membership;
 
 namespace Contrive.Auth.Web.Membership
 {
-    public class MembershipConfigurationProvider : AuthConfigurationProvider, IMembershipConfigurationProvider
+    public class AuthConfigurationProvider : Web.AuthConfigurationProvider, IAuthConfigurationProvider
     {
         public NameValueCollection RoleServiceConfiguration
         {

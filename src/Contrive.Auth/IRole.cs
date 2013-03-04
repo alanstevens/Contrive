@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Contrive.Auth.Membership
+namespace Contrive.Auth
 {
     public interface IRole
     {
@@ -11,6 +11,6 @@ namespace Contrive.Auth.Membership
 
         string Description { get; set; }
 
-        ICollection<IUserExtended> Users { get; set; }
+        ICollection<IUser> Users { get; set; }
     }
 }

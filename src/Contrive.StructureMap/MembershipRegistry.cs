@@ -8,7 +8,7 @@ namespace Contrive.StructureMap
     {
         public MembershipRegistry()
         {
-            For<IRoleService>().Singleton().Use<RoleService>();
+            For<IRoleServiceExtended>().Singleton().Use<RoleServiceExtended>();
             For<ISecurityService>().Singleton().Use<SecurityService>();
         }
     }

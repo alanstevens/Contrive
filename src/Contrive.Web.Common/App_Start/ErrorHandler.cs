@@ -1,11 +1,11 @@
-﻿using Contrive.Web.Common.Modules;
+﻿using System.Web;
 using Contrive.Web.Common.App_Start;
+using Contrive.Web.Common.Modules;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using WebActivator;
 
 [assembly: PreApplicationStartMethod(typeof (ErrorHandler), "PreStart")]
 
-namespace GoldMail.CloudComposer.WebRole.App_Start
+namespace Contrive.Web.Common.App_Start
 {
     public static class ErrorHandler
     {

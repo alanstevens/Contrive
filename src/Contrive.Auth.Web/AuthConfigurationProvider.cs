@@ -12,6 +12,8 @@ namespace Contrive.Auth.Web
             [DebuggerStepThrough] get { return GetUserServiceSettings(); }
         }
 
+        public NameValueCollection RoleServiceConfiguration { get; private set; }
+
         NameValueCollection GetUserServiceSettings()
         {
             // TODO: HAS 02/28/2013 Make this a base class for both client and web versions.

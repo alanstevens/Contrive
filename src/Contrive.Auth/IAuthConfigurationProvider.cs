@@ -6,5 +6,7 @@ namespace Contrive.Auth
     public interface IAuthConfigurationProvider : IConfigurationProvider
     {
         NameValueCollection UserServiceConfiguration { get; }
+
+        NameValueCollection RoleServiceConfiguration { get; }
     }
 }

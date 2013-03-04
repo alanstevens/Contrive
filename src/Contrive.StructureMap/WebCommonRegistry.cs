@@ -12,7 +12,7 @@ namespace Contrive.StructureMap
         {
             For<IWebConfigurationProvider>().Singleton().Use<WebConfigurationProvider>();
             For<ICache>().HttpContextScoped().Use<Cache>();
-            For<IErrorView>().Singleton().Use<MvcErrorView>();
+            For<IErrorViewRenderer>().Singleton().Use<MvcErrorViewRenderer>();
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
         }
     }

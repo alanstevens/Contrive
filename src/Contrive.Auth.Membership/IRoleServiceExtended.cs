@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Contrive.Auth.Membership
 {
-    public interface IRoleService
+    public interface IRoleServiceExtended
     {
         string ApplicationName { get; set; }
 
@@ -10,7 +10,7 @@ namespace Contrive.Auth.Membership
 
         bool IsUserInRole(string userName, string roleName);
 
-        IEnumerable<IRole> GetAllRoles();
+        IEnumerable<IRoleExtended> GetAllRoles();
 
         IEnumerable<IUserExtended> GetUsersInRole(string roleName);
 
@@ -18,7 +18,7 @@ namespace Contrive.Auth.Membership
 
         bool DeleteRole(string roleName, bool throwOnPopulatedRole = false);
 
-        IEnumerable<IRole> GetRolesForUser(string userName);
+        IEnumerable<IRoleExtended> GetRolesForUser(string userName);
 
         void CreateRole(string roleName);
 

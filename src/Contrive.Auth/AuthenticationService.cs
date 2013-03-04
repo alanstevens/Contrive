@@ -1,4 +1,5 @@
-using System;
+
+using Contrive.Common.Extensions;
 
 namespace Contrive.Auth
 {
@@ -15,24 +16,14 @@ namespace Contrive.Auth
 
         public bool LogOn(string userName, string password, bool rememberMe = false)
         {
-            if (_userService.ValidateUser(userName, password))
-                return _platformAuthenticationService.SignIn(userName, password, rememberMe);
-            return false;
+            var user = _userService.ValidateUser(userName, password);
+            if (user.IsNull()) return false;
+            return _platformAuthenticationService.SignIn(user, rememberMe);
         }
 
         public void LogOff()
         {
-            _platformAuthenticationService.SignOutCurrentUser();
-        }
-
-        public void SignOut(string userName)
-        {
-            _platformAuthenticationService.SignOut(userName);
-        }
-
-        public void SignOut(Guid userId)
-        {
-            _platformAuthenticationService.SignOut(userId);
+            _platformAuthenticationService.SignOut();
         }
     }
 }

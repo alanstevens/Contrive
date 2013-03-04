@@ -63,7 +63,7 @@ namespace Contrive.Web.Common
                 case MachineKeyValidation.HMACSHA512:
                     return typeof (HMACSHA512);
                 default:
-                    throw new ArgumentException("Wrong validation enum.");
+                    throw new ArgumentException("Unknown validation type.");
             }
         }
 

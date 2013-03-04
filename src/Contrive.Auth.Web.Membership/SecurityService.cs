@@ -14,17 +14,17 @@ namespace Contrive.Auth.Web.Membership
         public SecurityService(IUserServiceExtended userService,
                                IAuthenticationService authenticationService,
                                IPlatformAuthenticationService platformAuthenticationService,
-                               IRoleService roleService)
+                               IRoleServiceExtended roleServiceExtended)
         {
             _userService = userService;
             _authenticationService = authenticationService;
             _platformAuthenticationService = platformAuthenticationService;
-            _roleService = roleService;
+            _roleServiceExtended = roleServiceExtended;
         }
 
         readonly IAuthenticationService _authenticationService;
         readonly IPlatformAuthenticationService _platformAuthenticationService;
-        readonly IRoleService _roleService;
+        readonly IRoleServiceExtended _roleServiceExtended;
         readonly IUserServiceExtended _userService;
 
         public Guid CurrentUserId { get { return GetUserId(CurrentUserName); } }
@@ -148,7 +148,7 @@ namespace Contrive.Auth.Web.Membership
             Verify.NotEmpty(arrayOfRoles, "arrayOfRoles");
 
             var isMissingRoles =
-                arrayOfRoles.Any(role => !_roleService.IsUserInRole(CurrentUserName, role));
+                arrayOfRoles.Any(role => !_roleServiceExtended.IsUserInRole(CurrentUserName, role));
 
             if (!isMissingRoles) return;
 

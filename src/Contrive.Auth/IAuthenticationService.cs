@@ -7,9 +7,5 @@ namespace Contrive.Auth
         bool LogOn(string userName, string password, bool rememberMe = false);
 
         void LogOff();
-
-        void SignOut(string userName);
-
-        void SignOut(Guid userId);
     }
 }

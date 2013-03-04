@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration.Provider;
 using System.Text.RegularExpressions;
 using Contrive.Common;
@@ -43,12 +44,15 @@ namespace Contrive.Auth
             return _userRepository.GetUserByUserName(userName);
         }
 
-        public bool ValidateUser(string userName, string password)
+        public IUser ValidateUser(string userName, string password)
         {
             Verify.NotEmpty(userName, "userName");
             Verify.NotEmpty(password, "password");
 
-            return VerifyUser(GetUserByUserName(userName), password);
+            var user = GetUserByUserName(userName);
+            if (user.IsNotNull() && VerifyUser(user, password))
+                return user;
+            return null;
         }
 
         public bool DeleteAccount(string userName)
@@ -134,9 +138,15 @@ namespace Contrive.Auth
             return user;
         }
 
+        public IEnumerable<IUser> GetUsersForUserNames(IEnumerable<string> users)
+        {
+            return _userRepository.GetUsersForUserNames(users);
+        }
+
         bool VerifyPassword(IUser user, string password)
         {
             Verify.NotNull(user, "user");
+
             if (user.Password.IsEmpty()) return false;
 
             var encodedPassword = EncodePassword(password, user.PasswordSalt);
@@ -150,8 +160,6 @@ namespace Contrive.Auth
         {
             Verify.NotNull(user, "user");
             Verify.NotEmpty(password, "password");
-
-            if (user == null) return false;
 
             var verified = VerifyPassword(user, password);
 

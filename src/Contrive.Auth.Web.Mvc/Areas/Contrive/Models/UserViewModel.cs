@@ -7,6 +7,6 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Models
     {
         public IUserExtended User { get; set; }
         //public bool RequiresSecretQuestionAndAnswer { get; set; }
-        public IEnumerable<IRole> Roles { get; set; }
+        public IEnumerable<IRoleExtended> Roles { get; set; }
     }
 }

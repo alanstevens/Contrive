@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Contrive.Auth
@@ -24,5 +25,12 @@ namespace Contrive.Auth
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public ICollection<IRole> Roles { get; set; }
+
+        public bool IsNew
+        {
+            get { return Id == Guid.Empty; }
+        }
     }
 }

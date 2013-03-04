@@ -56,6 +56,7 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\Contrive.StructureMap\bin\Debug\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -67,19 +68,19 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\ErrorHandler.cs" />
     <Compile Include="Cache.cs" />
-    <Compile Include="Errors\ErrorViewBase.cs" />
     <Compile Include="Errors\HttpErrorHandler.cs" />
-    <Compile Include="Errors\IErrorView.cs" />
-    <Compile Include="Errors\MvcErrorView.cs" />
+    <Compile Include="Errors\ErrorViewRendererBase.cs" />
+    <Compile Include="Errors\IErrorViewRenderer.cs" />
+    <Compile Include="Errors\MvcErrorViewRenderer.cs" />
     <Compile Include="HttpContextBaseExtensions.cs" />
-    <Compile Include="IUserService.cs" />
+    <Compile Include="IFormsAuthService.cs" />
     <Compile Include="IWebConfigurationProvider.cs" />
+    <Compile Include="Modules\ErrorHandlingModule.cs" />
     <Compile Include="Mvc\LogErrorAttribute.cs" />
-    <Compile Include="UserService.cs" />
     <Compile Include="WebCryptoConfigurationProvider.cs" />
     <Compile Include="WebCryptographer.cs" />
-    <Compile Include="Modules\ErrorHandlingModule.cs" />
     <Compile Include="Mvc\RemoteRequireHttpsAttribute.cs" />
     <Compile Include="Mvc\WebStartupTask.cs" />
     <Compile Include="WebConfigurationProvider.cs" />

@@ -5,21 +5,21 @@ using Contrive.Common.Extensions;
 
 namespace Contrive.Auth.EntityFramework.Membership
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepositoryExtended : IRoleRepositoryExtended
     {
-        public RoleRepository(Repository<Role> repository)
+        public RoleRepositoryExtended(Repository<RoleExtended> repository)
         {
             _repository = repository;
         }
 
-        readonly Repository<Role> _repository;
+        readonly Repository<RoleExtended> _repository;
 
-        public IEnumerable<IRole> GetAll()
+        public IEnumerable<IRoleExtended> GetAll()
         {
             return _repository.GetAll();
         }
 
-        public IRole GetRoleByName(string roleName)
+        public IRoleExtended GetRoleByName(string roleName)
         {
             return _repository.FirstOrDefault(r => r.Name == roleName);
         }
@@ -31,26 +31,26 @@ namespace Contrive.Auth.EntityFramework.Membership
             return usersInRole.Where(u => u.UserName.Contains(usernameToMatch));
         }
 
-        public IEnumerable<IRole> GetRolesForRoleNames(IEnumerable<string> roleNames)
+        public IEnumerable<IRoleExtended> GetRolesForRoleNames(IEnumerable<string> roleNames)
         {
             return _repository.Where(r => roleNames.Contains(r.Name)).ToArray();
         }
 
-        public void Insert(IRole role)
+        public void Insert(IRoleExtended roleExtended)
         {
-            _repository.Insert(role.As<Role>());
+            _repository.Insert(roleExtended.As<RoleExtended>());
             SaveChanges();
         }
 
-        public void Update(IRole role)
+        public void Update(IRoleExtended roleExtended)
         {
-            _repository.Update(role.As<Role>());
+            _repository.Update(roleExtended.As<RoleExtended>());
             SaveChanges();
         }
 
-        public void Delete(IRole role)
+        public void Delete(IRoleExtended roleExtended)
         {
-            _repository.Delete(role.As<Role>());
+            _repository.Delete(roleExtended.As<RoleExtended>());
             SaveChanges();
         }
 

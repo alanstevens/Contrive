@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Security.Principal;
 using System.Web;
@@ -9,36 +8,33 @@ namespace Contrive.Auth.Web
 {
     public class WebPlatformAuthenticationService : IPlatformAuthenticationService
     {
-        static HttpContextBase HttpContext { get { return new HttpContextWrapper(System.Web.HttpContext.Current); } }
+        readonly IFormsAuthService _formsAuthService;
 
-        public IPrincipal CurrentPrincipal { get { return HttpContext.User; } }
-
-        public bool UserIsAuthenticated { get { return HttpContext.Request.IsAuthenticated; } }
-
-        public bool SignIn(string userName, string password, bool rememberMe = false)
+        public WebPlatformAuthenticationService(IFormsAuthService formsAuthService)
         {
-            FormsAuthentication.SetAuthCookie(userName, rememberMe);
+            _formsAuthService = formsAuthService;
+        }
+
+        static HttpContextBase Context { get { return new HttpContextWrapper(HttpContext.Current); } }
+
+        public IPrincipal CurrentPrincipal { get { return Context.User; } }
+
+        public bool UserIsAuthenticated { get { return Context.Request.IsAuthenticated; } }
+
+        public bool SignIn(IUser user, bool rememberMe = false)
+        {
+            _formsAuthService.UpdateCurrentUserWith(user, rememberMe);
             return true;
         }
 
-        public void SignOutCurrentUser()
-        {
-            FormsAuthentication.SignOut();
-        }
-
-        public void SignOut(string userName)
-        {
-            FormsAuthentication.SignOut();
-        }
-
-        public void SignOut(Guid userId)
+        public void SignOut()
         {
             FormsAuthentication.SignOut();
         }
 
         public void Deauthorize()
         {
-            HttpContext.Response.SetStatusAndReturn(HttpStatusCode.Unauthorized);
+            Context.Response.SetStatus(HttpStatusCode.Unauthorized);
         }
     }
 }

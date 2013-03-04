@@ -1,8 +1,8 @@
 using System.Web.Mvc;
-using GoldMail.Common;
-using GoldMail.Common.Extensions;
+using Contrive.Common;
+using Contrive.Common.Extensions;
 
-namespace GoldMail.CloudComposer.Web.Common.Mvc
+namespace Contrive.Web.Common.Mvc
 {
     public class LogErrorAttribute : HandleErrorAttribute, IStartupTask
     {

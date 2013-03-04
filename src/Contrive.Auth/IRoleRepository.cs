@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Contrive.Auth.Membership
+namespace Contrive.Auth
 {
     public interface IRoleRepository
     {
@@ -8,7 +8,7 @@ namespace Contrive.Auth.Membership
 
         IRole GetRoleByName(string roleName);
 
-        IEnumerable<IUserExtended> FindUsersInRole(string roleName, string usernameToMatch);
+        IEnumerable<IUser> FindUsersInRole(string roleName, string usernameToMatch);
 
         IEnumerable<IRole> GetRolesForRoleNames(IEnumerable<string> roleNames);
 

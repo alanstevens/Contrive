@@ -1,4 +1,3 @@
-using System;
 using System.Security.Principal;
 
 namespace Contrive.Auth
@@ -12,14 +11,10 @@ namespace Contrive.Auth
 
         IPrincipal CurrentPrincipal { get; }
 
-        bool SignIn(string userName, string password, bool rememberMe = false);
+        bool SignIn(IUser user, bool rememberMe = false);
 
-        void SignOutCurrentUser();
+        void SignOut();
 
         void Deauthorize();
-
-        void SignOut(string userName);
-
-        void SignOut(Guid userId);
     }
 }

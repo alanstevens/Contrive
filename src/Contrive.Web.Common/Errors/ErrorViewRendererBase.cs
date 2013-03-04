@@ -6,9 +6,9 @@ using Contrive.Common.Extensions;
 
 namespace Contrive.Web.Common.Errors
 {
-    public abstract class ErrorViewBase : IErrorView
+    public abstract class ErrorViewRendererBase : IErrorViewRenderer
     {
-        protected ErrorViewBase(IWebConfigurationProvider config)
+        protected ErrorViewRendererBase(IWebConfigurationProvider config)
         {
             _config = config;
         }
@@ -18,15 +18,15 @@ namespace Contrive.Web.Common.Errors
 
         readonly IWebConfigurationProvider _config;
 
-        public void Render(HttpResponseBase response, HttpRequestBase request, int statusCode, Exception currentError)
+        public void Render(HttpContextBase context, int statusCode, Exception currentError)
         {
-            if (request.IsAjaxRequest()) RenderAjaxView(request, currentError);
+            if (context.Request.IsAjaxRequest()) RenderAjaxView(context.Request, currentError);
             else
             {
                 var redirectPath = GetCustomErrorRedirect(statusCode);
 
-                if (redirectPath.Blank()) RenderFallBackErrorView(response, currentError);
-                else RenderCustomErrorView(request, response, redirectPath, currentError);
+                if (redirectPath.Blank()) RenderFallBackErrorView(context.Response, currentError);
+                else RenderCustomErrorView(context.Request, context.Response, redirectPath, currentError);
             }
         }
 

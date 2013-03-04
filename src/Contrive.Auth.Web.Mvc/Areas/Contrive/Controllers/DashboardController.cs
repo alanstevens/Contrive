@@ -7,13 +7,13 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
     [Authorize(Roles = "Admin")]
     public class DashboardController : Controller
     {
-        public DashboardController(IRoleService roleService, IUserService userService)
+        public DashboardController(IRoleServiceExtended roleServiceExtended, IUserService userService)
         {
-            _roleService = roleService;
+            _roleServiceExtended = roleServiceExtended;
             _userService = userService;
         }
 
-        readonly IRoleService _roleService;
+        readonly IRoleServiceExtended _roleServiceExtended;
         readonly IUserService _userService;
 
         public virtual ActionResult Index()

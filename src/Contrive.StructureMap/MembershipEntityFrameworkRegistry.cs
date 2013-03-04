@@ -14,8 +14,8 @@ namespace Contrive.StructureMap
             For<DbContext>().HybridHttpOrThreadLocalScoped().Use<MembershipContext>();
             For(typeof (IRepository<>)).HybridHttpOrThreadLocalScoped().Use(typeof (Repository<>));
             For<IUserExtendedRepository>().Singleton().Use<UserExtendedRepository>();
-            For<IRoleRepository>().Singleton().Use<RoleRepository>();
-            For<IRole>().Use<Role>();
+            For<IRoleRepositoryExtended>().Singleton().Use<RoleRepositoryExtended>();
+            For<IRoleExtended>().Use<RoleExtended>();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Contrive.Common;
+﻿using System;
+using System.Web;
+using Contrive.Common.Extensions;
 using Contrive.Web.Common.Errors;
 using Microsoft.Practices.ServiceLocation;
 
@@ -8,36 +10,43 @@ namespace Contrive.Web.Common.Modules
     {
         public ErrorHandlingModule()
         {
-            var sl = ServiceLocator.Current;
-            var errorHandler = sl.GetInstance<HttpErrorHandler>();
-            var cryptographer = sl.GetInstance<ICryptographer>();
-            var errorToken = cryptographer.GenerateToken();
-            var request = _context.Request;
-            var response = _context.Response;
-            var currentError = _context.Error;
-            var isCustomErrorEnabled = _context.IsCustomErrorEnabled;
-            var contextItems = _context.Items;
+            var errorHandledKey = Guid.Empty;
 
             OnError = () =>
                       {
-                          errorHandler.HandleError(request, response, ERROR_STATUS_CODE, currentError, isCustomErrorEnabled);
-
-                          contextItems.Add(errorToken, true);
+                          HttpErrorHandler.HandleError(Context, ERROR_STATUS_CODE);
+                          errorHandledKey = Guid.NewGuid();
+                          Context.Items.Add(errorHandledKey, true);
                       };
 
             OnEndRequest = () =>
                            {
-                               if (!contextItems.Contains(errorToken) && response.StatusCode >= ERROR_STATUS_CODE)
-                                   errorHandler.HandleError(request, response, response.StatusCode, currentError, isCustomErrorEnabled);
+                               if (!Context.Items.Contains(errorHandledKey)
+                                   && IsAnErrorResponse(Context.Response))
+                                   HttpErrorHandler.HandleError(Context, Context.Response.StatusCode);
+
+                               errorHandledKey = Guid.Empty;
                            };
         }
 
         const int ERROR_STATUS_CODE = 400;
+        HttpErrorHandler _httpErrorHandler;
 
-        protected override void OnDisposing(bool disposing)
+        public HttpErrorHandler HttpErrorHandler
         {
-            OnError = null;
-            OnEndRequest = null;
+            get
+            {
+                if (_httpErrorHandler.IsNull())
+                    _httpErrorHandler = ServiceLocator.Current.GetInstance<HttpErrorHandler>();
+                return _httpErrorHandler;
+            }
         }
+
+        static bool IsAnErrorResponse(HttpResponseBase httpResponse)
+        {
+            return httpResponse.StatusCode >= ERROR_STATUS_CODE;
+        }
+
+        protected override void OnDisposing(bool disposing) {}
     }
 }

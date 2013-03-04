@@ -1,41 +1,45 @@
-using System;
+using System.Diagnostics;
 using System.Web;
 using Contrive.Common.Extensions;
 
 namespace Contrive.Web.Common.Errors
 {
+    // Based on https://github.com/PureKrome/MagicalUnicorn.MvcErrorToolkit
     public class HttpErrorHandler
     {
-        public HttpErrorHandler(IWebConfigurationProvider configurationProvider, IErrorView errorView)
+        public HttpErrorHandler(IWebConfigurationProvider configurationProvider, IErrorViewRenderer errorViewRenderer)
         {
             _configurationProvider = configurationProvider;
-            _errorView = errorView;
+            _errorViewRenderer = errorViewRenderer;
         }
 
         readonly IWebConfigurationProvider _configurationProvider;
-        readonly IErrorView _errorView;
+        readonly IErrorViewRenderer _errorViewRenderer;
 
-        public void HandleError(HttpRequestBase request,
-                                HttpResponseBase response,
-                                int statusCode,
-                                Exception currentError,
-                                bool isCustomErrorEnabled)
+        public void HandleError(HttpContextBase context, int statusCode)
         {
-            this.LogException(currentError.GetBaseException());
+            var currentError = context.Error;
+
+            if (currentError.IsNull()) return;
+
+#if DEBUG
+            Debugger.Break();
+#endif
+
             this.LogException(currentError);
 
-            if (!isCustomErrorEnabled || !UseCustomErrors(request.IsLocal)) return;
+            if (!context.IsCustomErrorEnabled || !UseCustomErrors(context.Request.IsLocal)) return;
 
-            var httpErrorException = currentError as HttpException;
-            if (httpErrorException.IsNotNull()) statusCode = httpErrorException.GetHttpCode();
+            var httpException = currentError as HttpException;
+            if (httpException != null) statusCode = httpException.GetHttpCode();
 
-            response.SetStatus(statusCode);
+            context.Response.SetStatus(statusCode);
 
-            _errorView.Render(response, request, statusCode, currentError);
+            _errorViewRenderer.Render(context, statusCode, currentError);
 
-            HttpContext.Current.ClearError();
+            context.ClearError();
 
-            response.TrySkipIisCustomErrors = true;
+            context.Response.TrySkipIisCustomErrors = true;
         }
 
         bool UseCustomErrors(bool isLocal)

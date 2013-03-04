@@ -12,17 +12,17 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
     [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
-        public RoleController(IRoleService roleService)
+        public RoleController(IRoleServiceExtended roleServiceExtended)
         {
-            _roleService = roleService;
+            _roleServiceExtended = roleServiceExtended;
         }
 
-        readonly IRoleService _roleService;
+        readonly IRoleServiceExtended _roleServiceExtended;
 
         public virtual ActionResult Index()
         {
             var model = new ManageRolesViewModel
-            {Roles = new SelectList(_roleService.GetAllRoles()), RoleList = _roleService.GetAllRoles()};
+            {Roles = new SelectList(_roleServiceExtended.GetAllRoles()), RoleList = _roleServiceExtended.GetAllRoles()};
 
             return View(model);
         }
@@ -49,7 +49,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
 
             try
             {
-                _roleService.CreateRole(roleName);
+                _roleServiceExtended.CreateRole(roleName);
 
                 if (Request.IsAjaxRequest())
                 {
@@ -93,7 +93,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
                 return Json(response);
             }
 
-            _roleService.DeleteRole(roleName);
+            _roleServiceExtended.DeleteRole(roleName);
 
             response.Success = true;
             response.Message = roleName + " was deleted successfully!";
@@ -124,7 +124,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
                 ResponseItem item;
                 try
                 {
-                    _roleService.DeleteRole(role, throwOnPopulatedRole);
+                    _roleServiceExtended.DeleteRole(role, throwOnPopulatedRole);
 
                     item = new ResponseItem
                     {Success = true, Message = "Deleted this role successfully - " + role, CssClass = "green"};
@@ -149,7 +149,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
 
         public ActionResult GetAllRoles()
         {
-            var list = _roleService.GetAllRoles();
+            var list = _roleServiceExtended.GetAllRoles();
 
             var selectList = list.Select(item => new SelectObject {caption = item.Name, value = item.Name}).ToList();
 
@@ -159,7 +159,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
         [HttpGet]
         public ActionResult GetUsersInRole(string roleName)
         {
-            var list = _roleService.GetUsersInRole(roleName);
+            var list = _roleServiceExtended.GetUsersInRole(roleName);
 
             return Json(list, JsonRequestBehavior.AllowGet);
         }

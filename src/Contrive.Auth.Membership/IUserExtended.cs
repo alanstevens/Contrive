@@ -25,7 +25,7 @@ namespace Contrive.Auth.Membership
 
         DateTime? FailedPasswordAttemptWindowStart { get; set; }
 
-        ICollection<IRole> Roles { get; set; }
+        new ICollection<IRoleExtended> Roles { get; set; }
 
         DateTime? LastPasswordChangedDate { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Contrive.Auth
 {
@@ -17,5 +18,9 @@ namespace Contrive.Auth
         string FirstName { get; set; }
 
         string LastName { get; set; }
+
+        ICollection<IRole> Roles { get; set; }
+
+        bool IsNew { get; }
     }
 }
