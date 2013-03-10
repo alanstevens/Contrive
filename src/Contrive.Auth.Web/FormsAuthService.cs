@@ -37,7 +37,11 @@ namespace Contrive.Auth.Web
             }
         }
 
-        public IUser CurrentUser { get { return Context.Items[CURRENT_USER_KEY].As<IUser>(); } private set { Context.Items[CURRENT_USER_KEY] = value; } }
+        public IUser CurrentUser
+        {
+            get { return Context.Items[CURRENT_USER_KEY].As<IUser>(); } 
+            private set { Context.Items[CURRENT_USER_KEY] = value; }
+        }
 
         /// <summary>
         ///     To be called on authenticate request with Application.User
@@ -101,13 +105,6 @@ namespace Contrive.Auth.Web
             return FormsAuthentication.Decrypt(cookieValue);
         }
 
-        static HttpCookie GetCurrentCookie()
-        {
-            var cookieName = FormsAuthentication.FormsCookieName;
-            var authCookie = Context.Request.Cookies[cookieName];
-            return authCookie;
-        }
-
         static FormsAuthenticationTicket NewTicket(DateTime expires, bool stayLoggedIn)
         {
             return new FormsAuthenticationTicket(2, "", DateTime.Now, expires, stayLoggedIn, "");
@@ -129,6 +126,13 @@ namespace Contrive.Auth.Web
             cookie.Value = FormsAuthentication.Encrypt(ticket);
             cookie.Expires = ticket.Expiration;
             return cookie;
+        }
+
+        static HttpCookie GetCurrentCookie()
+        {
+            var cookieName = FormsAuthentication.FormsCookieName;
+            var authCookie = Context.Request.Cookies[cookieName];
+            return authCookie;
         }
 
         /// <summary>
