@@ -4,6 +4,6 @@ namespace Contrive.Auth.Membership
 {
     public interface IRoleExtended : IRole
     {
-        ICollection<IUserExtended> Users { get; set; }
+        new ICollection<IUserExtended> Users { get; set; }
     }
 }

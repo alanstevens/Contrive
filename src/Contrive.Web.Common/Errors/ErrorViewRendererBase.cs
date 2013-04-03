@@ -33,10 +33,10 @@ namespace Contrive.Web.Common.Errors
         protected virtual void RenderAjaxView(HttpRequestBase request, Exception currentError)
         {
             var jsonResult = new JsonResult
-            {
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = new {error_message = GetJsonErrorMessage(request, currentError)}
-            };
+                             {
+                                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                                 Data = new {error_message = GetJsonErrorMessage(request, currentError)}
+                             };
 
             jsonResult.ExecuteResult(NewControllerContext(request));
         }

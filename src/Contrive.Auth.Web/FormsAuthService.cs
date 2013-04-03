@@ -26,8 +26,6 @@ namespace Contrive.Auth.Web
 
         readonly IRoleRepository _roleRepository;
 
-        static HttpContextBase Context { get { return new HttpContextWrapper(HttpContext.Current); } }
-
         static DateTime ExpirationTime
         {
             get
@@ -37,11 +35,7 @@ namespace Contrive.Auth.Web
             }
         }
 
-        public IUser CurrentUser
-        {
-            get { return Context.Items[CURRENT_USER_KEY].As<IUser>(); } 
-            private set { Context.Items[CURRENT_USER_KEY] = value; }
-        }
+        public IUser CurrentUser { get { return HttpContextProvider.GetContext().Items[CURRENT_USER_KEY].As<IUser>(); } private set { HttpContextProvider.GetContext().Items[CURRENT_USER_KEY] = value; } }
 
         /// <summary>
         ///     To be called on authenticate request with Application.User
@@ -76,14 +70,15 @@ namespace Contrive.Auth.Web
 
             var cookie = RenewCookie(currentTicket);
 
-            Context.Response.Cookies.Set(cookie);
-            Context.Request.Cookies.Set(cookie);
+            var context = HttpContextProvider.GetContext();
+            context.Response.Cookies.Set(cookie);
+            context.Request.Cookies.Set(cookie);
 
             if (roleNames.IsNull() || roleNames.IsEmpty())
             {
                 if (!user.IsNew && user.Roles.Any())
                     roleNames = user.Roles.Select(r => r.Name);
-                else roleNames = new string[] { };
+                else roleNames = new string[] {};
             }
             else
             {
@@ -94,7 +89,7 @@ namespace Contrive.Auth.Web
             var identity = new FormsIdentity(currentTicket);
 
             // TODO: HAS 03/03/2013 Create a custom Principal type to hold custom data
-            Context.User = new GenericPrincipal(identity, roleNames.ToArray());
+            context.User = new GenericPrincipal(identity, roleNames.ToArray());
 
             CurrentUser = user;
         }
@@ -128,10 +123,10 @@ namespace Contrive.Auth.Web
             return cookie;
         }
 
-        static HttpCookie GetCurrentCookie()
+        HttpCookie GetCurrentCookie()
         {
             var cookieName = FormsAuthentication.FormsCookieName;
-            var authCookie = Context.Request.Cookies[cookieName];
+            var authCookie = HttpContextProvider.GetContext().Request.Cookies[cookieName];
             return authCookie;
         }
 
@@ -155,9 +150,9 @@ namespace Contrive.Auth.Web
             roleNames = null;
             if (userData.Blank()) return new User();
 
-            var propertyValues = userData.Split(new[] { ',' });
+            var propertyValues = userData.Split(new[] {','});
 
-            roleNames = propertyValues[7].Split(new[] { '|' });
+            roleNames = propertyValues[7].Split(new[] {'|'});
 
             return new User
                    {

@@ -67,7 +67,7 @@
   <ItemGroup>
     <Compile Include="AuthConfigurationProvider.cs" />
     <Compile Include="FormsAuthService.cs" />
-    <Compile Include="WebPlatformAuthenticationService.cs" />
+    <Compile Include="WebAuthenticationService.cs" />
     <Compile Include="Modules\AuthenticationModuleBase.cs" />
     <Compile Include="Modules\BasicAuthenticationModule.cs" />
     <Compile Include="Modules\DigestAuthenticationModule.cs" />

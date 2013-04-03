@@ -12,28 +12,28 @@ namespace Contrive.Auth.Web.Membership
     public class SecurityService : ISecurityService
     {
         public SecurityService(IUserServiceExtended userService,
+                               ILogOnService lLogOnService,
                                IAuthenticationService authenticationService,
-                               IPlatformAuthenticationService platformAuthenticationService,
                                IRoleServiceExtended roleServiceExtended)
         {
             _userService = userService;
+            _logOnService = lLogOnService;
             _authenticationService = authenticationService;
-            _platformAuthenticationService = platformAuthenticationService;
             _roleServiceExtended = roleServiceExtended;
         }
 
+        readonly ILogOnService _logOnService;
         readonly IAuthenticationService _authenticationService;
-        readonly IPlatformAuthenticationService _platformAuthenticationService;
         readonly IRoleServiceExtended _roleServiceExtended;
         readonly IUserServiceExtended _userService;
 
         public Guid CurrentUserId { get { return GetUserId(CurrentUserName); } }
 
-        public string CurrentUserName { get { return _platformAuthenticationService.CurrentPrincipal.Identity.Name; } }
+        public string CurrentUserName { get { return _authenticationService.CurrentPrincipal.Identity.Name; } }
 
         public bool HasUserId { get { return !(CurrentUserId == Guid.Empty); } }
 
-        public bool IsAuthenticated { get { return _platformAuthenticationService.UserIsAuthenticated; } }
+        public bool IsAuthenticated { get { return _authenticationService.UserIsAuthenticated; } }
 
         public bool Login(string userNameOrEmail, string password, bool rememberMe = false)
         {
@@ -42,12 +42,12 @@ namespace Contrive.Auth.Web.Membership
 
             var user = _userService.GetUserByUserNameOrEmailAddress(userNameOrEmail);
             if (user.IsNull()) return false;
-            return _authenticationService.LogOn(user.UserName, password, rememberMe);
+            return _logOnService.LogOn(user.UserName, password, rememberMe);
         }
 
         public void Logout()
         {
-            _authenticationService.LogOff();
+            _logOnService.LogOff();
         }
 
         public bool ChangePassword(string userName, string currentPassword, string newPassword)
@@ -125,22 +125,22 @@ namespace Contrive.Auth.Web.Membership
 
         public void RequireAuthenticatedUser()
         {
-            var currentPrincipal = _platformAuthenticationService.CurrentPrincipal;
+            var currentPrincipal = _authenticationService.CurrentPrincipal;
             if (currentPrincipal == null || !currentPrincipal.Identity.IsAuthenticated)
-                _platformAuthenticationService.Deauthorize();
+                _authenticationService.Deauthorize();
         }
 
         public void RequireUser(Guid userId)
         {
             Verify.NotEmpty(userId, "userId");
-            if (!IsUserLoggedOn(userId)) _platformAuthenticationService.Deauthorize();
+            if (!IsUserLoggedOn(userId)) _authenticationService.Deauthorize();
         }
 
         public void RequireUser(string userName)
         {
             Verify.NotEmpty(userName, "userName");
             if (!string.Equals(CurrentUserName, userName, StringComparison.OrdinalIgnoreCase))
-                _platformAuthenticationService.Deauthorize();
+                _authenticationService.Deauthorize();
         }
 
         public void RequireRoles(params string[] arrayOfRoles)
@@ -152,7 +152,7 @@ namespace Contrive.Auth.Web.Membership
 
             if (!isMissingRoles) return;
 
-            _platformAuthenticationService.Deauthorize();
+            _authenticationService.Deauthorize();
         }
 
         public bool ResetPassword(string passwordResetToken, string newPassword)

@@ -308,16 +308,16 @@ namespace Contrive.Tests.SubSpec
                 catch (Exception ex)
                 {
                     return new ITestCommand[]
-                    {
-                        new ExceptionTestCommand(method,
-                                                 () =>
-                                                 {
-                                                     throw new InvalidOperationException(
-                                                         string.Format(
-                                                                       "An exception was thrown while building tests from Specification {0}.{1}:\r\n" +
-                                                                       ex, method.TypeName, method.Name));
-                                                 })
-                    };
+                           {
+                               new ExceptionTestCommand(method,
+                                                        () =>
+                                                        {
+                                                            throw new InvalidOperationException(
+                                                                string.Format(
+                                                                              "An exception was thrown while building tests from Specification {0}.{1}:\r\n" +
+                                                                              ex, method.TypeName, method.Name));
+                                                        })
+                           };
                 }
             }
 

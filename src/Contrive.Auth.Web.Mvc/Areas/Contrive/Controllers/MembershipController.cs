@@ -190,17 +190,17 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
 
             var allRoles = _roleServiceExtended.GetAllRoles();
             var model = new GrantRolesToUserViewModel
-            {
-                UserName = username,
-                AvailableRoles =
-                    (string.IsNullOrEmpty(username)
-                         ? new SelectList(allRoles)
-                         : new SelectList(allRoles.Where(r => !_roleServiceExtended.GetRolesForUser(username).Contains(r)))),
-                GrantedRoles =
-                    (string.IsNullOrEmpty(username)
-                         ? new SelectList(new string[] {})
-                         : new SelectList(_roleServiceExtended.GetRolesForUser(username)))
-            };
+                        {
+                            UserName = username,
+                            AvailableRoles =
+                                (string.IsNullOrEmpty(username)
+                                     ? new SelectList(allRoles)
+                                     : new SelectList(allRoles.Where(r => !_roleServiceExtended.GetRolesForUser(username).Contains(r)))),
+                            GrantedRoles =
+                                (string.IsNullOrEmpty(username)
+                                     ? new SelectList(new string[] {})
+                                     : new SelectList(_roleServiceExtended.GetRolesForUser(username)))
+                        };
 
             return View(model);
         }

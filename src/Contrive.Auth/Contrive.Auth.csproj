@@ -65,11 +65,11 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticationService.cs" />
+    <Compile Include="LogOnService.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="IAuthConfigurationProvider.cs" />
+    <Compile Include="ILogOnService.cs" />
     <Compile Include="IAuthenticationService.cs" />
-    <Compile Include="IPlatformAuthenticationService.cs" />
     <Compile Include="IRole.cs" />
     <Compile Include="IRoleRepository.cs" />
     <Compile Include="IRoleService.cs" />

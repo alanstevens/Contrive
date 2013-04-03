@@ -1,4 +1,3 @@
-using System.Web;
 using Contrive.Common;
 using Contrive.Web.Common;
 using Contrive.Web.Common.Errors;
@@ -13,7 +12,6 @@ namespace Contrive.StructureMap
             For<IWebConfigurationProvider>().Singleton().Use<WebConfigurationProvider>();
             For<ICache>().HttpContextScoped().Use<Cache>();
             For<IErrorViewRenderer>().Singleton().Use<MvcErrorViewRenderer>();
-            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
         }
     }
 }

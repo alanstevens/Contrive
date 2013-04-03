@@ -10,8 +10,8 @@ namespace Contrive.Auth.Membership
     public class RoleServiceExtended : IRoleServiceExtended
     {
         public RoleServiceExtended(IRoleRepositoryExtended roleRepositoryExtended,
-                           IUserExtendedRepository userRepository,
-                           IAuthConfigurationProvider configuration)
+                                   IUserExtendedRepository userRepository,
+                                   IAuthConfigurationProvider configuration)
         {
             _roleRepositoryExtended = roleRepositoryExtended;
             _userRepository = userRepository;

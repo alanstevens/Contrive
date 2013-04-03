@@ -70,11 +70,13 @@
   <ItemGroup>
     <Compile Include="App_Start\ErrorHandler.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="Elmah.cs" />
     <Compile Include="Errors\HttpErrorHandler.cs" />
     <Compile Include="Errors\ErrorViewRendererBase.cs" />
     <Compile Include="Errors\IErrorViewRenderer.cs" />
     <Compile Include="Errors\MvcErrorViewRenderer.cs" />
     <Compile Include="HttpContextBaseExtensions.cs" />
+    <Compile Include="HttpContextProvider.cs" />
     <Compile Include="IFormsAuthService.cs" />
     <Compile Include="IWebConfigurationProvider.cs" />
     <Compile Include="Modules\ErrorHandlingModule.cs" />

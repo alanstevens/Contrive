@@ -36,10 +36,7 @@ namespace Contrive.Auth.Membership
 
         public ICollection<IRoleExtended> Roles { get; set; }
 
-        public bool IsNew
-        {
-            get { return Id == Guid.Empty; }
-        }
+        public bool IsNew { get { return Id == Guid.Empty; } }
 
         //[MaxLength(100)]
         //public string PasswordQuestion { get; set; }

@@ -35,7 +35,7 @@ namespace Contrive.Tests
             "Given a new RoleService".Context(
                                               () =>
                                               _roleRepository.Setup(r => r.GetAll()).Returns(new List<IRoleExtended>
-                                              {new Mock<IRoleExtended>().Object}));
+                                                                                             {new Mock<IRoleExtended>().Object}));
             "Get all should not be empty".Assert(() => _roleServiceExtended.GetAllRoles().Should().NotBeEmpty());
         }
 
@@ -139,7 +139,7 @@ namespace Contrive.Tests
             "When ".Do(
                        () =>
                        _roleServiceExtended.AddUsersToRoles(new[] {userMock.Object, _userMock2.Object},
-                                                    new[] {roleMock.Object, _roleMock2.Object}));
+                                                            new[] {roleMock.Object, _roleMock2.Object}));
             "It should ".Assert(() =>
                                 {
                                     roleMock.Object.Users.Should().Contain(userMock.Object);
@@ -167,7 +167,7 @@ namespace Contrive.Tests
             "When ".Do(
                        () =>
                        _roleServiceExtended.RemoveUsersFromRoles(new[] {userMock.Object, _userMock2.Object},
-                                                         new[] {roleMock.Object, _roleMock2.Object}));
+                                                                 new[] {roleMock.Object, _roleMock2.Object}));
             "It should ".Assert(() =>
                                 {
                                     roleMock.Object.Users.Should().BeEmpty();

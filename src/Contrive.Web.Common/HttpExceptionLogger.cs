@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Web;
 using Contrive.Common;
 using Contrive.Common.Extensions;
 using Elmah;
@@ -14,11 +13,11 @@ namespace Contrive.Web.Common
             LoggingExtensions.ExceptionLogger = LogException;
         }
 
-        static void LogException(object source, Exception ex)
+        void LogException(object source, Exception ex)
         {
             try
             {
-                RaiseErrorSignal(ex);
+                Elmah.RaiseErrorSignal(ex);
 
                 // Rely on ELMAH configuration to filter messages from Log4Net
                 if (IsFiltered(ex)) return;
@@ -34,22 +33,9 @@ namespace Contrive.Web.Common
             }
         }
 
-        static void RaiseErrorSignal(Exception ex)
+        bool IsFiltered(Exception ex)
         {
-            var context = HttpContext.Current;
-
-            if (context.IsNull()) return;
-
-            var signal = ErrorSignal.FromContext(context);
-
-            if (signal.IsNull()) return;
-
-            signal.Raise(ex, context);
-        }
-
-        static bool IsFiltered(Exception ex)
-        {
-            var context = HttpContext.Current;
+            var context = HttpContextProvider.GetContext();
 
             if (context.IsNull()) return false;
 

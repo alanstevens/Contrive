@@ -58,7 +58,7 @@ namespace Contrive.Common
         protected override string Decode(string encodedData, Protection protectionOption)
         {
             Verify.NotNull(encodedData, "encodedData");
-            if (encodedData.Length % 2 != 0) throw new ArgumentException(null, "encodedData");
+            if (encodedData.Length%2 != 0) throw new ArgumentException(null, "encodedData");
             byte[] buffer;
 
             try
@@ -90,8 +90,10 @@ namespace Contrive.Common
                 if (hashValue == null || hashValue.Length != HashSize) return null;
 
                 for (var index = 0; index < hashValue.Length; ++index)
+                {
                     if (hashValue[index] != bufferCopy[buffer.Length + index])
                         return null;
+                }
             }
 
             return Encoding.UTF8.GetString(buffer);

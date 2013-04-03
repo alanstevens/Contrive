@@ -11,16 +11,16 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
     public class ContriveAccountController : Controller
     {
         public ContriveAccountController(IUserServiceExtended userService,
-                                         IAuthenticationService authenticationService,
+                                         ILogOnService logOnService,
                                          IEmailService emailService)
         {
             _userService = userService;
-            _authenticationService = authenticationService;
+            _logOnService = logOnService;
             _emailService = emailService;
         }
 
         const int ONE_DAY_IN_MINUTES = 24*60;
-        readonly IAuthenticationService _authenticationService;
+        readonly ILogOnService _logOnService;
         readonly IEmailService _emailService;
         readonly IUserServiceExtended _userService;
 
@@ -41,7 +41,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_authenticationService.LogOn(model.UserName, model.Password, model.RememberMe))
+                if (_logOnService.LogOn(model.UserName, model.Password, model.RememberMe))
                 {
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/") &&
                         !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\")) return Redirect(returnUrl);
@@ -66,7 +66,7 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
         [HttpGet]
         public virtual ActionResult LogOff()
         {
-            _authenticationService.LogOff();
+            _logOnService.LogOff();
 
             return RedirectToAction("Index", "Home");
         }
@@ -102,10 +102,10 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
         public virtual ActionResult ChangePassword()
         {
             var viewModel = new ChangePasswordViewModel
-            {
-                MinRequiredNonAlphanumericCharacters = _userService.Settings.MinRequiredNonAlphanumericCharacters,
-                MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength
-            };
+                            {
+                                MinRequiredNonAlphanumericCharacters = _userService.Settings.MinRequiredNonAlphanumericCharacters,
+                                MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength
+                            };
 
             return View(viewModel);
         }
@@ -188,11 +188,11 @@ namespace Contrive.Auth.Web.Mvc.Areas.Contrive.Controllers
             if (user.IsNull()) return RedirectToAction("Index", "Home");
 
             var model = new PasswordResetModel
-            {
-                User = user,
-                MinRequiredNonAlphanumericCharacters = _userService.Settings.MinRequiredNonAlphanumericCharacters,
-                MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength
-            };
+                        {
+                            User = user,
+                            MinRequiredNonAlphanumericCharacters = _userService.Settings.MinRequiredNonAlphanumericCharacters,
+                            MinRequiredPasswordLength = _userService.Settings.MinRequiredPasswordLength
+                        };
 
             return View(model);
         }

@@ -28,9 +28,6 @@ namespace Contrive.Auth
 
         public ICollection<IRole> Roles { get; set; }
 
-        public bool IsNew
-        {
-            get { return Id == Guid.Empty; }
-        }
+        public bool IsNew { get { return Id == Guid.Empty; } }
     }
 }

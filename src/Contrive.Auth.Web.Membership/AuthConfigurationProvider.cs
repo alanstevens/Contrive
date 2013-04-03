@@ -1,7 +1,6 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Web.Configuration;
-using Contrive.Auth.Membership;
 
 namespace Contrive.Auth.Web.Membership
 {
