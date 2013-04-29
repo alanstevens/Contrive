@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Security;
 using Contrive.Common;
 using Contrive.Common.Extensions;
+using Contrive.Common.Web;
 
 namespace Contrive.Auth.Web
 {

@@ -1,4 +1,6 @@
 using Contrive.Common;
+using Contrive.Common.Web;
+using Contrive.Common.Web.Errors;
 using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap

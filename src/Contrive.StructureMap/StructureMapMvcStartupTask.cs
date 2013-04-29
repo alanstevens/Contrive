@@ -1,12 +1,13 @@
 ﻿using System.Web.Mvc;
+using Contrive.Common;
 using Microsoft.Practices.ServiceLocation;
 using StructureMap;
 
 namespace Contrive.StructureMap
 {
-    public class StructureMapMvcStartupTask
+    public class StructureMapMvcStartupTask : IStartupTask
     {
-        public StructureMapMvcStartupTask()
+        public void OnStartup()
         {
             var container = ServiceLocator.Current.GetInstance<IContainer>();
             var dependencyResolver = new StructureMapDependencyResolver(container);

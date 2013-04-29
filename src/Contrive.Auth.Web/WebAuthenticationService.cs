@@ -1,6 +1,7 @@
 using System.Net;
 using System.Security.Principal;
 using System.Web.Security;
+using Contrive.Common.Web;
 
 namespace Contrive.Auth.Web
 {

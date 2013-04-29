@@ -2,6 +2,8 @@
 using Contrive.Auth.Web;
 using Contrive.Common;
 using Contrive.Common.Extensions;
+using Contrive.Common.Web;
+using StructureMap;
 using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap
@@ -12,25 +14,28 @@ namespace Contrive.StructureMap
         {
             For<IAuthConfigurationProvider>().Singleton().Use<AuthConfigurationProvider>();
             For<IUserService>().Singleton().Use<UserService>();
-            For<ICryptographer>().Singleton().Use(s =>
-                                                  {
-                                                      var cryptoConfig = s.GetInstance<ICryptoConfigurationProvider>();
-                                                      return BuildCryptographer(cryptoConfig);
-                                                  });
+            For<ICryptographer>().Singleton().Use(BuildCryptographer);
             For<IUserServiceSettings>().Singleton()
                                        .Use(s => new UserServiceSettings(s.GetInstance<IAuthConfigurationProvider>().UserServiceConfiguration));
         }
 
-        static ICryptographer BuildCryptographer(ICryptoConfigurationProvider cryptoConfig)
+        static ICryptographer BuildCryptographer(IContext context)
         {
+            var processName = System.Diagnostics.Process.GetCurrentProcess().ProcessName.ToLower();
+            if (processName.Contains("w3wp") || processName.Contains("aspnet_wp") || processName.Contains("iisexpress"))
+            {
+                return new WebCryptographer();
+            }
+
+            var cryptoConfig = context.GetInstance<ICryptoConfigurationProvider>();
             var encryptionAlgorithm = cryptoConfig.EncryptionAlgorithm;
             var hashAlgorithm = cryptoConfig.HashAlgorithm;
             var encryptionKey = cryptoConfig.EncryptionKey;
             var hmacKey = cryptoConfig.HmacKey;
-            var generic = typeof (Cryptographer<,>);
-            var specific = generic.MakeGenericType(new[] {encryptionAlgorithm, hashAlgorithm});
-            var ci = specific.GetConstructor(new[] {typeof (byte[]), typeof (byte[])});
-            var o = ci.Invoke(new object[] {encryptionKey, hmacKey});
+            var generic = typeof(Cryptographer<,>);
+            var specific = generic.MakeGenericType(new[] { encryptionAlgorithm, hashAlgorithm });
+            var ci = specific.GetConstructor(new[] { typeof(byte[]), typeof(byte[]) });
+            var o = ci.Invoke(new object[] { encryptionKey, hmacKey });
             return o.As<ICryptographer>();
         }
     }
