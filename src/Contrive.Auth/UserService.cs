@@ -18,6 +18,8 @@ namespace Contrive.Auth
             _settings = settings;
         }
 
+        public static Func<IUser> NewUser = () => new User();
+
         readonly ICryptographer _cryptographer;
         readonly IUserServiceSettings _settings;
         readonly IUserRepository _userRepository;
@@ -121,11 +123,6 @@ namespace Contrive.Auth
             _userRepository.Insert(newUser);
 
             return UserCreateStatus.Success;
-        }
-
-        protected virtual IUser NewUser()
-        {
-            return new User();
         }
 
         IUser VerifyUserExists(string userName)

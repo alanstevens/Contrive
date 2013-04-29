@@ -68,10 +68,6 @@
     <Compile Include="AuthConfigurationProvider.cs" />
     <Compile Include="FormsAuthService.cs" />
     <Compile Include="WebAuthenticationService.cs" />
-    <Compile Include="Modules\AuthenticationModuleBase.cs" />
-    <Compile Include="Modules\BasicAuthenticationModule.cs" />
-    <Compile Include="Modules\DigestAuthenticationModule.cs" />
-    <Compile Include="Modules\DigestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

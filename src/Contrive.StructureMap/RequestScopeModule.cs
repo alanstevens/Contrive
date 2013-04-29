@@ -1,4 +1,3 @@
-using Contrive.Common.Web.Modules;
 using StructureMap;
 
 namespace Contrive.StructureMap

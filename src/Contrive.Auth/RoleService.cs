@@ -15,6 +15,8 @@ namespace Contrive.Auth
             _userRepository = userRepository;
         }
 
+        public static Func<IRole> NewRole = () => new Role();
+
         readonly IRoleRepository _roleRepository;
         readonly IUserRepository _userRepository;
 
@@ -131,11 +133,6 @@ namespace Contrive.Auth
             Verify.NotEmpty(roles, "roles");
 
             RemoveUsersFromRoles(_userRepository.GetUsersForUserNames(users), GetRolesForRoleNames(roles));
-        }
-
-        static IRole NewRole()
-        {
-            return new Role();
         }
 
         public void AddUsersToRoles(IEnumerable<IUser> users, IEnumerable<IRole> roles)

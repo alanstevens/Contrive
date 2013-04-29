@@ -82,8 +82,6 @@
     <Compile Include="CommonRegistry.cs" />
     <Compile Include="DataRegistry.cs" />
     <Compile Include="ListenerConvention.cs" />
-    <Compile Include="MembershipEntityFrameworkRegistry.cs" />
-    <Compile Include="MembershipRegistry.cs" />
     <Compile Include="RequestScopeModule.cs" />
     <Compile Include="StructureMapContainerConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
