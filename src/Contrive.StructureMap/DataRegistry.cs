@@ -1,5 +1,5 @@
 using Contrive.Common;
-using Contrive.Data.Common;
+using Contrive.Common.Data;
 using StructureMap.Configuration.DSL;
 
 namespace Contrive.StructureMap

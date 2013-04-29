@@ -2,7 +2,7 @@
 
 Contrive is a collection of utilities for Microsoft .NET.
 
-Contrive contains an authentication and authorization system that is (mostly) backwards compatible with the ASP.NET Membership Provider. Contrive does not support secret question/answer or mailing passwords in plain text. There is not currently an implementation of the RoleProvider.
+Contrive contains an authentication and authorization system.
 
 Contrive is currently incomplete and crappy. Most of these tools are in use in production applications, but have not been fully cleaned up and made general purpose for public consumption.
 

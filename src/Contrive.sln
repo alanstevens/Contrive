@@ -1,11 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Auth", "Contrive.Auth\Contrive.Auth.csproj", "{8B6F25F8-DB66-4DD6-A591-399AB373ABAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Auth.Web", "Contrive.Auth.Web\Contrive.Auth.Web.csproj", "{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Auth.Web.Mvc", "Contrive.Auth.Web.Mvc\Contrive.Auth.Web.Mvc.csproj", "{83E4F300-AD67-4773-8E01-0323A3A7B9AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.StructureMap", "Contrive.StructureMap\Contrive.StructureMap.csproj", "{FC138A58-C976-4704-BC55-89970007E66A}"
 EndProject
@@ -15,9 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Auth.EntityFramewo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Common", "Contrive.Common\Contrive.Common.csproj", "{00B479B8-86CD-4EDB-B6B0-F0C574B1F00B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Data.Common", "Contrive.Data.Common\Contrive.Data.Common.csproj", "{22EAC544-F46D-46D4-87B0-A015A81C0A2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Common.Data", "Contrive.Common.Data\Contrive.Common.Data.csproj", "{22EAC544-F46D-46D4-87B0-A015A81C0A2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Web.Common", "Contrive.Web.Common\Contrive.Web.Common.csproj", "{EDE4D614-2999-416D-8FA0-63D4A3A9175F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Common.Web", "Contrive.Common.Web\Contrive.Common.Web.csproj", "{EDE4D614-2999-416D-8FA0-63D4A3A9175F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DB0A3550-0A44-4C4E-A67E-D86CA746DD02}"
 	ProjectSection(SolutionItems) = preProject
@@ -31,10 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\LICENSE.txt = ..\LICENSE.txt
 		..\readme.md = ..\readme.md
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Auth.Membership", "Contrive.Auth.Membership\Contrive.Auth.Membership.csproj", "{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contrive.Auth.Web.Membership", "Contrive.Auth.Web.Membership\Contrive.Auth.Web.Membership.csproj", "{CD8FB741-4558-476C-8458-5B4F3A8011A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,14 +54,6 @@ Global
 		{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}.Staging|Any CPU.ActiveCfg = Release|Any CPU
 		{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}.Staging|Any CPU.Build.0 = Release|Any CPU
-		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Integration|Any CPU.ActiveCfg = Release|Any CPU
-		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Integration|Any CPU.Build.0 = Release|Any CPU
-		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Staging|Any CPU.ActiveCfg = Release|Any CPU
-		{83E4F300-AD67-4773-8E01-0323A3A7B9AC}.Staging|Any CPU.Build.0 = Release|Any CPU
 		{FC138A58-C976-4704-BC55-89970007E66A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC138A58-C976-4704-BC55-89970007E66A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC138A58-C976-4704-BC55-89970007E66A}.Integration|Any CPU.ActiveCfg = Release|Any CPU
@@ -116,22 +102,6 @@ Global
 		{EDE4D614-2999-416D-8FA0-63D4A3A9175F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDE4D614-2999-416D-8FA0-63D4A3A9175F}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
 		{EDE4D614-2999-416D-8FA0-63D4A3A9175F}.Staging|Any CPU.Build.0 = Staging|Any CPU
-		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Integration|Any CPU.ActiveCfg = Release|Any CPU
-		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Integration|Any CPU.Build.0 = Release|Any CPU
-		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Staging|Any CPU.ActiveCfg = Release|Any CPU
-		{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}.Staging|Any CPU.Build.0 = Release|Any CPU
-		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Integration|Any CPU.ActiveCfg = Release|Any CPU
-		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Integration|Any CPU.Build.0 = Release|Any CPU
-		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Staging|Any CPU.ActiveCfg = Release|Any CPU
-		{CD8FB741-4558-476C-8458-5B4F3A8011A3}.Staging|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

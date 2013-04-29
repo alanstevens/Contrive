@@ -100,14 +100,6 @@
       <Project>{4D901CB3-DE1C-4A70-801E-1BE06C5C2E4E}</Project>
       <Name>Contrive.Auth.EntityFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contrive.Auth.Membership\Contrive.Auth.Membership.csproj">
-      <Project>{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}</Project>
-      <Name>Contrive.Auth.Membership</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Contrive.Auth.Web.Membership\Contrive.Auth.Web.Membership.csproj">
-      <Project>{CD8FB741-4558-476C-8458-5B4F3A8011A3}</Project>
-      <Name>Contrive.Auth.Web.Membership</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contrive.Auth.Web\Contrive.Auth.Web.csproj">
       <Project>{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}</Project>
       <Name>Contrive.Auth.Web</Name>
@@ -120,11 +112,11 @@
       <Project>{00B479B8-86CD-4EDB-B6B0-F0C574B1F00B}</Project>
       <Name>Contrive.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contrive.Data.Common\Contrive.Data.Common.csproj">
+    <ProjectReference Include="..\Contrive.Common.Data\Contrive.Common.Data.csproj">
       <Project>{22EAC544-F46D-46D4-87B0-A015A81C0A2A}</Project>
       <Name>Contrive.Data.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contrive.Web.Common\Contrive.Web.Common.csproj">
+    <ProjectReference Include="..\Contrive.Common.Web\Contrive.Common.Web.csproj">
       <Project>{EDE4D614-2999-416D-8FA0-63D4A3A9175F}</Project>
       <Name>Contrive.Web.Common</Name>
     </ProjectReference>

@@ -56,10 +56,6 @@
     <Compile Include="WebSecurity.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contrive.Auth.Membership\Contrive.Auth.Membership.csproj">
-      <Project>{9E06EC82-8E8F-4BE0-A2D8-54855C2786CE}</Project>
-      <Name>Contrive.Auth.Membership</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contrive.Auth.Web\Contrive.Auth.Web.csproj">
       <Project>{627B918B-6856-4B1C-91E1-DAFC5CCDCA0C}</Project>
       <Name>Contrive.Auth.Web</Name>
