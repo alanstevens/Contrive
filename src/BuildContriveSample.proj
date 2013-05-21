@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="RunTests" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectFile>SampleWebSite\ContriveSample.sln</ProjectFile>
+    <IsDesktopBuild>true</IsDesktopBuild>
+  </PropertyGroup>
+  <Target Name="Debug">
+    <MSBuild Projects="$(ProjectFile)" Targets="Clean"/>
+    <MSBuild Projects="$(ProjectFile)" Properties="Configuration=Debug" Targets="Build"/>
+    <MSBuild Projects="SampleWebSite\Contrive.Sample.web\Contrive.Sample.web.csproj" Properties="Configuration=Debug" Targets="Package"/>
+  </Target>
+  <Target Name="Release">
+    <MSBuild Projects="$(ProjectFile)" Targets="Clean"/>
+    <MSBuild Projects="$(ProjectFile)" Properties="Configuration=Release" Targets="Build"/>
+    <MSBuild Projects="SampleWebSite\Contrive.Sample.web\Contrive.Sample.web.csproj" Properties="Configuration=Release" Targets="Package"/>
+  </Target>
+  <Target Name="staging">
+    <MSBuild Projects="$(ProjectFile)" Targets="Clean"/>
+    <MSBuild Projects="$(ProjectFile)" Properties="Configuration=staging" Targets="Build"/>
+    <MSBuild Projects="SampleWebSite\Contrive.Sample.web\Contrive.Sample.web.csproj" Properties="Configuration=staging" Targets="Package"/>
+  </Target>
+  <Target Name="All">
+    <MSBuild Projects="$(ProjectFile)" Targets="Clean"/>
+    <MSBuild Projects="$(ProjectFile)" Properties="Configuration=Debug" Targets="Build"/>
+    <MSBuild Projects="SampleWebSite\Contrive.Sample.web\Contrive.Sample.web.csproj" Properties="Configuration=Debug" Targets="Package"/>
+    <MSBuild Projects="$(ProjectFile)" Targets="Clean"/>
+    <MSBuild Projects="$(ProjectFile)" Properties="Configuration=staging" Targets="Build"/>
+    <MSBuild Projects="SampleWebSite\Contrive.Sample.web\Contrive.Sample.web.csproj" Properties="Configuration=staging" Targets="Package"/>
+    <MSBuild Projects="$(ProjectFile)" Targets="Clean"/>
+    <MSBuild Projects="$(ProjectFile)" Properties="Configuration=Release" Targets="Build"/>
+    <MSBuild Projects="SampleWebSite\Contrive.Sample.web\Contrive.Sample.web.csproj" Properties="Configuration=Release" Targets="Package"/>
+  </Target>
+</Project>

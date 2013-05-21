@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B36D0991-29D6-4047-A2D0-5A06A6071657}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Contrive.Sample.Tests</RootNamespace>
+    <AssemblyName>Contrive.Sample.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.1\lib\net20\xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.extensions">
+      <HintPath>..\packages\xunit.extensions.1.9.1\lib\net20\xunit.extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Integration\UserSpecs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubSpec\SubSpec.cs" />
+    <Compile Include="SubSpec\SubSpec.Thesis.cs" />
+    <Compile Include="SubSpec\SubSpecUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Contrive\Contrive.Auth.Web\Contrive.Auth.Web.csproj">
+      <Project>{627b918b-6856-4b1c-91e1-dafc5ccdca0c}</Project>
+      <Name>Contrive.Auth.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Contrive\Contrive.Auth\Contrive.Auth.csproj">
+      <Project>{8b6f25f8-db66-4dd6-a591-399ab373abae}</Project>
+      <Name>Contrive.Auth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Contrive\Contrive.Common.Data\Contrive.Common.Data.csproj">
+      <Project>{22eac544-f46d-46d4-87b0-a015a81c0a2a}</Project>
+      <Name>Contrive.Common.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Contrive\Contrive.Common.Web\Contrive.Common.Web.csproj">
+      <Project>{ede4d614-2999-416d-8fa0-63d4a3a9175f}</Project>
+      <Name>Contrive.Common.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Contrive\Contrive.Common\Contrive.Common.csproj">
+      <Project>{00b479b8-86cd-4edb-b6b0-f0c574b1f00b}</Project>
+      <Name>Contrive.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Contrive\Contrive.StructureMap\Contrive.StructureMap.csproj">
+      <Project>{fc138a58-c976-4704-bc55-89970007e66a}</Project>
+      <Name>Contrive.StructureMap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contrive.Sample.Data\Contrive.Sample.Data.csproj">
+      <Project>{06E21CC1-40BD-461B-8784-B2BF260733FA}</Project>
+      <Name>Contrive.Sample.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contrive.Sample.Web\Contrive.Sample.Web.csproj">
+      <Project>{6edccf2f-44b0-46b1-9432-60e4782828ce}</Project>
+      <Name>Contrive.Sample.Web</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Integration\app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SubSpec\LICENSE.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
