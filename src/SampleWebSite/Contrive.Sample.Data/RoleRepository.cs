@@ -4,6 +4,9 @@ using Contrive.Common.Data;
 
 namespace Contrive.Sample.Data
 {
+    /// <summary>
+    /// The AdventureWorks database does not contain a role concept.
+    /// </summary>
     public class RoleRepository: DataServiceBase, IRoleRepository
     {
         public IEnumerable<IRole> GetAll()

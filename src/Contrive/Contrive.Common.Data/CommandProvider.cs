@@ -8,6 +8,8 @@ namespace Contrive.Common.Data
     {
         /// <summary>
         /// The IDbCommand lifecycle is managed by the inversion of control container.
+        /// You *must* add IDbCommand to your container configuration.
+        /// A typical configuration would scope the IDbCommand lifecycle to thread or HttpRequest.
         /// </summary>
         public static Func<IDbCommand> GetCommand = () =>
                                                     {

@@ -15,13 +15,13 @@ namespace Contrive.Common.Data
 
         public static IDbConnection GetConnection()
         {
-            IDbConnection connection;
             try
             {
                 var connectionString = ConnectionStringProvider.GetConnectionString();
-                connection = NewConnection(connectionString);
-                if(connection.IsNull()) throw new DataException("ConnectionProvider returned a null connection.");
+                var connection = NewConnection(connectionString);
+                if(connection.IsNull()) throw new DataException("ConnectionProvider.NewConnection() returned a null connection.{0}Ensure that NewConnection is populated at application startup".FormatWith(Environment.NewLine));
                 connection.Open();
+            return connection;
             }
             catch (Exception ex)
             {
@@ -31,7 +31,6 @@ namespace Contrive.Common.Data
 #endif
                 throw;
             }
-            return connection;
         }
     }
 }

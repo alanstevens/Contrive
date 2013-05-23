@@ -7,15 +7,12 @@ namespace Contrive.Sample.Data
     {
         public SampleDataRegistry()
         {
-            //For<IUserRepository>()
-            //    .HttpContextScoped()
-            //    .Use<UserRepository>();
-
-            //For<IUserRepository>()
-            //    .Use<UserRepository>();
+            For<IUserRepository>()
+                .HybridHttpOrThreadLocalScoped()
+                .Use<UserRepository>();
 
             For<IRoleRepository>()
-                .HttpContextScoped()
+                .HybridHttpOrThreadLocalScoped()
                 .Use<RoleRepository>();
         }
     }
