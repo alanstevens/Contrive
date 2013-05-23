@@ -27,32 +27,32 @@ namespace Contrive.Common
 
         public string Encrypt(string dataToEncrypt)
         {
-            return Encode(dataToEncrypt, Protection.Encryption);
+            return Protect(dataToEncrypt, Protection.Encryption);
         }
 
         public string Decrypt(string encryptedData)
         {
-            return Decode(encryptedData, Protection.Encryption);
+            return Unprotect(encryptedData, Protection.Encryption);
         }
 
         public string Hash(string dataToHash)
         {
-            return Encode(dataToHash, Protection.Validation);
+            return Protect(dataToHash, Protection.Validation);
         }
 
         public string ValidateHash(string hashedData)
         {
-            return Decode(hashedData, Protection.Validation);
+            return Unprotect(hashedData, Protection.Validation);
         }
 
         public string EncryptAndHash(string dataToEncrypt)
         {
-            return Encode(dataToEncrypt, Protection.All);
+            return Protect(dataToEncrypt, Protection.All);
         }
 
         public string DecryptHashed(string encryptedData)
         {
-            return Decode(encryptedData, Protection.All);
+            return Unprotect(encryptedData, Protection.All);
         }
 
         public string GenerateValidationKey()
@@ -65,9 +65,9 @@ namespace Contrive.Common
             return GetRandomBuffer(DECRYPTION_KEY_SIZE).ToHex();
         }
 
-        protected abstract string Encode(string input, Protection protectionOption);
+        protected abstract string Protect(string input, Protection protectionOption);
 
-        protected abstract string Decode(string encodedData, Protection protectionOption);
+        protected abstract string Unprotect(string encodedData, Protection protectionOption);
 
         static byte[] GetRandomBuffer(int bufferSize)
         {

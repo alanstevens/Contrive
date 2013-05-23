@@ -15,14 +15,13 @@ namespace Contrive.Common.Data
 
         public void OnStartup()
         {
-            DataActionExtensions.Executor = (dataAction, uponCompletion,  indicateBusy) =>
+            DataActionExtensions.Executor = (dataAction, uponCompletion, indicateBusy) =>
                                             {
                                                 Action work = () =>
                                                               {
                                                                   try
                                                                   {
-                                                                      // TODO: HAS 10/04/2012 What happens if we have multiple call to InvokeDataProcess using this UnitOfWork?
-                                                                      using (UnitOfWork.Current) dataAction();
+                                                                      dataAction();
                                                                   }
                                                                   catch (Exception ex)
                                                                   {

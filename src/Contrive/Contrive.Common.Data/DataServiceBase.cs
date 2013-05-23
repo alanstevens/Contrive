@@ -8,6 +8,10 @@ namespace Contrive.Common.Data
     {
         WeakReference _commandReference;
 
+        /// <summary>
+        /// Reuse the same command as long as it is in a usable state.
+        /// </summary>
+        /// <returns></returns>
         protected IDbCommand GetCommand()
         {
             IDbCommand command = null;
@@ -16,7 +20,7 @@ namespace Contrive.Common.Data
 
             if (command.IsNull() || command.Connection.IsNull() || command.IsConnectionClosed())
             {
-                command = UnitOfWork.Current.GetCommand();
+                command = CommandProvider.GetCommand();
                 _commandReference = new WeakReference(command);
             }
             else command.Clear();

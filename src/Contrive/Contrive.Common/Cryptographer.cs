@@ -37,7 +37,7 @@ namespace Contrive.Common
             }
         }
 
-        protected override string Encode(string input, Protection protectionOption)
+        protected override string Protect(string input, Protection protectionOption)
         {
             var data = Encoding.Unicode.GetBytes(input);
 
@@ -51,11 +51,11 @@ namespace Contrive.Common
                 Buffer.BlockCopy(hashData, 0, validationData, data.Length, hashData.Length);
                 data = validationData;
             }
-            if (protectionOption == Protection.All || protectionOption == Protection.Encryption) data = Protect(data);
+            if (protectionOption == Protection.All || protectionOption == Protection.Encryption) data = Encode(data);
             return data.ToHex();
         }
 
-        protected override string Decode(string encodedData, Protection protectionOption)
+        protected override string Unprotect(string encodedData, Protection protectionOption)
         {
             Verify.NotNull(encodedData, "encodedData");
             if (encodedData.Length%2 != 0) throw new ArgumentException(null, "encodedData");
@@ -74,7 +74,7 @@ namespace Contrive.Common
 
             if (protectionOption == Protection.All || protectionOption == Protection.Encryption)
             {
-                buffer = Unprotect(buffer);
+                buffer = Decode(buffer);
                 if (buffer == null) return null;
             }
 
@@ -99,7 +99,7 @@ namespace Contrive.Common
             return Encoding.UTF8.GetString(buffer);
         }
 
-        byte[] Protect(byte[] buffer)
+        byte[] Encode(byte[] buffer)
         {
             Verify.NotEmpty(buffer, "buffer");
 
@@ -130,7 +130,7 @@ namespace Contrive.Common
             return outputBuffer;
         }
 
-        byte[] Unprotect(byte[] inputBuffer)
+        byte[] Decode(byte[] inputBuffer)
         {
             Verify.NotEmpty(inputBuffer, "inputBuffer");
 

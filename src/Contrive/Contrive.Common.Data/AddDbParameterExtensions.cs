@@ -8,9 +8,6 @@ namespace Contrive.Common.Data
     {
         const int VAR_CHAR_MAX = 4000;
 
-        public static Func<string, DbType, ParameterDirection, object, int, byte, byte, IDataParameter> CreateParameter =
-            (name, type, direction, value, size, precision, scale) => null;
-
         public static IDbCommand AddParameter(this IDbCommand command, string name, DbType type)
         {
             AddParameter(command, name, type, null);
@@ -35,32 +32,31 @@ namespace Contrive.Common.Data
             return command;
         }
 
-        public static IDbCommand AddParameter(this IDbCommand command,
-                                              string name,
-                                              DbType type,
-                                              object value,
-                                              int size,
-                                              ParameterDirection direction)
+        public static IDbCommand AddParameter(this IDbCommand command, string name, DbType type, object value, int size, ParameterDirection direction)
         {
-            var parameter = NewParameter(name, type, direction, value, size);
+            var parameter = command.NewParameter(name, type, direction, value, size);
 
             command.Parameters.Add(parameter);
             return command;
         }
 
-        static IDataParameter NewParameter(string name,
-                                           DbType type,
-                                           ParameterDirection direction,
-                                           object value = null,
-                                           int size = 0,
-                                           byte precision = (byte) 0,
-                                           byte scale = (byte) 0)
+        static IDataParameter NewParameter(this IDbCommand command, string name, DbType type, ParameterDirection direction, object value = null, int size = 0, byte precision = (byte) 0, byte scale = (byte) 0)
         {
             if (value.IsNull()) value = DBNull.Value;
 
             if (type == DbType.AnsiString && size == 0) size = VAR_CHAR_MAX;
 
-            return CreateParameter(name, type, direction, value, size, precision, scale);
+            var parameter = command.CreateParameter();
+
+            parameter.ParameterName = name;
+            parameter.DbType = type;
+            parameter.Direction = direction;
+            parameter.Value = value;
+            parameter.Size = size;
+            parameter.Precision = precision;
+            parameter.Scale = scale;
+
+            return parameter;
         }
     }
 }

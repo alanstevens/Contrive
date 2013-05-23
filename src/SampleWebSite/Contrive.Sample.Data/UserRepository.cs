@@ -28,6 +28,7 @@ namespace Contrive.Sample.Data
 
         public void Update(IUser user)
         {
+            // TODO: HAS 05/23/2013 Store query in resources using IDataParameters
             var query = @"UPDATE [AdventureWorksLT2008R2].[SalesLT].[Customer]
                                         Set
                                            [FirstName]='{0}'

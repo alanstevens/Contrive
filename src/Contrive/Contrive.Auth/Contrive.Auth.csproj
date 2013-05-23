@@ -80,7 +80,6 @@
     <Compile Include="UserService.cs" />
     <Compile Include="UserPasswordFormat.cs" />
     <Compile Include="UserServiceSettings.cs" />
-    <Compile Include="UserServiceStartupTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

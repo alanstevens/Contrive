@@ -6,7 +6,7 @@ namespace Contrive.Common.Web
 {
     public class WebCryptographer : CryptographerBase
     {
-        protected override string Encode(string input, Protection protectionType)
+        protected override string Protect(string input, Protection protectionType)
         {
             var bytesToEncode = Encoding.Unicode.GetBytes(input);
 
@@ -17,7 +17,7 @@ namespace Contrive.Common.Web
             return output;
         }
 
-        protected override string Decode(string input, Protection protectionType)
+        protected override string Unprotect(string input, Protection protectionType)
         {
 #pragma warning disable 612,618
             var decodedBytes = MachineKey.Decode(input, ConvertProtection(protectionType));

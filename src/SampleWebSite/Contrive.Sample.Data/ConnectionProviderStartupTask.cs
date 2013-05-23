@@ -1,6 +1,8 @@
 ﻿using System.Data.SqlClient;
+using Contrive.Common;
+using Contrive.Common.Data;
 
-namespace Contrive.Common.Data
+namespace Contrive.Sample.Data
 {
     public class ConnectionProviderStartupTask : IStartupTask
     {

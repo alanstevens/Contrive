@@ -1,11 +1,11 @@
 using System;
 using System.Reflection;
+using CommonServiceLocator.StructureMapAdapter.Unofficial;
 using Contrive.Common;
 using Contrive.Common.Extensions;
 using Microsoft.Practices.ServiceLocation;
 using StructureMap;
 using StructureMap.Graph;
-using StructureMap.ServiceLocatorAdapter;
 
 namespace Contrive.StructureMap
 {

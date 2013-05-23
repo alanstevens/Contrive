@@ -20,6 +20,10 @@ namespace Contrive.Auth
 
         public IUser CurrentUser { get; set; }
 
+        /// <summary>
+        /// This abstraction enables a consumer to return their own IUser implementation.
+        /// This delegate can be populated at application startup using an IStartupTask or some other mean.
+        /// </summary>
         public static Func<IUser> NewUser = () => new User();
 
         readonly ICryptographer _cryptographer;
