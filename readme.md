@@ -1,4 +1,6 @@
-#Contrive
+** THIS REPO IS OBSOLETE **
+
+# Contrive
 
 Contrive is a collection of utilities for Microsoft .NET based on my experience in many codebases.
 
